@@ -30,8 +30,8 @@ const Home = () => {
 				setPagesCount(response.data.pagesCount);
 			}
 		} catch (error) {
-			if (error?.response?.status === 404) {
-				Alert("خطا!", error.response.data.message, "error");
+			if (error?.response?.status && error?.response?.data?.message) {
+				Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
 			} else {
 				Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
 			}

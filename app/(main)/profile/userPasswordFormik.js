@@ -3,32 +3,26 @@ import { Alert } from "@/utils/popupWindows";
 import * as Yup from "yup";
 
 export const initialValues = {
-    first_name: "",
-    last_name: "",
-    username: "",
+    old_password: "",
     password: "",
     confirm_password: "",
 }
 
 export const onSubmit = async (values, actions, router) => {
-    const response = await registerAction(values);
-    if (response.status === 200) {
-        await Alert(null, "حساب کاربری شما با موفقیت ایجاد شد", "success");
-        router.push("/login");
-    } else {
-        Alert("خطا!", response.message, "error");
-    }
+    // const response = await registerAction(values);
+    // if (response.status === 200) {
+    //     await Alert(null, "حساب کاربری شما با موفقیت ایجاد شد", "success");
+    //     router.push("/login");
+    // } else {
+    //     Alert("خطا!", response.message, "error");
+    // }
 }
 
 export const validationSchema = Yup.object({
-    first_name: Yup.string().required("این فیلد الزامی می‌باشد")
-        .matches(/^(\s)*([\u0600-\u06FF]+(\s)*)+$/, "لطفاً فقط از حروف فارسی استفاده کنید"),
-    last_name: Yup.string().required("این فیلد الزامی می‌باشد")
-        .matches(/^(\s)*([\u0600-\u06FF]+(\s)*)+$/, "لطفاً فقط از حروف فارسی استفاده کنید"),
-    username: Yup.string().required("این فیلد الزامی می‌باشد")
-        .min(5, "نام کاربری باید شامل حداقل 5 کاراکتر باشد")
-        .matches(/^[a-zA-Z0-9@_]+$/, "نام کاربری نباید شامل کاراکترهای غیرمجاز باشد")
-        .matches(/^[a-zA-Z]+[a-zA-Z0-9@_]+$/, "نام کاربری نباید با عدد یا کاراکترهای خاص شروع شود"),
+    old_password: Yup.string().required("این فیلد الزامی می‌باشد")
+        .min(6, "کلمه عبور باید شامل حداقل 6 کاراکتر باشد")
+        .matches(/^[a-zA-Z0-9@_]+$/, "کلمه عبور نباید شامل کاراکترهای غیرمجاز باشد")
+        .matches(/^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9@_]+$/, "کلمه عبور حتماً باید شامل حروف انگلیسی و عدد باشد"),
     password: Yup.string().required("این فیلد الزامی می‌باشد")
         .min(6, "کلمه عبور باید شامل حداقل 6 کاراکتر باشد")
         .matches(/^[a-zA-Z0-9@_]+$/, "کلمه عبور نباید شامل کاراکترهای غیرمجاز باشد")

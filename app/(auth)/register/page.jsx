@@ -5,8 +5,10 @@ import React from 'react';
 import GetField from '@/components/GetField';
 import Link from 'next/link';
 import { initialValues, onSubmit, validationSchema } from './registerFormik';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
+    const router = useRouter();
 
     return (
         <div className="bg-slate-950 rounded-lg px-6 md:px-10 pt-3 pb-5 w-full max-w-[500px] 
@@ -14,7 +16,7 @@ const Page = () => {
             <h1 className="text-primary mb-5 text-center text-4xl">ثبت نام</h1>
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values, actions) => onSubmit(values, actions)}
+                onSubmit={(values, actions) => onSubmit(values, actions, router)}
                 validationSchema={validationSchema}
             >
                 {(formik) => (
@@ -43,16 +45,6 @@ const Page = () => {
                                 name="username"
                                 placeholder="نام کاربری"
                                 label="نام کاربری"
-                                formik={formik}
-                                ltr
-                            />
-                        </div>
-                        <div>
-                            <GetField
-                                control="input"
-                                name="email"
-                                placeholder="ایمیل"
-                                label="ایمیل"
                                 formik={formik}
                                 ltr
                             />

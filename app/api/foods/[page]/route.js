@@ -20,40 +20,52 @@ export const dynamic = "force-dynamic";
 // ]
 
 export async function GET(request, context) {
-    const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
-    const page = Number(context.params.page) || 1;
+    try {
+        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
+        const page = Number(context.params.page) || 1;
 
-    await db.connect();
+        await db.connect();
 
-    const count = await Food.countDocuments({});
-    const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
+        const count = await Food.countDocuments({});
+        const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
 
-    if (page > pagesCount) {
+        if (page > pagesCount) {
+            return NextResponse.json(
+                {
+                    message: "صفحه یافت نشد!"
+                },
+                {
+                    status: 404,
+                }
+            );
+        }
+
+        const data = await Food.find()
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .lean();
+
+
         return NextResponse.json(
             {
-                message: "صفحه یافت نشد!"
+                pagesCount,
+                data: data.map(item => db.convertToObject(item))
             },
             {
-                status: 404,
+                status: 200,
+                statusText: "Foods received successfully!"
+            }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            {
+                message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."
+            }
+            ,
+            {
+                status: 500,
             }
         );
     }
-
-    const data = await Food.find()
-        .skip((page - 1) * pageSize)
-        .limit(pageSize)
-        .lean();
-
-
-    return NextResponse.json(
-        {
-            pagesCount,
-            data: data.map(item => db.convertToObject(item))
-        },
-        {
-            status: 200,
-            statusText: "Foods received successfully!"
-        }
-    );
 }
 

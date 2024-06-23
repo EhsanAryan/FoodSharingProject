@@ -3,9 +3,9 @@ import React from 'react';
 
 const NotFound = () => {
     return (
-        <div className="my-14 text-center flex flex-col gap-5 items-center">
-            <span className="text-primary text-5xl">
-                صفحه یافت نشد!
+        <div className="my-14 text-center flex flex-col gap-6 items-center">
+            <span className="text-primary text-4xl">
+                صفحه مورد نظر یافت نشد!
             </span>
             <Link 
             href="/" 

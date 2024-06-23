@@ -7,10 +7,11 @@ export const initialValues = {
     password: ""
 }
 
-export const onSubmit = async (values, actions) => {
+export const onSubmit = async (values, actions, router) => {
     const response = await loginAction(values);
     if (response.status === 200) {
-        actions.resetForm();
+        Alert(null, "ورود موفقیت آمیز بود", "success");
+        router.push("/");
     } else {
         Alert("خطا!", response.message, "error");
     }

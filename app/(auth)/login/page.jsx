@@ -5,8 +5,10 @@ import React from 'react';
 import { initialValues, onSubmit, validationSchema } from './loginFormik';
 import GetField from '@/components/GetField';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
+    const router = useRouter();
 
     return (
         <div className="bg-slate-950 rounded-lg px-6 md:px-10 pt-3 pb-5 w-full max-w-[500px] 
@@ -14,7 +16,7 @@ const Page = () => {
             <h1 className="text-primary mb-5 text-center text-4xl">ورود</h1>
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values, actions) => onSubmit(values, actions)}
+                onSubmit={(values, actions) => onSubmit(values, actions, router)}
                 validationSchema={validationSchema}
             >
                 {(formik) => (
