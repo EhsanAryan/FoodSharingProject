@@ -8,6 +8,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import MenuIcon from '@mui/icons-material/Menu';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
+import LoginIcon from '@mui/icons-material/Login';
 import { Box, IconButton } from '@mui/material';
 
 const navbarItems = [
@@ -21,7 +22,15 @@ const navbarItems = [
         text: "اشتراک غذا",
         icon: <LocalDiningIcon />
     },
-]
+];
+
+const noAuthNavbarItems = [
+    {
+        href: "/login",
+        text: "ورود/ثبت نام",
+        icon: <LoginIcon />
+    },
+];
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);

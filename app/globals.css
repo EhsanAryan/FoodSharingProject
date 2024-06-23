@@ -30,6 +30,22 @@
     box-shadow: 0px 0px 15px #f16d01, 0px 0px 25px #f16d01;
   }
 
+  .dir-rtl {
+    direction: rtl !important;
+  }
+
+  .dir-ltr {
+    direction: ltr !important;
+  }
+
+  .children-dir-ltr * {
+    direction: ltr !important;
+  }
+
+  .children-dir-rtl * {
+    direction: rtl !important;
+  }
+
   .slow-transition {
     transition: all 400ms ease-in-out;
   }
@@ -43,13 +59,9 @@
   }
 }
 
-*:not(:ltr) {
-  direction: rtl;
+*:not(.dir-ltr) {
+  direction: rtl !important;
 }
-
-/* * {
-  scroll-behavior: smooth;
-} */
 
 .navbar-link::after {
   content: "";
@@ -102,15 +114,15 @@
   background: #b45405;
 }
 
-/* @font-face {
+@font-face {
   font-family: "BYekan";
   src: url("./fonts/BYekan/BYekan-webfont.woff") format("woff"),
     url("./fonts/BYekan/BYekan-webfont.ttf") format("truetype");
 }
 
-.main-font {
+.primary-font {
   font-family: "BYekan" !important;
-} */
+}
 
 
 .hover-shadow {
@@ -122,16 +134,11 @@
 }
 
 
-
-
-
-
-
-/* .appear {
+.appear {
   opacity: 0;
-  translate: 0 -50px;
-  animation: appear 500ms ease-in-out 150ms forwards;
-  transition: all 300ms ease-in-out;
+  translate: 0 -10px;
+  animation: appear 400ms ease-in-out 120ms forwards;
+  /* transition: all 300ms ease-in-out; */
 }
 
 @keyframes appear {
@@ -144,4 +151,4 @@
     opacity: 1;
     translate: 0;
   }
-} */
+}

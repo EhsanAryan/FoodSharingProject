@@ -70,7 +70,7 @@ const Home = () => {
 							</div>
 							<div className="px-2 pt-4 pb-5">
 								<h4 className="text-xl text-center">{item.name}</h4>
-								<div className="mt-2 mb-6">
+								<div className="mt-2 mb-8">
 									{item.summary}
 								</div>
 								<div>

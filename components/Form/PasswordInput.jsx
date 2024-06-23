@@ -10,32 +10,40 @@ const PasswordInput = ({
     label,
     className,
     fieldClass,
+    ltr,
     formik,
+    disabled,
 }) => {
     const [showPass, setShowPass] = useState(false);
 
     return (
         <>
-            <div className={`${className || ""} 
-            relative flex items-center
-            dir-ltr children-dir-ltr`}>
+            <div className={`${className || ""} w-full relative flex flex-col gap-1 text-white`}>
                 {label && (
-                    <span className="border border-gray-400 bg-gray-200 
-                    border-e-0 rounded-s-md px-2 py-1 whitespace-nowrap">
+                    <label
+                        htmlFor={name}
+                        className={`bg-transparent whitespace-nowrap text-[0.9rem] px-1
+                        ${disabled ? "text-gray-500" : ""}`}
+                    >
                         {label}
-                    </span>
+                    </label>
                 )}
-                <Field type={showPass ? "text" : "password"}
-                    name={name} placeholder={placeholder}
-                    className={`border border-gray-400
-                ps-2 pe-9 py-1 outline-none flex-1
-                bg-transparent focus:border-cyan-500 
-                transition-all placeholder:text-sm
-                ${!formik.touched[name] ? "border-gray-400" : formik.errors[name] ? "border-red-500" : "border-green-500"}
-                ${label ? "rounded-e-md" : "rounded-md"} 
-                ${fieldClass || ""}`}
+                <Field
+                    type={showPass ? "text" : "password"}
+                    name={name}
+                    placeholder={placeholder}
+                    className={`bg-slate-800 w-full h-full 
+                    ps-2 pe-10 py-1 placeholder:text-sm outline-none 
+                    rounded-md disabled:opacity-60 border
+                    ${disabled ? "border-gray-500" : !formik.touched[name] ? "border-gray-500" : formik.errors[name] ? "border-red-500" : "border-green-500"}
+                    ${ltr ? "dir-ltr" : ""}
+                    ${fieldClass || ""}`}
+                    disabled={disabled}
                 />
-                <span className="cursor-pointer absolute top-1 right-1.5"
+                <span className={`cursor-pointer absolute bottom-1 end-1.5 
+                ${ltr ? "dir-ltr" : ""}
+                ${disabled ? "opacity-60 pointer-events-none" : "opacity-100"}
+                `}
                     onClick={() => setShowPass(prevValue => !prevValue)}
                     title="مشاهده رمز عبور"
                 >

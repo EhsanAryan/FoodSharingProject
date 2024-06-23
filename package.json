@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.20",
     "axios": "^1.7.2",
     "formik": "^2.4.6",
+    "moment-jalaali": "^0.10.1",
     "mongoose": "^8.4.3",
     "next": "14.2.4",
     "react": "^18",
