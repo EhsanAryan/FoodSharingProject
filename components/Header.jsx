@@ -13,6 +13,7 @@ import { Box, IconButton } from '@mui/material';
 import { MainContext } from '@/context/MainContextContainer';
 import { getUserInfoService } from '@/services/userServices';
 import { getCookieValue } from '@/utils/getCookieValue';
+import { logoutAction } from '@/app/actions/actions';
 
 
 
@@ -38,15 +39,22 @@ const noAuthNavbarItems = [
 ];
 
 const Header = () => {
-    const { setUser } = useContext(MainContext);
+    const { setUser, check, setCheck } = useContext(MainContext);
 
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [navItems, setNavItems] = useState(noAuthNavbarItems);
+    const [isLogin, setIsLogin] = useState(false);
 
     const handleSetIsMenuOpen = () => setIsMenuOpen(prevValue => !prevValue)
 
     const pathname = usePathname();
+
+    const logoutHandler = async () => {
+        await logoutAction();
+        setCheck(prevValue => prevValue + 1);
+        setUser(null);
+    }
 
     const getUserInfoHandler = async () => {
         try {
@@ -71,13 +79,15 @@ const Header = () => {
     useEffect(() => {
         setLoading(true);
         if (getCookieValue("userId")) {
+            setIsLogin(true);
             setNavItems(navbarItems);
             getUserInfoHandler();
         } else {
+            setIsLogin(false);
             setNavItems(noAuthNavbarItems);
             setLoading(false);
         }
-    }, [])
+    }, [check])
 
     return (
         <header className=" w-full h-[60px] bg-primary px-3 md:px-5 
@@ -123,7 +133,15 @@ const Header = () => {
                     <MenuIcon />
                 </IconButton>
             </div>
-            <div>
+            <div className="flex items-center gap-8">
+                {(!loading && isLogin) ? (
+                    <div
+                        className="navbar-link cursor-pointer"
+                        onClick={logoutHandler}
+                    >
+                        خروج
+                    </div>
+                ) : null}
                 <Link
                     href="/"
                     className="hover-shadow"

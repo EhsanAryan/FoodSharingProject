@@ -1,13 +1,15 @@
 "use client";
 
 import { Form, Formik } from 'formik';
-import React from 'react';
+import React, { useContext } from 'react';
 import { initialValues, onSubmit, validationSchema } from './loginFormik';
 import GetField from '@/components/GetField';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { MainContext } from '@/context/MainContextContainer';
 
 const Page = () => {
+    const { setCheck } = useContext(MainContext);
     const router = useRouter();
 
     return (
@@ -16,7 +18,7 @@ const Page = () => {
             <h1 className="text-primary mb-5 text-center text-4xl">ورود</h1>
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values, actions) => onSubmit(values, actions, router)}
+                onSubmit={(values, actions) => onSubmit(values, actions, router, setCheck)}
                 validationSchema={validationSchema}
             >
                 {(formik) => (

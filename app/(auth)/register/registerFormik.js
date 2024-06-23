@@ -1,4 +1,4 @@
-import { registerAction } from "@/app/actions/authActions";
+import { registerService } from "@/services/authServices";
 import { Alert } from "@/utils/popupWindows";
 import * as Yup from "yup";
 
@@ -11,12 +11,18 @@ export const initialValues = {
 }
 
 export const onSubmit = async (values, actions, router) => {
-    const response = await registerAction(values);
-    if (response.status === 200) {
-        await Alert(null, "حساب کاربری شما با موفقیت ایجاد شد", "success");
-        router.push("/login");
-    } else {
-        Alert("خطا!", response.message, "error");
+    try {
+        const response = await registerService(values);
+        if (response.status === 200) {
+            await Alert(null, "حساب کاربری شما با موفقیت ایجاد شد", "success");
+            router.push("/login");
+        }
+    } catch (error) {
+        if (error?.response?.status && error?.response?.data?.message) {
+            Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
+        } else {
+            Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
+        }
     }
 }
 

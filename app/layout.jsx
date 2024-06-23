@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
                 <MainContextContainer>
                     <Header />
                     <main className="bg-slate-950 main-content-section fixed top-[60px] right-0 
-                    w-full text-white px-3 md:px-6 lg:px-10 py-8 overflow-x-hidden overflow-y-auto">
+                    w-full text-white px-4 md:px-6 lg:px-10 py-8 overflow-x-hidden overflow-y-auto">
                         {children}
                     </main>
                 </MainContextContainer>

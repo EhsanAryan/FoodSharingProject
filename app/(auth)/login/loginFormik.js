@@ -1,4 +1,4 @@
-import { loginAction } from "@/app/actions/authActions";
+import { loginService } from "@/services/authServices";
 import { Alert } from "@/utils/popupWindows";
 import * as Yup from "yup";
 
@@ -7,13 +7,20 @@ export const initialValues = {
     password: ""
 }
 
-export const onSubmit = async (values, actions, router) => {
-    const response = await loginAction(values);
-    if (response.status === 200) {
-        Alert(null, "ورود موفقیت آمیز بود", "success");
-        router.push("/");
-    } else {
-        Alert("خطا!", response.message, "error");
+export const onSubmit = async (values, actions, router, setCheck) => {
+    try {
+        const response = await loginService(values);
+        if (response.status === 200) {
+            Alert(null, "ورود موفقیت آمیز بود", "success");
+            setCheck(prevValue => prevValue + 1);
+            router.push("/");
+        }
+    } catch (error) {
+        if (error?.response?.status && error?.response?.data?.message) {
+            Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
+        } else {
+            Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
+        }
     }
 }
 

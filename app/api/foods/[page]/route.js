@@ -53,7 +53,6 @@ export async function GET(request, context) {
             },
             {
                 status: 200,
-                statusText: "Foods received successfully!"
             }
         );
     } catch (error) {

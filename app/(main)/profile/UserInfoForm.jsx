@@ -2,19 +2,38 @@
 
 import GetField from '@/components/GetField';
 import { Form, Formik } from 'formik';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { initialValues, onSubmit, validationSchema } from './userInfoFormik';
 import { Alert } from '@/utils/popupWindows';
 import { useRouter } from 'next/navigation';
 import { Avatar } from '@mui/material';
 import { MainContext } from '@/context/MainContextContainer';
+import { changeAvatarService } from '@/services/userServices';
 
 const UserInfoForm = () => {
-    const { user } = useContext(MainContext);
+    const { user, setUser } = useContext(MainContext);
 
     const [reinitializeValues, setReinitializeValues] = useState(null);
 
     const router = useRouter();
+    const imageInputRef = useRef(null);
+
+    const changeAvatarHandler = async (ev) => {
+        const file = ev.target.files[0];
+        if(!file) return;
+        if(!file.type.includes("image/")) return Alert("خطا!", "لطفاً یک تصویر آپلود کنید", "error");
+        const formData = new FormData();
+        formData.append("avatar", file);
+        try {
+            const response = await changeAvatarService(formData);
+            if(response.status === 200) {
+                Alert(null, "تصویر آواتار با موفقیت به روز رسانی شد.", "success");
+                setUser(response.data);
+            }
+        } catch (error) {
+            
+        }
+    }
 
     useEffect(() => {
         if (user) {
@@ -32,6 +51,13 @@ const UserInfoForm = () => {
     return (
         <div>
             <div className="flex justify-center mb-6">
+                {/* Hidden file input */}
+                <input 
+                type="file"
+                className="hidden"
+                ref={imageInputRef}
+                onChange={(ev) => changeAvatarHandler(ev)}
+                />
                 <Avatar
                     src={user?.avatar || ""}
                     alt="User avatar"
@@ -40,6 +66,7 @@ const UserInfoForm = () => {
                         height: "200px",
                         cursor: "pointer"
                     }}
+                    onClick={() => imageInputRef?.current?.click()}
                 />
             </div>
             <Formik

@@ -40,7 +40,6 @@ export async function GET(request) {
             ,
             {
                 status: 200,
-                statusText: "User info received successfully!",
             }
         );
     } catch (error) {

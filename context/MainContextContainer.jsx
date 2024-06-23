@@ -6,11 +6,14 @@ export const MainContext = createContext({})
 
 const MainContextContainer = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [check, setCheck] = useState(0);
 
     return (
         <MainContext.Provider value={{
             user,
-            setUser
+            setUser,
+            check,
+            setCheck,
         }}>
             {children}
         </MainContext.Provider>

@@ -1,4 +1,3 @@
-import { registerAction } from "@/app/actions/authActions";
 import { Alert } from "@/utils/popupWindows";
 import * as Yup from "yup";
 
