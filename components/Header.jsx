@@ -16,7 +16,6 @@ import { getCookieValue } from '@/utils/getCookieValue';
 import { logoutAction } from '@/app/actions/actions';
 
 
-
 const navbarItems = [
     {
         href: "/profile",
@@ -39,12 +38,9 @@ const noAuthNavbarItems = [
 ];
 
 const Header = () => {
-    const { setUser, check, setCheck } = useContext(MainContext);
+    const { setUser, isLogin, setIsLogin, isLoading, setIsLoading } = useContext(MainContext);
 
-    const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [navItems, setNavItems] = useState(noAuthNavbarItems);
-    const [isLogin, setIsLogin] = useState(false);
 
     const handleSetIsMenuOpen = () => setIsMenuOpen(prevValue => !prevValue)
 
@@ -52,8 +48,7 @@ const Header = () => {
 
     const logoutHandler = async () => {
         await logoutAction();
-        setCheck(prevValue => prevValue + 1);
-        setUser(null);
+        setIsLogin(false);
     }
 
     const getUserInfoHandler = async () => {
@@ -63,31 +58,26 @@ const Header = () => {
                 setUser(response.data);
             }
         } catch (error) {
-            // if (error?.response?.status && error?.response?.data?.message) {
-            //     await Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
-            //     if (error.response.status === 401) {
-            //         router.push("/login");
-            //     }
-            // } else {
-            //     Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
-            // }
+            if (error?.response?.status === 401) {
+                await logoutAction();
+                setIsLogin(false);
+            }
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
-        setLoading(true);
+        setIsLoading(true);
         if (getCookieValue("userId")) {
             setIsLogin(true);
-            setNavItems(navbarItems);
             getUserInfoHandler();
         } else {
+            setUser(null);
+            setIsLoading(false);
             setIsLogin(false);
-            setNavItems(noAuthNavbarItems);
-            setLoading(false);
         }
-    }, [check])
+    }, [isLogin]);
 
     return (
         <header className=" w-full h-[60px] bg-primary px-3 md:px-5 
@@ -101,8 +91,18 @@ const Header = () => {
                     alignItems: "center",
                     gap: "1rem"
                 }}>
-                    {!loading ? (
-                        navItems.map((item, index) => (
+                    {!isLoading ? isLogin ? (
+                        navbarItems.map((item, index) => (
+                            <Link
+                                key={`link_${Math.random()}_${index}`}
+                                href={item.href}
+                                className={`${pathname === item.href ? "navbar-acitve-link" : "navbar-link"}`}
+                            >
+                                {item.text}
+                            </Link>
+                        ))
+                    ) : (
+                        noAuthNavbarItems.map((item, index) => (
                             <Link
                                 key={`link_${Math.random()}_${index}`}
                                 href={item.href}
@@ -134,7 +134,7 @@ const Header = () => {
                 </IconButton>
             </div>
             <div className="flex items-center gap-8">
-                {(!loading && isLogin) ? (
+                {(!isLoading && isLogin) ? (
                     <div
                         className="navbar-link cursor-pointer"
                         onClick={logoutHandler}
@@ -152,8 +152,9 @@ const Header = () => {
             <DrawerNavbar
                 isMenuOpen={isMenuOpen}
                 handleSetIsMenuOpen={handleSetIsMenuOpen}
-                navbarItems={navItems}
+                navbarItems={isLogin ? navbarItems : noAuthNavbarItems}
                 anchor="right"
+                isLoading={isLoading}
             />
         </header>
     );

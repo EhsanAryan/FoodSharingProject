@@ -43,6 +43,7 @@ export async function GET(request) {
             }
         );
     } catch (error) {
+        console.log(error);
         return NextResponse.json(
             {
                 message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."

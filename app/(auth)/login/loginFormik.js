@@ -7,12 +7,12 @@ export const initialValues = {
     password: ""
 }
 
-export const onSubmit = async (values, actions, router, setCheck) => {
+export const onSubmit = async (values, actions, router, setIsLogin) => {
     try {
         const response = await loginService(values);
         if (response.status === 200) {
             Alert(null, "ورود موفقیت آمیز بود", "success");
-            setCheck(prevValue => prevValue + 1);
+            setIsLogin(true);
             router.push("/");
         }
     } catch (error) {

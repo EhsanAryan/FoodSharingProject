@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { MainContext } from '@/context/MainContextContainer';
 
 const Page = () => {
-    const { setCheck } = useContext(MainContext);
+    const { setIsLogin } = useContext(MainContext);
     const router = useRouter();
 
     return (
@@ -18,7 +18,7 @@ const Page = () => {
             <h1 className="text-primary mb-5 text-center text-4xl">ورود</h1>
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values, actions) => onSubmit(values, actions, router, setCheck)}
+                onSubmit={(values, actions) => onSubmit(values, actions, router, setIsLogin)}
                 validationSchema={validationSchema}
             >
                 {(formik) => (

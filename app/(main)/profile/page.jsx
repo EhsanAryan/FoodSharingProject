@@ -5,12 +5,13 @@ import UserInfoForm from './UserInfoForm';
 import UserPasswordForm from './UserPasswordForm';
 import { getUserInfoService } from '@/services/userServices';
 import { Alert } from '@/utils/popupWindows';
-import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import { MainContext } from '@/context/MainContextContainer';
+import { logoutAction } from '@/app/actions/actions';
+import { notFound, useRouter } from 'next/navigation';
 
 const Page = () => {
-    const { user, setUser } = useContext(MainContext);
+    const { user, setUser, isLogin, setIsLogin, isLoading } = useContext(MainContext);
 
     const [loading, setLoading] = useState(true);
     const [tab, setTab] = useState("info"); // info, password
@@ -25,13 +26,19 @@ const Page = () => {
                 setUser(response.data);
             }
         } catch (error) {
+            console.log(error);
             if (error?.response?.status && error?.response?.data?.message) {
                 await Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
                 if (error.response.status === 401) {
-                    router.push("/login");
+                    await logoutAction();
+                    setIsLogin(false);
+                    notFound();
+                } else {
+                    router.back();
                 }
             } else {
-                Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
+                await Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
+                router.back();
             }
         } finally {
             setLoading(false);
@@ -39,12 +46,18 @@ const Page = () => {
     }
 
     useEffect(() => {
-        if (!user) {
-            getUserInfoHandler();
-        } else {
-            setLoading(false);
+        if (!isLoading) {
+            if (!isLogin) {
+                notFound();
+            } else {
+                if (!user) {
+                    getUserInfoHandler();
+                } else {
+                    setLoading(false);
+                }
+            }
         }
-    }, [user]);
+    }, [user, isLogin, isLoading]);
 
     return (
         <div>

@@ -7,9 +7,9 @@ const DrawerNavbar = ({
     isMenuOpen,
     handleSetIsMenuOpen,
     navbarItems,
-    anchor = "right"
+    anchor = "right",
+    isLoading = false
 }) => {
-
     const pathname = usePathname();
 
     return (
@@ -34,32 +34,34 @@ const DrawerNavbar = ({
                 onClick={(ev) => ev.stopPropagation()}
                 className="bg-primary"
             >
-                {navbarItems.map((item, index) => (
-                    <ListItem disablePadding key={`hidden_${Math.random()}_${index}`}
-                        className="my-2">
-                        <Link
-                            href={item.href}
-                            className={`w-full 
-                            ${pathname === item.href ? "bg-[#00000033]" : ""}`}
-                        >
-                            <ListItemButton
-                                sx={{
-                                    display: "flex",
-                                    gap: "0.5rem",
-                                    alignItems: "center",
-                                    width: "100%"
-                                }}
+                {!isLoading ? (
+                    navbarItems.map((item, index) => (
+                        <ListItem disablePadding key={`hidden_${Math.random()}_${index}`}
+                            className="my-2">
+                            <Link
+                                href={item.href}
+                                className={`w-full 
+                                ${pathname === item.href ? "bg-[#00000033]" : ""}`}
                             >
-                                <ListItemIcon sx={{ minWidth: "unset" }}>
-                                    {item.icon}
-                                </ListItemIcon>
-                                <span>
-                                    {item.text}
-                                </span>
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                ))}
+                                <ListItemButton
+                                    sx={{
+                                        display: "flex",
+                                        gap: "0.5rem",
+                                        alignItems: "center",
+                                        width: "100%"
+                                    }}
+                                >
+                                    <ListItemIcon sx={{ minWidth: "unset" }}>
+                                        {item.icon}
+                                    </ListItemIcon>
+                                    <span>
+                                        {item.text}
+                                    </span>
+                                </ListItemButton>
+                            </Link>
+                        </ListItem>
+                    ))
+                ) : null}
             </List>
         </Drawer>
     );
