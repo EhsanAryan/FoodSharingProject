@@ -14,6 +14,7 @@
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
     "formik": "^2.4.6",
     "moment-jalaali": "^0.10.1",
     "mongoose": "^8.4.3",

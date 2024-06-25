@@ -1,6 +1,7 @@
 import User from "@/models/user";
 import db from "@/utils/db";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
 
@@ -40,10 +41,10 @@ export async function POST(request) {
         }
 
         const newUser = new User({
-            first_name: data.first_name,
-            last_name: data.last_name,
-            username: data.username,
-            password: data.password
+            first_name: data.first_name.trim(),
+            last_name: data.last_name.trim(),
+            username: data.username.trim(),
+            password: bcrypt.hashSync(data.password.trim())
         });
         await newUser.save();
 

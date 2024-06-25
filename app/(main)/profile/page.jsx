@@ -26,7 +26,6 @@ const Page = () => {
                 setUser(response.data);
             }
         } catch (error) {
-            console.log(error);
             if (error?.response?.status && error?.response?.data?.message) {
                 await Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
                 if (error.response.status === 401) {
@@ -61,7 +60,7 @@ const Page = () => {
 
     return (
         <div>
-            {loading ? (
+            {(loading || isLoading) ? (
                 <Loading
                     size={50}
                     className="mt-12"

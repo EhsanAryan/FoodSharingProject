@@ -9,21 +9,17 @@ import { notFound } from 'next/navigation';
 import Loading from '@/components/Loading';
 
 const Page = () => {
-    const { isLogin } = useContext(MainContext);
-
-    const [loading, setLoading] = useState(true);
+    const { isLogin, isLoading } = useContext(MainContext);
 
     useEffect(() => {
         if (!isLogin) {
             notFound();
-        } else {
-            setLoading(false);
         }
     }, [isLogin]);
 
     return (
         <div>
-            {loading ? (
+            {isLoading ? (
                 <Loading
                     size={50}
                     className="mt-12"

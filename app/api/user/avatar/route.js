@@ -102,7 +102,6 @@ export async function POST(request) {
         );
 
     } catch (error) {
-        console.log(error);
         return NextResponse.json(
             {
                 message: "مشکلی از سمت سرور رخ داده است.\nلطفاً چند لحظه بعد مجدداً تلاش کنید."

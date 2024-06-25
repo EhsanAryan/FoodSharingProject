@@ -74,8 +74,8 @@ const Header = () => {
             getUserInfoHandler();
         } else {
             setUser(null);
-            setIsLoading(false);
             setIsLogin(false);
+            setIsLoading(false);
         }
     }, [isLogin]);
 

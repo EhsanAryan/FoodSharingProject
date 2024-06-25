@@ -2,6 +2,7 @@ import User from "@/models/user";
 import db from "@/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
 
@@ -23,11 +24,11 @@ export async function POST(request) {
 
         await db.connect();
 
-        const existUsername = await User.findOne({
+        const existUser = await User.findOne({
             username: data.username.trim()
         }).lean();
 
-        if (!existUsername) {
+        if (!existUser) {
             return NextResponse.json(
                 {
                     message: "کاربری با نام کاربری وارد شده، وجود ندارد"
@@ -39,12 +40,9 @@ export async function POST(request) {
             );
         }
 
-        const existUser = await User.findOne({
-            username: data.username.trim(),
-            password: data.password.trim()
-        }).lean();
+        const isCorrectPassword = bcrypt.compareSync(data.password.trim() , existUser.password);
 
-        if (!existUser) {
+        if (!isCorrectPassword) {
             return NextResponse.json(
                 {
                     message: "رمز عبور نادرست می‌باشد"
