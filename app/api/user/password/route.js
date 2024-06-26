@@ -2,13 +2,12 @@ import User from "@/models/user";
 import db from "@/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import fs from 'fs';
-import path from 'path';
 import { checkTokenIsValid } from "@/app/actions/actions";
+import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request) {
+export async function PUT(request) {
     try {
         if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
             return NextResponse.json(
@@ -17,21 +16,6 @@ export async function POST(request) {
                 },
                 {
                     status: 401,
-                }
-            );
-        }
-
-        const formData = await request.formData();
-        const avatar = formData.get("avatar");
-
-        if (!avatar || !(avatar instanceof File)) {
-            return NextResponse.json(
-                {
-                    message: "فایل ارسال شده، نامعتبر می‌باشد"
-                }
-                ,
-                {
-                    status: 400
                 }
             );
         }
@@ -64,18 +48,25 @@ export async function POST(request) {
             }
         }
 
+        const data = await request.json();
+
+        if (!(data.old_password && data.new_password && data.confirm_password)) {
+            return NextResponse.json(
+                {
+                    message: "لطفاً تمام فیلدهای الزامی را ارسال کنید"
+                }
+                ,
+                {
+                    status: 400,
+                }
+            );
+        }
+
         await db.connect();
 
-        // Delete the avatar of user if exists
         const user = await User.findById(decodedToken.sub).lean();
-        if (user) {
-            if (user.avatar) {
-                const existAvatarPath = path.join(process.cwd(), "public", user.avatar);
-                if (fs.existsSync(existAvatarPath)) {
-                    fs.unlinkSync(existAvatarPath);
-                }
-            }
-        } else {
+
+        if (!user) {
             return NextResponse.json(
                 {
                     message: "کاربر مورد نظر یافت نشد."
@@ -85,27 +76,41 @@ export async function POST(request) {
                 }
             );
         }
+        
+        const isCorrectPassword = bcrypt.compareSync(data.old_password.trim(), user.password);
 
-        // Write new avatar
-        const avatarExtension = avatar.name.split(".").pop();
-        const avatarName = `avatar_${decodedToken.sub}_${Math.random()}.${avatarExtension}`;
-        const avatarDir = path.join(process.cwd(), "public", "avatars");
-        const avatarPath = path.join(avatarDir, avatarName);
-        const avatarDatabasePath = `/avatars/${avatarName}`;
+        if (!isCorrectPassword) {
+            return NextResponse.json(
+                {
+                    message: "رمز عبور فعلی نادرست می‌باشد"
+                }
+                ,
+                {
+                    status: 400,
+                }
+            );
+        }
 
-        const fileStream = fs.createWriteStream(avatarPath);
-        const bufferedAvatar = await avatar.arrayBuffer();
-        fileStream.write(Buffer.from(bufferedAvatar), (err) => {
-            if (err) {
-                throw new Error("Saving image failed!");
-            }
-        });
-        fileStream.end();
+        if (data.new_password.trim() !== data.confirm_password.trim()) {
+            return NextResponse.json(
+                {
+                    message: "رمز عبور جدید با تکرار آن تطابق ندارد."
+                }
+                ,
+                {
+                    status: 400,
+                }
+            );
+        }
 
-        // Update new avatar path of user
+        const newHashPassword = bcrypt.hashSync(data.new_password.trim());
+
+        // Update new password of user
         const updatedUser = await User.findByIdAndUpdate(
             decodedToken.sub,
-            { avatar: avatarDatabasePath },
+            {
+                password: newHashPassword
+            },
             { new: true } // Return the updated document
         ).lean();
 
@@ -120,10 +125,8 @@ export async function POST(request) {
             );
         }
 
-        const { password, ...updatedUserData } = db.convertToObject(updatedUser);
-
         return NextResponse.json(
-            updatedUserData
+            {}
             ,
             {
                 status: 200
@@ -133,7 +136,7 @@ export async function POST(request) {
     } catch (err) {
         return NextResponse.json(
             {
-                message: "مشکلی از سمت سرور رخ داده است.\nلطفاً چند لحظه بعد مجدداً تلاش کنید."
+                message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."
             }
             ,
             {
@@ -142,3 +145,4 @@ export async function POST(request) {
         );
     }
 }
+

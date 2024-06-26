@@ -3,6 +3,7 @@ import db from "@/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const dynamic = "force-dynamic";
 
@@ -40,7 +41,7 @@ export async function POST(request) {
             );
         }
 
-        const isCorrectPassword = bcrypt.compareSync(data.password.trim() , existUser.password);
+        const isCorrectPassword = bcrypt.compareSync(data.password.trim(), existUser.password);
 
         if (!isCorrectPassword) {
             return NextResponse.json(
@@ -54,10 +55,27 @@ export async function POST(request) {
             );
         }
 
-        cookies().set("userId", existUser._id.toString());
+        const payload = {
+            sub: existUser._id,
+            username: existUser.username,
+            // first_name: existUser.first_name,
+            // last_name: existUser.last_name
+        };
+
+        const JWT_SECRET = process.env.JWT_SECRET;
+
+        const token = jwt.sign(
+            payload,
+            JWT_SECRET,
+            { expiresIn: "30d" }
+        );
+
+        cookies().set("foodToken", token, {
+            maxAge: 30 * 24 * 60 * 60,
+        });
 
         return NextResponse.json(
-            db.convertToObject(existUser)
+            {}
             ,
             {
                 status: 200,

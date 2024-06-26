@@ -1,3 +1,5 @@
+import { logoutAction } from "@/app/actions/actions";
+import { changeUserInfoService } from "@/services/userServices";
 import { Alert } from "@/utils/popupWindows";
 import * as Yup from "yup";
 
@@ -6,14 +8,25 @@ export const initialValues = {
     last_name: "",
 }
 
-export const onSubmit = async (values, actions, router) => {
-    // const response = await registerAction(values);
-    // if (response.status === 200) {
-    //     await Alert(null, "حساب کاربری شما با موفقیت ایجاد شد", "success");
-    //     router.push("/login");
-    // } else {
-    //     Alert("خطا!", response.message, "error");
-    // }
+export const onSubmit = async (values, actions, setUser, setIsLogin, notFound) => {
+    try {
+        const response = await changeUserInfoService(values);
+        if (response.status === 200) {
+            setUser(response.data);
+            Alert(null, "اطلاعات شما با موفقیت به روز رسانی شد.", "success");
+        }
+    } catch (error) {
+        if (error?.response?.status && error?.response?.data?.message) {
+            Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
+            if (error.response.status === 401) {
+                await logoutAction();
+                setIsLogin(false);
+                notFound();
+            }
+        } else {
+            Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
+        }
+    }
 }
 
 export const validationSchema = Yup.object({

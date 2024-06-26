@@ -5,14 +5,15 @@ import { Form, Formik } from 'formik';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { initialValues, onSubmit, validationSchema } from './userInfoFormik';
 import { Alert } from '@/utils/popupWindows';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { Avatar } from '@mui/material';
 import { MainContext } from '@/context/MainContextContainer';
-import { changeAvatarService } from '@/services/userServices';
+import { changeUserAvatarService } from '@/services/userServices';
 import Loading from '@/components/Loading';
+import { logoutAction } from '@/app/actions/actions';
 
 const UserInfoForm = () => {
-    const { user, setUser } = useContext(MainContext);
+    const { user, setUser, setIsLogin } = useContext(MainContext);
 
     const [reinitializeValues, setReinitializeValues] = useState(null);
     const [avatarLoading, setAvatarLoading] = useState(false);
@@ -30,14 +31,19 @@ const UserInfoForm = () => {
         const formData = new FormData();
         formData.append("avatar", file);
         try {
-            const response = await changeAvatarService(formData);
+            const response = await changeUserAvatarService(formData);
             if (response.status === 200) {
-                Alert(null, "تصویر آواتار با موفقیت به روز رسانی شد.", "success");
                 setUser(response.data);
+                Alert(null, "تصویر آواتار با موفقیت به روز رسانی شد.", "success");
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
                 Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
+                if (error.response.status === 401) {
+                    await logoutAction();
+                    setIsLogin(false);
+                    notFound();
+                }
             } else {
                 Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
             }
@@ -89,7 +95,7 @@ const UserInfoForm = () => {
             </div>
             <Formik
                 initialValues={reinitializeValues || initialValues}
-                onSubmit={(values, actions) => onSubmit(values, actions, router)}
+                onSubmit={(values, actions) => onSubmit(values, actions, setUser, setIsLogin, notFound)}
                 validationSchema={validationSchema}
                 enableReinitialize
             >

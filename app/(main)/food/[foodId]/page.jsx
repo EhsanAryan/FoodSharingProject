@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 
 const getFoodHandler = async (foodId) => {
-    db.connect();
+    await db.connect();
 
     const food = await Food.findById(foodId).lean();
 

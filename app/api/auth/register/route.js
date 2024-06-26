@@ -10,10 +10,22 @@ export async function POST(request) {
     try {
         const data = await request.json();
 
-        if (!(data.username && data.password && data.first_name && data.last_name)) {
+        if (!(data.username && data.password && data.confirm_password && data.first_name && data.last_name)) {
             return NextResponse.json(
                 {
                     message: "لطفاً تمام فیلدهای الزامی را ارسال کنید"
+                }
+                ,
+                {
+                    status: 400,
+                }
+            );
+        }
+
+        if (data.password.trim() !== data.confirm_password.trim()) {
+            return NextResponse.json(
+                {
+                    message: "رمز عبور با تکرار آن تطابق ندارد."
                 }
                 ,
                 {
@@ -49,7 +61,7 @@ export async function POST(request) {
         await newUser.save();
 
         return NextResponse.json(
-            data
+            {}
             ,
             {
                 status: 200,

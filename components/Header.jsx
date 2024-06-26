@@ -9,14 +9,19 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import MenuIcon from '@mui/icons-material/Menu';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import LoginIcon from '@mui/icons-material/Login';
-import { Box, IconButton } from '@mui/material';
+import { Avatar, Box, IconButton } from '@mui/material';
 import { MainContext } from '@/context/MainContextContainer';
 import { getUserInfoService } from '@/services/userServices';
 import { getCookieValue } from '@/utils/getCookieValue';
 import { logoutAction } from '@/app/actions/actions';
-
+import HomeIcon from '@mui/icons-material/Home';
 
 const navbarItems = [
+    {
+        href: "/",
+        text: "خانه",
+        icon: <HomeIcon />
+    },
     {
         href: "/profile",
         text: "حساب کاربری",
@@ -31,6 +36,11 @@ const navbarItems = [
 
 const noAuthNavbarItems = [
     {
+        href: "/",
+        text: "خانه",
+        icon: <HomeIcon />
+    },
+    {
         href: "/login",
         text: "ورود/ثبت نام",
         icon: <LoginIcon />
@@ -38,7 +48,7 @@ const noAuthNavbarItems = [
 ];
 
 const Header = () => {
-    const { setUser, isLogin, setIsLogin, isLoading, setIsLoading } = useContext(MainContext);
+    const { user, setUser, isLogin, setIsLogin, isLoading, setIsLoading } = useContext(MainContext);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -69,7 +79,7 @@ const Header = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        if (getCookieValue("userId")) {
+        if (getCookieValue("foodToken")) {
             setIsLogin(true);
             getUserInfoHandler();
         } else {
@@ -80,7 +90,7 @@ const Header = () => {
     }, [isLogin]);
 
     return (
-        <header className=" w-full h-[60px] bg-primary px-3 md:px-5 
+        <header className=" w-full h-[70px] bg-primary px-3 md:px-5 
         flex items-center justify-between">
             <div>
                 <Box sx={{
@@ -143,10 +153,22 @@ const Header = () => {
                     </div>
                 ) : null}
                 <Link
-                    href="/"
+                    href="/profile"
                     className="hover-shadow"
                 >
-                    <FastfoodIcon sx={{ fontSize: "2rem" }} />
+                    {!isLoading ? isLogin ? (
+                        <Avatar
+                            src={user?.avatar || ""}
+                            alt="User avatar"
+                            sx={{
+                                width: "55px",
+                                height: "55px",
+                                cursor: "pointer"
+                            }}
+                        />
+                    ) : (
+                        <FastfoodIcon sx={{ fontSize: "2rem" }} />
+                    ) : null}
                 </Link>
             </div>
             <DrawerNavbar
