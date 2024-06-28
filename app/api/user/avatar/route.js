@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import fs from 'fs';
 import path from 'path';
 import { checkTokenIsValid } from "@/app/actions/actions";
+import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -121,6 +122,8 @@ export async function POST(request) {
         }
 
         const { password, ...updatedUserData } = db.convertToObject(updatedUser);
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json(
             updatedUserData

@@ -1,14 +1,16 @@
 import User from "@/models/user";
+import Food from "@/models/food";
 import db from "@/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import fs from 'fs';
+import path from 'path';
 import { checkTokenIsValid } from "@/app/actions/actions";
-import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
-export async function PUT(request) {
+export async function POST(request) {
     try {
         if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
             return NextResponse.json(
@@ -17,6 +19,36 @@ export async function PUT(request) {
                 },
                 {
                     status: 401,
+                }
+            );
+        }
+
+        const formData = await request.formData();
+        const title = formData.get("title");
+        const summary = formData.get("summary");
+        const instruction = formData.get("instruction");
+        const image = formData.get("image");
+
+        if (!(title && summary && instruction && image)) {
+            return NextResponse.json(
+                {
+                    message: "لطفاً تمام فیلدهای الزامی را ارسال کنید"
+                }
+                ,
+                {
+                    status: 400
+                }
+            );
+        }
+
+        if (!(image instanceof File)) {
+            return NextResponse.json(
+                {
+                    message: "فایل ارسال شده، نامعتبر می‌باشد"
+                }
+                ,
+                {
+                    status: 400
                 }
             );
         }
@@ -49,20 +81,6 @@ export async function PUT(request) {
             }
         }
 
-        const data = await request.json();
-
-        if (!(data.old_password && data.new_password && data.confirm_password)) {
-            return NextResponse.json(
-                {
-                    message: "لطفاً تمام فیلدهای الزامی را ارسال کنید"
-                }
-                ,
-                {
-                    status: 400,
-                }
-            );
-        }
-
         await db.connect();
 
         const user = await User.findById(decodedToken.sub).lean();
@@ -77,54 +95,31 @@ export async function PUT(request) {
                 }
             );
         }
-        
-        const isCorrectPassword = bcrypt.compareSync(data.old_password.trim(), user.password);
 
-        if (!isCorrectPassword) {
-            return NextResponse.json(
-                {
-                    message: "رمز عبور فعلی نادرست می‌باشد"
-                }
-                ,
-                {
-                    status: 400,
-                }
-            );
-        }
+        // Write food image
+        const imageExtension = image.name.split(".").pop();
+        const imageName = `food_${decodedToken.sub}_${Math.random()}.${imageExtension}`;
+        const imageDir = path.join(process.cwd(), "public", "foods");
+        const imagePath = path.join(imageDir, imageName);
+        const imageDatabasePath = `/foods/${imageName}`;
 
-        if (data.new_password.trim() !== data.confirm_password.trim()) {
-            return NextResponse.json(
-                {
-                    message: "رمز عبور جدید با تکرار آن تطابق ندارد."
-                }
-                ,
-                {
-                    status: 400,
-                }
-            );
-        }
+        const fileStream = fs.createWriteStream(imagePath);
+        const bufferedAvatar = await image.arrayBuffer();
+        fileStream.write(Buffer.from(bufferedAvatar), (err) => {
+            if (err) {
+                throw new Error("Saving image failed!");
+            }
+        });
+        fileStream.end();
 
-        const newHashPassword = bcrypt.hashSync(data.new_password.trim());
-
-        // Update new password of user
-        const updatedUser = await User.findByIdAndUpdate(
-            decodedToken.sub,
-            {
-                password: newHashPassword
-            },
-            { new: true } // Return the updated document
-        ).lean();
-
-        if (!updatedUser) {
-            return NextResponse.json(
-                {
-                    message: "کاربر مورد نظر یافت نشد."
-                },
-                {
-                    status: 404
-                }
-            );
-        }
+        const newUser = new Food({
+            title,
+            summary,
+            instruction,
+            image: imageDatabasePath,
+            creator_id: user._id
+        });
+        await newUser.save();
 
         revalidatePath("/", "layout");
 
@@ -139,7 +134,7 @@ export async function PUT(request) {
     } catch (err) {
         return NextResponse.json(
             {
-                message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."
+                message: "مشکلی از سمت سرور رخ داده است.\nلطفاً چند لحظه بعد مجدداً تلاش کنید."
             }
             ,
             {
@@ -148,4 +143,3 @@ export async function PUT(request) {
         );
     }
 }
-

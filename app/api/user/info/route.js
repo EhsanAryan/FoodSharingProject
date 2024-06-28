@@ -3,6 +3,7 @@ import db from "@/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { checkTokenIsValid } from "@/app/actions/actions";
+import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -161,6 +162,8 @@ export async function PUT(request) {
                 }
             );
         }
+
+        revalidatePath("/", "layout");
 
         const { password, ...updatedUserData } = db.convertToObject(updatedUser);
 

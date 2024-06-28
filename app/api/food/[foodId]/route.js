@@ -1,15 +1,56 @@
-import User from "@/models/user";
-import Food from "@/models/food";
 import db from "@/utils/db";
-import { cookies } from "next/headers";
+import Food from "@/models/food";
 import { NextResponse } from "next/server";
+import User from "@/models/user";
+import { cookies } from "next/headers";
 import fs from 'fs';
 import path from 'path';
 import { checkTokenIsValid } from "@/app/actions/actions";
+import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request) {
+export async function GET(request, context) {
+    try {
+        const foodId = context.params.foodId;
+
+        await db.connect();
+
+        const food = await Food.findById(foodId).lean();
+
+        if (!food) {
+            return NextResponse.json(
+                {
+                    message: "غذای مورد نظر یافت نشد."
+                },
+                {
+                    status: 404,
+                }
+            );
+        }
+
+        return NextResponse.json(
+            db.convertToObject(food)
+            ,
+            {
+                status: 200,
+            }
+        );
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json(
+            {
+                message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."
+            }
+            ,
+            {
+                status: 500,
+            }
+        );
+    }
+}
+
+export async function PUT(request, context) {
     try {
         if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
             return NextResponse.json(
@@ -21,6 +62,8 @@ export async function POST(request) {
                 }
             );
         }
+
+        const foodId = context.params.foodId;
 
         const formData = await request.formData();
         const title = formData.get("title");
@@ -95,6 +138,36 @@ export async function POST(request) {
             );
         }
 
+        const food = await Food.findById(foodId).lean();
+
+        if (!food) {
+            return NextResponse.json(
+                {
+                    message: "غذای مورد نظر یافت نشد."
+                },
+                {
+                    status: 404,
+                }
+            );
+        }
+
+        if (food.creator_id.toString() !== user._id.toString()) {
+            return NextResponse.json(
+                {
+                    message: "شما مجوز تغییر اطلاعات این غذا را ندارید"
+                },
+                {
+                    status: 403
+                }
+            );
+        }
+
+        // Delete the food image if exists
+        const existImagePath = path.join(process.cwd(), "public", food.image);
+        if (fs.existsSync(existImagePath)) {
+            fs.unlinkSync(existImagePath);
+        }
+
         // Write food image
         const imageExtension = image.name.split(".").pop();
         const imageName = `food_${decodedToken.sub}_${Math.random()}.${imageExtension}`;
@@ -111,20 +184,36 @@ export async function POST(request) {
         });
         fileStream.end();
 
-        const newUser = new Food({
-            title,
-            summary,
-            instruction,
-            image: imageDatabasePath,
-            creator_id: user._id
-        });
-        await newUser.save();
+        // Update the food
+        const updatedFood = await Food.findByIdAndUpdate(
+            foodId,
+            {
+                title,
+                summary,
+                instruction,
+                image: imageDatabasePath,
+            },
+            { new: true } // Return the updated document
+        ).lean();
+
+        if (!updatedFood) {
+            return NextResponse.json(
+                {
+                    message: "کاربر مورد نظر یافت نشد."
+                },
+                {
+                    status: 404
+                }
+            );
+        }
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json(
             {}
             ,
             {
-                status: 200
+                status: 201
             }
         );
 
@@ -140,3 +229,4 @@ export async function POST(request) {
         );
     }
 }
+

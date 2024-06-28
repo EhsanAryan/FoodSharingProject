@@ -62,7 +62,7 @@ const Page = async ({ params: { foodId } }) => {
                 }}
             ></div>
             <div className="divider mt-14 mb-6"></div>
-            <div className="right-appear flex items-center gap-2 
+            <div className="right-appear flex items-center gap-4 
             sm:px-4 md:px-8">
                 <Avatar
                     src={food?.creator?.avatar || ""}

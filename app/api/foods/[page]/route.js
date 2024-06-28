@@ -4,21 +4,6 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-// const foods = [
-//     {
-//         title: "همبرگر",
-//         summary: "یه همبرگر ساده",
-//         instruction: "ابتدا گوشت را میپزیم\nسپس میزاریم لای نون.",
-//         image: "/images/burger.jpg",
-//     },
-//     {
-//         title: "پیتزا",
-//         summary: "پیتزا مخلوط",
-//         instruction: "پیتزا رو میزاریم تو فر\n10 دقیقه بعد برمیداریم میخوریم",
-//         image: "/images/pizza.jpg",
-//     },
-// ]
-
 export async function GET(request, context) {
     try {
         const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;

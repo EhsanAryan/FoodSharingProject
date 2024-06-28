@@ -4,6 +4,14 @@ export const getFoodsService = (page, pageSize=20) => {
     return httpService(`/api/foods/${page}?page_size=${pageSize}`, "get");
 }
 
+export const getSingleFoodService = (foodId) => {
+    return httpService(`/api/food/${foodId}`, "get");
+}
+
 export const createNewFoodService = (formData) => {
-    return httpService("/api/foods", "post", formData, "multipart/form-data")
+    return httpService("/api/food", "post", formData, "multipart/form-data")
+}
+
+export const updateFoodService = (foodId, formData) => {
+    return httpService(`/api/food/${foodId}`, "put", formData, "multipart/form-data")
 }
