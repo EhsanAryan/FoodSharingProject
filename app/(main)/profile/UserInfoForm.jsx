@@ -24,8 +24,8 @@ const UserInfoForm = () => {
     const changeAvatarHandler = async (ev) => {
         const file = ev.target.files[0];
         if (!file) return;
-        if (!file.type.includes("image/")) return Alert("خطا!", "لطفاً یک تصویر آپلود کنید", "error");
-        if (file.size > 3 * 1024 * 1024) return Alert("خطا!", "حداکثر سایز تصویر باید 3 مگابایت باشد", "error");
+        if (!file.type.includes("image/")) return Alert("خطا!", "لطفاً یک تصویر بارگذاری کنید", "error");
+        if (file.size > 2 * 1024 * 1024) return Alert("خطا!", "حداکثر سایز تصویر باید 2 مگابایت باشد", "error");
 
         setAvatarLoading(true);
         const formData = new FormData();

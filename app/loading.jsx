@@ -3,7 +3,7 @@ import React from 'react';
 
 const Loading = () => {
     return (
-        <div className="mt-12 mb-10 w-full flex flex-col gap-3 justify-center items-center">
+        <div className="my-10 w-full flex flex-col gap-3 justify-center items-center">
             <CircularProgress
                 size={40}
                 sx={{

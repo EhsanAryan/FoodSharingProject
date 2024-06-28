@@ -56,7 +56,7 @@ export async function POST(request) {
         }
 
         const payload = {
-            sub: existUser._id,
+            sub: existUser._id.toString(),
             username: existUser.username,
             // first_name: existUser.first_name,
             // last_name: existUser.last_name

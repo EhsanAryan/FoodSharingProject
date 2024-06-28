@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const foodSchema = mongoose.Schema({
-    name: {
+    title: {
         type: String,
         required: true
     },
@@ -15,6 +15,11 @@ const foodSchema = mongoose.Schema({
     },
     image: {
         type: String,
+        required: true,
+    },
+    creator_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User model
         required: true,
     },
 });

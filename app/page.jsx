@@ -63,13 +63,13 @@ const Home = () => {
 							<div className="relative w-full h-[300px]">
 								<Image
 									src={item.image}
-									alt={item.name}
+									alt={item.title}
 									fill
 									className="object-cover"
 								/>
 							</div>
 							<div className="px-2 pt-4 pb-5">
-								<h4 className="text-xl text-center">{item.name}</h4>
+								<h4 className="text-xl text-center">{item.title}</h4>
 								<div className="mt-2 mb-8">
 									{item.summary}
 								</div>

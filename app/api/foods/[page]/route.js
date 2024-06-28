@@ -6,16 +6,16 @@ export const dynamic = "force-dynamic";
 
 // const foods = [
 //     {
-//         name: "همبرگر",
+//         title: "همبرگر",
 //         summary: "یه همبرگر ساده",
 //         instruction: "ابتدا گوشت را میپزیم\nسپس میزاریم لای نون.",
-//         image: "/foods/burger.jpg",
+//         image: "/images/burger.jpg",
 //     },
 //     {
-//         name: "پیتزا",
+//         title: "پیتزا",
 //         summary: "پیتزا مخلوط",
 //         instruction: "پیتزا رو میزاریم تو فر\n10 دقیقه بعد برمیداریم میخوریم",
-//         image: "/foods/pizza.jpg",
+//         image: "/images/pizza.jpg",
 //     },
 // ]
 

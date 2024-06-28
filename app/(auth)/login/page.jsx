@@ -14,7 +14,7 @@ const Page = () => {
 
     return (
         <div className="bg-slate-950 rounded-lg px-6 md:px-10 pt-3 pb-5 w-full max-w-[500px] 
-        appear mx-auto">
+        top-appear mx-auto">
             <h1 className="text-primary mb-5 text-center text-4xl">ورود</h1>
             <Formik
                 initialValues={initialValues}
