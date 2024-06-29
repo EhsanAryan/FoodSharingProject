@@ -1,29 +1,30 @@
+import { checkIsOwner, checkTokenIsValid } from '@/app/actions/actions';
 import Food from '@/models/food';
 import User from '@/models/user';
 import db from '@/utils/db';
 import { Avatar } from '@mui/material';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
+import Details from './Details';
 
 const getFoodHandler = async (foodId) => {
     await db.connect();
 
-    const food = await Food.findById(foodId).lean();
+    const food = await Food.findById(foodId).populate("creator").lean();
 
-    if (!food) notFound();
+    if (!(food && food.creator)) notFound();
 
-    const foodCreator = await User.findById(food.creator_id).lean();
+    food.creator = db.convertToObject(food.creator);
 
-    if (!foodCreator) notFound();
+    delete food.creator.password;
 
-    const { password, ...foodCreatorData } = db.convertToObject(foodCreator);
+    let is_owner = await checkIsOwner(food.creator._id.toString());
 
     return {
         ...db.convertToObject(food),
-        creator: {
-            ...foodCreatorData
-        }
+        is_owner
     };
 }
 
@@ -47,40 +48,26 @@ const Page = async ({ params: { foodId } }) => {
             <div className="text-sm sm:text-base mt-6 sm:px-4 md:px-8 right-appear">
                 توضیحات:
             </div>
-            <div className="text-sm sm:text-base mt-2 px-2 sm:px-6 md:px-10 right-appear">
+            <div className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear">
                 {food?.summary}
             </div>
             <div className="text-sm sm:text-base mt-8 sm:px-4 md:px-8 right-appear">
                 دستور پخت:
             </div>
             <div
-                className="text-sm sm:text-base mt-2 px-2 sm:px-6 md:px-10 right-appear"
+                className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear"
                 dangerouslySetInnerHTML={{
                     __html: food.instruction ?
                         food.instruction.replaceAll("\n", "<br />")
                         : ""
                 }}
             ></div>
-            <div className="divider mt-14 mb-6"></div>
-            <div className="right-appear flex items-center gap-4 
-            sm:px-4 md:px-8">
-                <Avatar
-                    src={food?.creator?.avatar || ""}
-                    alt="Food Creator avatar"
-                    sx={{
-                        width: "55px",
-                        height: "55px",
-                    }}
-                />
-                <div className="flex flex-col">
-                    <small>
-                        {food?.creator?.username}
-                    </small>
-                    <small>
-                        {`${food?.creator?.first_name || ""} ${food?.creator?.last_name || ""}`}
-                    </small>
-                </div>
-            </div>
+            {food ? (
+                <>
+                    <div className="divider mt-14 mb-6 top-appear"></div>
+                    <Details food={food} />
+                </>
+            ) : null}
         </div>
     );
 }

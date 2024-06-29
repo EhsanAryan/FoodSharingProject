@@ -37,7 +37,6 @@ export async function GET(request, context) {
             }
         );
     } catch (error) {
-        console.log(error);
         return NextResponse.json(
             {
                 message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."
@@ -61,6 +60,34 @@ export async function PUT(request, context) {
                     status: 401,
                 }
             );
+        }
+
+        const token = cookies().get("foodToken").value;
+
+        const { decodedToken, error } = await checkTokenIsValid(token);
+
+        if (error) {
+            if (error.name === "TokenExpiredError") {
+                return NextResponse.json(
+                    {
+                        message: "توکن منقضی شده است!"
+                    }
+                    ,
+                    {
+                        status: 401,
+                    }
+                );
+            } else {
+                return NextResponse.json(
+                    {
+                        message: "توکن نامعتبر می‌باشد!"
+                    }
+                    ,
+                    {
+                        status: 401,
+                    }
+                );
+            }
         }
 
         const foodId = context.params.foodId;
@@ -95,34 +122,6 @@ export async function PUT(request, context) {
             );
         }
 
-        const token = cookies().get("foodToken").value;
-
-        const { decodedToken, error } = await checkTokenIsValid(token);
-
-        if (error) {
-            if (error.name === "TokenExpiredError") {
-                return NextResponse.json(
-                    {
-                        message: "توکن منقضی شده است!"
-                    }
-                    ,
-                    {
-                        status: 401,
-                    }
-                );
-            } else {
-                return NextResponse.json(
-                    {
-                        message: "توکن نامعتبر می‌باشد!"
-                    }
-                    ,
-                    {
-                        status: 401,
-                    }
-                );
-            }
-        }
-
         await db.connect();
 
         const user = await User.findById(decodedToken.sub).lean();
@@ -151,7 +150,7 @@ export async function PUT(request, context) {
             );
         }
 
-        if (food.creator_id.toString() !== user._id.toString()) {
+        if (food.creator.toString() !== user._id.toString()) {
             return NextResponse.json(
                 {
                     message: "شما مجوز تغییر اطلاعات این غذا را ندارید"
@@ -221,6 +220,124 @@ export async function PUT(request, context) {
         return NextResponse.json(
             {
                 message: "مشکلی از سمت سرور رخ داده است.\nلطفاً چند لحظه بعد مجدداً تلاش کنید."
+            }
+            ,
+            {
+                status: 500,
+            }
+        );
+    }
+}
+
+
+export async function DELETE(request, context) {
+    try {
+        if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
+            return NextResponse.json(
+                {
+                    message: "احراز هویت انجام نشده است."
+                },
+                {
+                    status: 401,
+                }
+            );
+        }
+
+        const token = cookies().get("foodToken").value;
+
+        const { decodedToken, error } = await checkTokenIsValid(token);
+
+        if (error) {
+            if (error.name === "TokenExpiredError") {
+                return NextResponse.json(
+                    {
+                        message: "توکن منقضی شده است!"
+                    }
+                    ,
+                    {
+                        status: 401,
+                    }
+                );
+            } else {
+                return NextResponse.json(
+                    {
+                        message: "توکن نامعتبر می‌باشد!"
+                    }
+                    ,
+                    {
+                        status: 401,
+                    }
+                );
+            }
+        }
+
+        const foodId = context.params.foodId;
+
+        await db.connect();
+
+        const user = await User.findById(decodedToken.sub).lean();
+
+        if (!user) {
+            return NextResponse.json(
+                {
+                    message: "کاربر مورد نظر یافت نشد."
+                },
+                {
+                    status: 404
+                }
+            );
+        }
+
+        const food = await Food.findById(foodId).lean();
+
+        if (!food) {
+            return NextResponse.json(
+                {
+                    message: "غذای مورد نظر یافت نشد."
+                },
+                {
+                    status: 404,
+                }
+            );
+        }
+
+        if (food.creator.toString() !== user._id.toString()) {
+            return NextResponse.json(
+                {
+                    message: "شما مجوز حذف این غذا را ندارید"
+                },
+                {
+                    status: 403
+                }
+            );
+        }
+
+        const deletedFood = await Food.findByIdAndDelete(foodId).lean();
+
+        if (!deletedFood) {
+            return NextResponse.json(
+                {
+                    message: "غذای مورد نظر یافت نشد."
+                },
+                {
+                    status: 404,
+                }
+            );
+        }
+
+        revalidatePath("/", "layout");
+
+        return NextResponse.json(
+            db.convertToObject(deletedFood)
+            ,
+            {
+                status: 200,
+            }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            {
+                message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."
             }
             ,
             {

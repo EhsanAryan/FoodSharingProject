@@ -15,3 +15,7 @@ export const createNewFoodService = (formData) => {
 export const updateFoodService = (foodId, formData) => {
     return httpService(`/api/food/${foodId}`, "put", formData, "multipart/form-data")
 }
+
+export const deleteFoodService = (foodId) => {
+    return httpService(`/api/food/${foodId}`, "delete")
+}

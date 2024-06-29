@@ -9,7 +9,7 @@ export const Alert = (title, text, icon, buttonText) => {
     });
 }
 
-export const Confirm = (title, text, icon, dangerMode, cancelButton, okButton) => {
+export const Confirm = (title, text, icon, dangerMode=false, cancelButton, okButton) => {
     return swal({
         title,
         text,

@@ -117,7 +117,7 @@ export async function POST(request) {
             summary,
             instruction,
             image: imageDatabasePath,
-            creator_id: user._id
+            creator: user._id
         });
         await newUser.save();
 

@@ -63,7 +63,7 @@ const Page = () => {
             {(loading || isLoading) ? (
                 <Loading
                     size={50}
-                    className="mt-12"
+                    className="my-12"
                 />
             ) : user ? (
                 <div className="w-full bg-slate-900 rounded-xl max-w-screen-xl mx-auto">

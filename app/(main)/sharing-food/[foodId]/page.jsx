@@ -195,10 +195,7 @@ const Page = ({ params: { foodId } }) => {
                                     <Link
                                         href="/"
                                         className="px-6 rounded-md
-                                        flex justify-center items-center"
-                                        style={{
-                                            background: "linear-gradient(120deg, #bd1600, #e60000)"
-                                        }}
+                                        flex justify-center items-center red-btn"
                                     >
                                         لغو
                                     </Link>

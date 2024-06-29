@@ -8,7 +8,6 @@
   }
 
   .text-primary {
-    /* background: linear-gradient(#0cf, #08657c); */
     background: linear-gradient(#cfc205 40%, #f16d01 60%);
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -211,4 +210,21 @@
   height: 1.5px;
   border-radius: 100px;
   background-color: white;
+}
+
+.red-btn {
+  background: linear-gradient(120deg, #bd1600, #e60000);
+}
+
+.red-btn:hover {
+  box-shadow: 0px 0px 15px #830f00, 0px 0px 25px #bd1600;
+
+}
+
+.yellow-btn {
+  background: linear-gradient(120deg, #cfc205, #f16d01);
+}
+
+.yellow-btn:hover {
+  box-shadow: 0px 0px 15px #f16d01, 0px 0px 25px #f16d01;
 }
