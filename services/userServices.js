@@ -15,3 +15,7 @@ export const changeUserPasswordService = (data) => {
 export const changeUserAvatarService = (formData) => {
     return httpService("/api/user/avatar", "post", formData, "multipart/form-data");
 }
+
+export const getUserFoodsService = () => {
+    return httpService("/api/user/foods", "get");
+}

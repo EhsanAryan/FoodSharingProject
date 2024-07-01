@@ -16,9 +16,9 @@ export async function GET(request, context) {
 
         await db.connect();
 
-        const food = await Food.findById(foodId).lean();
+        const food = await Food.findById(foodId).populate("creator").lean();
 
-        if (!food) {
+        if (!(food && food.creator)) {
             return NextResponse.json(
                 {
                     message: "غذای مورد نظر یافت نشد."
@@ -28,6 +28,9 @@ export async function GET(request, context) {
                 }
             );
         }
+
+        food.creator = db.convertToObject(food.creator);
+        delete food.creator.password;
 
         return NextResponse.json(
             db.convertToObject(food)
@@ -209,7 +212,7 @@ export async function PUT(request, context) {
         revalidatePath("/", "layout");
 
         return NextResponse.json(
-            {}
+            db.convertToObject(updatedFood)
             ,
             {
                 status: 201

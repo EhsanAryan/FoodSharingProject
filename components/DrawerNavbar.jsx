@@ -40,8 +40,12 @@ const DrawerNavbar = ({
                             className="my-2">
                             <Link
                                 href={item.href}
-                                className={`w-full 
-                                ${pathname === item.href ? "bg-[#00000033]" : ""}`}
+                                onClick={handleSetIsMenuOpen}
+                                className={`w-full
+                                    ${item.href === "/profile" ? pathname.startsWith(item.href) ? "bg-[#00000033]" : "" :
+                                        pathname === item.href ? "bg-[#00000033]" : ""
+                                    }`
+                                }
                             >
                                 <ListItemButton
                                     sx={{

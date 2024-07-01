@@ -7,11 +7,11 @@ import { initialValues, onSubmit, validationSchema } from './userPasswordFormik'
 import { MainContext } from '@/context/MainContextContainer';
 import { notFound } from 'next/navigation';
 
-const UserPasswordForm = () => {
+const Page = () => {
     const { setIsLogin } = useContext(MainContext);
 
     return (
-        <div>
+        <>
             <Formik
                 initialValues={initialValues}
                 onSubmit={(values, actions) => onSubmit(values, actions, setIsLogin, notFound)}
@@ -63,8 +63,8 @@ const UserPasswordForm = () => {
                     </Form>
                 )}
             </Formik>
-        </div>
+        </>
     );
 }
 
-export default UserPasswordForm;
+export default Page;

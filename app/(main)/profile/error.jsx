@@ -5,7 +5,7 @@ import React from 'react';
 
 const Error = ({ error, reset }) => {
     return (
-        <div className="mt-10 mb-6 flex flex-col items-center gap-4">
+        <div className="my-10 flex flex-col items-center gap-4">
             <span className="text-4xl text-primary">
                 خطا!
             </span>

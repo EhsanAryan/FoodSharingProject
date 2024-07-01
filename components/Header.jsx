@@ -106,7 +106,9 @@ const Header = () => {
                             <Link
                                 key={`link_${Math.random()}_${index}`}
                                 href={item.href}
-                                className={`${pathname === item.href ? "navbar-acitve-link" : "navbar-link"}`}
+                                className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
+                                    pathname === item.href ? "navbar-acitve-link" : "navbar-link"
+                                }`}
                             >
                                 {item.text}
                             </Link>
@@ -116,7 +118,9 @@ const Header = () => {
                             <Link
                                 key={`link_${Math.random()}_${index}`}
                                 href={item.href}
-                                className={`${pathname === item.href ? "navbar-acitve-link" : "navbar-link"}`}
+                                className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
+                                    pathname === item.href ? "navbar-acitve-link" : "navbar-link"
+                                }`}
                             >
                                 {item.text}
                             </Link>

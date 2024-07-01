@@ -1,110 +1,139 @@
 "use client";
 
-import Loading from '@/components/Loading';
-import UserInfoForm from './UserInfoForm';
-import UserPasswordForm from './UserPasswordForm';
-import { getUserInfoService } from '@/services/userServices';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import GetField from '@/components/GetField';
+import { Form, Formik } from 'formik';
+import { initialValues, onSubmit, validationSchema } from './userInfoFormik';
 import { Alert } from '@/utils/popupWindows';
-import React, { useContext, useEffect, useState } from 'react';
-import { MainContext } from '@/context/MainContextContainer';
-import { logoutAction } from '@/app/actions/actions';
 import { notFound, useRouter } from 'next/navigation';
+import { Avatar } from '@mui/material';
+import { MainContext } from '@/context/MainContextContainer';
+import { changeUserAvatarService } from '@/services/userServices';
+import Loading from '@/components/Loading';
+import { logoutAction } from '@/app/actions/actions';
 
 const Page = () => {
-    const { user, setUser, isLogin, setIsLogin, isLoading } = useContext(MainContext);
+    const { user, setUser, setIsLogin } = useContext(MainContext);
 
-    const [loading, setLoading] = useState(true);
-    const [tab, setTab] = useState("info"); // info, password
+    const [reinitializeValues, setReinitializeValues] = useState(null);
+    const [avatarLoading, setAvatarLoading] = useState(false);
 
     const router = useRouter();
+    const imageInputRef = useRef(null);
 
-    const getUserInfoHandler = async () => {
-        setLoading(true);
+    const changeAvatarHandler = async (ev) => {
+        const file = ev.target.files[0];
+        if (!file) return;
+        if (!file.type.includes("image/")) return Alert("خطا!", "لطفاً یک تصویر بارگذاری کنید", "error");
+        if (file.size > 2 * 1024 * 1024) return Alert("خطا!", "حداکثر سایز تصویر باید 2 مگابایت باشد", "error");
+
+        setAvatarLoading(true);
+        const formData = new FormData();
+        formData.append("avatar", file);
         try {
-            const response = await getUserInfoService();
+            const response = await changeUserAvatarService(formData);
             if (response.status === 200) {
                 setUser(response.data);
+                Alert(null, "تصویر آواتار با موفقیت به روز رسانی شد.", "success");
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
-                await Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
+                Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
                 if (error.response.status === 401) {
                     await logoutAction();
                     setIsLogin(false);
                     notFound();
-                } else {
-                    router.back();
                 }
             } else {
-                await Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
-                router.back();
+                Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
             }
         } finally {
-            setLoading(false);
+            setAvatarLoading(false);
         }
     }
 
     useEffect(() => {
-        if (!isLoading) {
-            if (!isLogin) {
-                notFound();
-            } else {
-                if (!user) {
-                    getUserInfoHandler();
-                } else {
-                    setLoading(false);
-                }
-            }
+        if (user) {
+            setReinitializeValues({
+                first_name: user.first_name,
+                last_name: user.last_name
+            });
+        } else {
+            setReinitializeValues(null);
+            Alert("خطا!", "در دریافت جزئیات حساب کاربری شما مشکلی رخ داده است!", "error");
+            router.back();
         }
-    }, [user, isLogin, isLoading]);
+    }, [user]);
 
     return (
-        <div>
-            {(loading || isLoading) ? (
-                <Loading
-                    size={50}
-                    className="my-12"
+        <>
+            <div className="w-full flex justify-center mb-6">
+                {/* Hidden file input */}
+                <input
+                    type="file"
+                    className="hidden"
+                    ref={imageInputRef}
+                    onChange={(ev) => changeAvatarHandler(ev)}
                 />
-            ) : user ? (
-                <div className="w-full bg-slate-900 rounded-xl max-w-screen-xl mx-auto">
-                    <div className="w-full bg-slate-800 flex gap-2 items-center 
-                    rounded-t-xl py-6">
-                        <div
-                            className="flex-1 flex justify-center items-center 
-                            text-xl sm:text-2xl md:text-3xl"
-                        >
-                            <span
-                                className={`px-4 pb-1 cursor-pointer text-primary font-bold
-                                 ${tab === "info" ? "border-b-4 border-[#f16d01]" : ""}`}
-                                onClick={() => setTab("info")}
-                            >
-                                اطلاعات
-                            </span>
+                {avatarLoading ? (
+                    <Loading
+                        size={20}
+                        className="my-6"
+                    />
+                ) : (
+                    <Avatar
+                        src={user?.avatar || ""}
+                        alt="User avatar"
+                        sx={{
+                            width: "200px",
+                            height: "200px",
+                            cursor: "pointer"
+                        }}
+                        onClick={() => imageInputRef?.current?.click()}
+                    />
+                )}
+            </div>
+            <Formik
+                initialValues={reinitializeValues || initialValues}
+                onSubmit={(values, actions) => onSubmit(values, actions, setUser, setIsLogin, notFound)}
+                validationSchema={validationSchema}
+                enableReinitialize
+            >
+                {(formik) => (
+                    <Form className="w-full flex flex-col gap-4 items-center">
+                        <div className="w-full max-w-sm">
+                            <GetField
+                                control="input"
+                                name="first_name"
+                                placeholder="نام"
+                                label="نام"
+                                formik={formik}
+                            />
                         </div>
-                        <div
-                            className="flex-1 flex justify-center items-center 
-                            text-xl sm:text-2xl md:text-3xl"
-                        >
-                            <span
-                                className={`px-4 pb-1 cursor-pointer text-primary font-bold
-                                ${tab === "password" ? "border-b-4 border-[#f16d01]" : ""}`}
-                                onClick={() => setTab("password")}
-
-                            >
-                                کلمه عبور
-                            </span>
+                        <div className="w-full max-w-sm">
+                            <GetField
+                                control="input"
+                                name="last_name"
+                                placeholder="نام خانوادگی"
+                                label="نام خانوادگی"
+                                formik={formik}
+                            />
                         </div>
-                    </div>
-                    <div className="px-4 md:px-8 pt-8 pb-6">
-                        {tab === "info" ? (
-                            <UserInfoForm />
-                        ) : (
-                            <UserPasswordForm />
-                        )}
-                    </div>
-                </div>
-            ) : null}
-        </div>
+                        <div className="mt-4">
+                            <GetField
+                                control="submit"
+                                formik={formik}
+                                text="ارسال"
+                                disabledButton
+                                sx={{
+                                    background: "linear-gradient(120deg, #cfc205, #f16d01)"
+                                }}
+                            />
+                        </div>
+                    </Form>
+                )}
+            </Formik>
+        </>
     );
 }
 

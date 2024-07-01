@@ -1,31 +1,31 @@
-import { checkIsOwner, checkTokenIsValid } from '@/app/actions/actions';
+import { checkIsOwner } from '@/app/actions/actions';
 import Food from '@/models/food';
-import User from '@/models/user';
 import db from '@/utils/db';
-import { Avatar } from '@mui/material';
-import { cookies } from 'next/headers';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import Details from './Details';
 
 const getFoodHandler = async (foodId) => {
-    await db.connect();
-
-    const food = await Food.findById(foodId).populate("creator").lean();
-
-    if (!(food && food.creator)) notFound();
-
-    food.creator = db.convertToObject(food.creator);
-
-    delete food.creator.password;
-
-    let is_owner = await checkIsOwner(food.creator._id.toString());
-
-    return {
-        ...db.convertToObject(food),
-        is_owner
-    };
+    try {
+        await db.connect();
+    
+        const food = await Food.findById(foodId).populate("creator").lean();
+    
+        if (!(food && food.creator)) notFound();
+    
+        food.creator = db.convertToObject(food.creator);
+        delete food.creator.password;
+    
+        let is_owner = await checkIsOwner(food.creator._id.toString());
+    
+        return {
+            ...db.convertToObject(food),
+            is_owner
+        };
+    } catch (error) {
+        throw new Error("Food data fetching failed!");
+    }
 }
 
 const Page = async ({ params: { foodId } }) => {
