@@ -8,10 +8,16 @@ export async function GET(request, context) {
     try {
         const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
         const page = Number(context.params.page) || 1;
+        const search = new URL(request.url).searchParams.get("search") || "";
 
         await db.connect();
 
-        const count = await Food.countDocuments({});
+        const count = await Food.countDocuments(search.trim() ? {
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            }
+        } : {});
         const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
 
         if (page > pagesCount) {
@@ -25,16 +31,27 @@ export async function GET(request, context) {
             );
         }
 
-        const data = await Food.find()
+        const foods = await Food.find(search.trim() ? {
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            }
+        } : {})
             .skip((page - 1) * pageSize)
             .limit(pageSize)
+            .populate("creator")
             .lean();
+
+        foods.forEach((food) => {
+            food.creator = db.convertToObject(food.creator);
+            delete food.creator.password;
+        });
 
 
         return NextResponse.json(
             {
                 pagesCount,
-                data: data.map(item => db.convertToObject(item))
+                data: foods.map(item => db.convertToObject(item))
             },
             {
                 status: 200,

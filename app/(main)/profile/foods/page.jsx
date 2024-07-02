@@ -49,7 +49,7 @@ const Page = () => {
 
     return (
         <>
-            <h1 className="text-primary text-2xl text-center font-bold">غذاهای شما</h1>
+            <h1 className="text-primary text-3xl text-center font-bold">غذاهای شما</h1>
             {loading ? (
                 <Loading
                     size={40}
