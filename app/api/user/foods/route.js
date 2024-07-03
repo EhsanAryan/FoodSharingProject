@@ -48,6 +48,8 @@ export async function GET(request) {
             }
         }
 
+        const search = new URL(request.url).searchParams.get("search") || "";
+
         await db.connect();
 
         const user = await User.findById(decodedToken.sub).lean();
@@ -63,7 +65,15 @@ export async function GET(request) {
             );
         }
 
-        const foods = await Food.find({ creator: user._id}).populate("creator").lean();
+        const foods = await Food.find(search.trim() ? {
+            creator: user._id,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            }
+        } : {
+            creator: user._id
+        }).populate("creator").lean();
 
         foods.forEach((food) => {
             food.creator = db.convertToObject(food.creator);

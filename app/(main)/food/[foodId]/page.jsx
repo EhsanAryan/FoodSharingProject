@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import React from 'react';
 import Details from './Details';
 
+export const dynamic = "force-dynamic";
+
 const getFoodHandler = async (foodId) => {
     try {
         await db.connect();

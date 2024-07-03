@@ -27,14 +27,11 @@ export const checkIsOwner = async (id) => {
     const token = cookies().get("foodToken").value;
 
     const { decodedToken, error } = await checkTokenIsValid(token);
-
     if (error) return false;
 
     const user = await User.findById(decodedToken.sub).lean();
-
     if (!user) return false;
 
     if(user._id.toString() === id) return true;
     return false;
-
 }

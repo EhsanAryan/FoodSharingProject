@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getSingleFoodService } from '@/services/foodServices';
 import axios from 'axios';
+import { base_api_url } from '@/services/httpService';
 
 const Page = ({ params: { foodId } }) => {
     const { isLogin, setIsLogin, isLoading } = useContext(MainContext);
@@ -59,7 +60,7 @@ const Page = ({ params: { foodId } }) => {
 
     const getFileByPath = async (path) => {
         try {
-            const response = await axios.get(path, {
+            const response = await axios.get(`${base_api_url}${path}`, {
                 responseType: "blob"
             });
             if (response.status === 200) {
@@ -69,6 +70,7 @@ const Page = ({ params: { foodId } }) => {
                 });
                 return file;
             }
+            return null;
         } catch (error) {
             return null;
         } finally {

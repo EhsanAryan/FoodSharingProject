@@ -2,14 +2,11 @@
 
 import { getFoodsService } from '@/services/foodServices';
 import { Alert } from '@/utils/popupWindows';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Pagination } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import Loading from '@/components/Loading';
-
-
-export const dynamic = 'force-dynamic';
 
 const Home = () => {
 	const [foods, setFoods] = useState([]);
@@ -17,6 +14,8 @@ const Home = () => {
 	const [page, setPage] = useState(1);
 	const [pagesCount, setPagesCount] = useState(1);
 	const [searchChar, setSearchChar] = useState("");
+
+	const inputRef = useRef(null);
 
 	let searchTimeout;
 
@@ -31,6 +30,9 @@ const Home = () => {
 			if (response.status === 200) {
 				setFoods(response.data.data);
 				setPagesCount(response.data.pagesCount);
+				setTimeout(() => {
+                    inputRef?.current?.focus();
+                }, 50);
 			}
 		} catch (error) {
 			if (error?.response?.status && error?.response?.data?.message) {
@@ -46,7 +48,7 @@ const Home = () => {
 	const setSearchCharHandler = (char) => {
 		if(searchTimeout) clearTimeout(searchTimeout);
 		searchTimeout = setTimeout(() => {
-			setSearchChar(char);
+			setSearchChar(char.trim());
 			setPage(1);
 		}, 1000);
 	}
@@ -57,8 +59,8 @@ const Home = () => {
 
 	return (
 		<>
-			<h1 className="text-primary mb-4 text-center text-4xl">غذاها</h1>
-			<div className="text-center mb-6">
+			<h1 className="text-primary mb-3 text-center text-4xl">غذاها</h1>
+			<div className="text-center mb-7">
 				<input
 					type="text"
 					name="search"
@@ -67,6 +69,8 @@ const Home = () => {
 					className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
                     rounded-[20px] placeholder:text-sm disabled:opacity-60"
 					onChange={(ev) => setSearchCharHandler(ev.target.value)}
+					ref={inputRef}
+					disabled={loading}
 				/>
 			</div>
 			<div>
@@ -110,7 +114,7 @@ const Home = () => {
 						))}
 					</div>
 				) : (
-					<div className="mt-12 text-red-500 text-3xl text-center">
+					<div className="my-12 text-red-500 text-2xl md:text-3xl text-center">
 						غذایی برای نمایش موجود نیست!
 					</div>
 				)

@@ -8,6 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request, context) {
     try {
         const userId = context.params.userId;
+        const search = new URL(request.url).searchParams.get("search") || "";
 
         await db.connect();
 
@@ -24,7 +25,15 @@ export async function GET(request, context) {
             );
         }
 
-        const foods = await Food.find({ creator: userId }).populate("creator").lean();
+        const foods = await Food.find(search.trim() ? {
+            creator: userId,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            }
+        } : {
+            creator: userId
+        }).populate("creator").lean();
 
         foods.forEach((food) => {
             food.creator = db.convertToObject(food.creator);

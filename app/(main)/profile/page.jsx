@@ -77,8 +77,9 @@ const Page = () => {
                 />
                 {avatarLoading ? (
                     <Loading
-                        size={20}
-                        className="my-6"
+                        size={40}
+                        className="my-10"
+                        noText
                     />
                 ) : (
                     <Avatar
@@ -92,6 +93,9 @@ const Page = () => {
                         onClick={() => imageInputRef?.current?.click()}
                     />
                 )}
+            </div>
+            <div className="mb-6 text-center text-primary font-bold text-xl">
+                {user?.username}
             </div>
             <Formik
                 initialValues={reinitializeValues || initialValues}

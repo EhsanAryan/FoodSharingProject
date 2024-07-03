@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
 const connect = async () => {
-    await mongoose.connect("mongodb://127.0.0.1:27017/food");
+    await mongoose.connect("mongodb://localhost:27017/food");
 }
 
 const close = async () => {
-    await mongoose.connection.close();
+    // await mongoose.connection.close();
+    await mongoose.disconnect();
 }
 
 const convertToObject = (doc) => {
