@@ -47,38 +47,61 @@ const Details = ({ food }) => {
     return (
         <>
             {food.is_owner ? (
-                <div className="top-appear flex items-center gap-8 
-                    sm:px-4 md:px-8">
+                <div className="flex flex-col gap-y-8 gap-x-4 sm:flex-row justify-between items-center
+                sm:px-4 md:px-8">
                     {loading ? (
                         <Loading
-                            size={35}
+                            size={40}
                             noText
+                            className="my-2"
                         />
                     ) : (
                         <>
-                            <button
-                                type="button"
-                                className="flex justify-center items-center gap-2
-                                py-2 px-6 rounded-md red-btn"
-                                onClick={() => foodDeleteHandler(food._id)}
-                            >
-                                <DeleteIcon />
-                                <span>حذف</span>
-                            </button>
-                            <Link
-                                href={`/sharing-food/${food._id}`}
-                                className="flex justify-center items-center gap-2
-                        py-2 px-6 rounded-lg yellow-btn"
-                            >
-                                <EditIcon />
-                                <span>ویرایش</span>
-                            </Link>
+                            <div className="right-appear flex items-center gap-4">
+                                <Avatar
+                                    src={food?.creator?.avatar || ""}
+                                    alt="Food Creator avatar"
+                                    sx={{
+                                        width: "65px",
+                                        height: "65px",
+                                    }}
+                                />
+                                <div className="flex flex-col gap-1">
+                                    <small>
+                                        {food?.creator?.username}
+                                    </small>
+                                    <small>
+                                        {`${food?.creator?.first_name || ""} ${food?.creator?.last_name || ""}`}
+                                    </small>
+                                </div>
+                            </div>
+                            <div className="left-appear flex items-center gap-6">
+                                <Link
+                                    href={`/sharing-food/${food._id}`}
+                                    className="flex justify-center items-center gap-2
+                                    py-2 px-6 rounded-lg yellow-btn"
+                                >
+                                    <EditIcon />
+                                    <span>ویرایش</span>
+                                </Link>
+                                <button
+                                    type="button"
+                                    className="flex justify-center items-center gap-2
+                                    py-2 px-6 rounded-md red-btn"
+                                    onClick={() => foodDeleteHandler(food._id)}
+                                >
+                                    <DeleteIcon />
+                                    <span>حذف</span>
+                                </button>
+                            </div>
                         </>
                     )}
                 </div>
             ) : (
-                <div className="right-appear flex items-center gap-4 
-                        sm:px-4 md:px-8">
+                <div
+                    className="right-appear flex items-center gap-4 
+                    sm:px-4 md:px-8"
+                >
                     <Avatar
                         src={food?.creator?.avatar || ""}
                         alt="Food Creator avatar"
