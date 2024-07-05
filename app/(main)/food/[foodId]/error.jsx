@@ -10,7 +10,7 @@ const Error = ({ error, reset }) => {
                 خطا!
             </span>
             <span className="text-2xl text-primary">
-                در دریافت جزئیات غذا خطایی رخ داده است.
+                {error.message}
             </span>
             <Link
                 href="/"

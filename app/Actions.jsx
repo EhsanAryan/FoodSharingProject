@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React, { useContext, useState } from 'react';
 import SubjectIcon from '@mui/icons-material/Subject';
+import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert, Confirm } from '@/utils/popupWindows';
 import { deleteFoodService } from '@/services/foodServices';
@@ -46,11 +47,19 @@ const Actions = ({ rowData, setForceRequest }) => {
         ${loading ? "pointer-events-none" : ""}`}>
             <Link
                 href={`/food/${rowData._id}`}
-                className="px-4 py-1.5 rounded-lg yellow-btn
+                className="px-4 py-1.5 rounded-lg green-btn
                 flex justify-center items-center gap-2"
             >
                 <SubjectIcon />
                 <span>جزئیات</span>
+            </Link>
+            <Link
+                href={`/sharing-food/${rowData._id}`}
+                className="px-4 py-1.5 rounded-lg yellow-btn
+                flex justify-center items-center gap-2"
+            >
+                <EditIcon />
+                <span>ویرایش</span>
             </Link>
             <button
                 type="button"

@@ -228,3 +228,11 @@
 .yellow-btn:hover {
   box-shadow: 0px 0px 15px #f16d01, 0px 0px 25px #f16d01;
 }
+
+.green-btn {
+  background: linear-gradient(120deg, #2cc206, #25910a);
+}
+
+.green-btn:hover {
+  box-shadow: 0px 0px 15px #25910a, 0px 0px 25px #25910a;
+}

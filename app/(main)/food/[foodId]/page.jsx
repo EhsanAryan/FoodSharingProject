@@ -26,7 +26,7 @@ const getFoodHandler = async (foodId) => {
             is_owner
         };
     } catch (error) {
-        throw new Error("Food data fetching failed!");
+        throw new Error("در دریافت جزئیات غذا خطایی رخ داده است.");
     }
 }
 

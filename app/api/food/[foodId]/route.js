@@ -153,7 +153,7 @@ export async function PUT(request, context) {
             );
         }
 
-        if (food.creator.toString() !== user._id.toString()) {
+        if (food.creator.toString() !== user._id.toString() && !user.is_admin) {
             return NextResponse.json(
                 {
                     message: "شما مجوز تغییر اطلاعات این غذا را ندارید"
