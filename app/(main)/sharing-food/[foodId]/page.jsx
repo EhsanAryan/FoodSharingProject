@@ -16,7 +16,7 @@ import axios from 'axios';
 import { base_api_url } from '@/services/httpService';
 
 const Page = ({ params: { foodId } }) => {
-    const { isLogin, setIsLogin, isLoading } = useContext(MainContext);
+    const { isLogin, setIsLogin, isLoading, setIsAdmin } = useContext(MainContext);
 
     const [loading, setLoading] = useState(false);
     const [foodData, setFoodData] = useState(null);
@@ -118,7 +118,7 @@ const Page = ({ params: { foodId } }) => {
             ) : isLogin ? (
                 <Formik
                     initialValues={reinitializeValues || initialValues}
-                    onSubmit={(values, actions) => onSubmit(values, actions, foodId, router, setIsLogin, notFound)}
+                    onSubmit={(values, actions) => onSubmit(values, actions, foodId, router, setIsLogin, setIsAdmin, notFound)}
                     validationSchema={validationSchema}
                     validateOnMount
                     enableReinitialize

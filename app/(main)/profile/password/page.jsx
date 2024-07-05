@@ -8,13 +8,13 @@ import { MainContext } from '@/context/MainContextContainer';
 import { notFound } from 'next/navigation';
 
 const Page = () => {
-    const { setIsLogin } = useContext(MainContext);
+    const { setIsLogin, setIsAdmin } = useContext(MainContext);
 
     return (
         <>
             <Formik
                 initialValues={initialValues}
-                onSubmit={(values, actions) => onSubmit(values, actions, setIsLogin, notFound)}
+                onSubmit={(values, actions) => onSubmit(values, actions, setIsLogin, setIsAdmin, notFound)}
                 validationSchema={validationSchema}
             >
                 {(formik) => (

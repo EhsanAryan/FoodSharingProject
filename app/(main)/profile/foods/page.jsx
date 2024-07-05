@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
 const Page = () => {
-    const { setIsLogin, isLogin } = useContext(MainContext);
+    const { setIsLogin, isLogin, setIsAdmin } = useContext(MainContext);
 
     const [loading, setLoading] = useState(true);
     const [foods, setFoods] = useState([]);
@@ -39,6 +39,7 @@ const Page = () => {
                 if (error.response.status === 401) {
                     await logoutAction();
                     setIsLogin(false);
+                    setIsAdmin(0);
                 } else {
                     router.back();
                 }

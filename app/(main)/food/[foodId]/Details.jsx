@@ -13,7 +13,7 @@ import { logoutAction } from '@/app/actions/actions';
 import { deleteFoodService } from '@/services/foodServices';
 
 const Details = ({ food }) => {
-    const { setIsLogin } = useContext(MainContext);
+    const { setIsLogin, setIsAdmin } = useContext(MainContext);
 
     const [loading, setLoading] = useState(false);
 
@@ -35,6 +35,7 @@ const Details = ({ food }) => {
                 if (error.response.status === 401) {
                     await logoutAction();
                     setIsLogin(false);
+                    setIsAdmin(0);
                 }
             } else {
                 await Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");

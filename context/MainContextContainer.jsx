@@ -8,6 +8,7 @@ const MainContextContainer = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isLogin, setIsLogin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(0);
 
     return (
         <MainContext.Provider value={{
@@ -17,6 +18,8 @@ const MainContextContainer = ({ children }) => {
             setIsLogin,
             isLoading,
             setIsLoading,
+            isAdmin,
+            setIsAdmin
         }}>
             {children}
         </MainContext.Provider>

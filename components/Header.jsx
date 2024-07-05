@@ -48,7 +48,7 @@ const noAuthNavbarItems = [
 ];
 
 const Header = () => {
-    const { user, setUser, isLogin, setIsLogin, isLoading, setIsLoading } = useContext(MainContext);
+    const { user, setUser, isLogin, setIsLogin, isAdmin, setIsAdmin, isLoading, setIsLoading } = useContext(MainContext);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -59,6 +59,7 @@ const Header = () => {
     const logoutHandler = async () => {
         await logoutAction();
         setIsLogin(false);
+        setIsAdmin(0);
     }
 
     const getUserInfoHandler = async () => {
@@ -66,11 +67,14 @@ const Header = () => {
             const response = await getUserInfoService();
             if (response.status === 200) {
                 setUser(response.data);
+                setIsLogin(true);
+                setIsAdmin(response.data.is_admin);
             }
         } catch (error) {
             if (error?.response?.status === 401) {
                 await logoutAction();
                 setIsLogin(false);
+                setIsAdmin(0);
             }
         } finally {
             setIsLoading(false);
@@ -80,11 +84,15 @@ const Header = () => {
     useEffect(() => {
         setIsLoading(true);
         if (getCookieValue("foodToken")) {
+            if (getCookieValue("isAdmin")) {
+                setIsAdmin(Number(getCookieValue("isAdmin")))
+            }
             setIsLogin(true);
             getUserInfoHandler();
         } else {
             setUser(null);
             setIsLogin(false);
+            setIsAdmin(0);
             setIsLoading(false);
         }
     }, [isLogin]);
@@ -108,7 +116,7 @@ const Header = () => {
                                 href={item.href}
                                 className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
                                     pathname === item.href ? "navbar-acitve-link" : "navbar-link"
-                                }`}
+                                    }`}
                             >
                                 {item.text}
                             </Link>
@@ -120,7 +128,7 @@ const Header = () => {
                                 href={item.href}
                                 className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
                                     pathname === item.href ? "navbar-acitve-link" : "navbar-link"
-                                }`}
+                                    }`}
                             >
                                 {item.text}
                             </Link>

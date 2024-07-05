@@ -13,7 +13,7 @@ import Loading from '@/components/Loading';
 import { logoutAction } from '@/app/actions/actions';
 
 const Page = () => {
-    const { user, setUser, setIsLogin } = useContext(MainContext);
+    const { user, setUser, setIsLogin, setIsAdmin } = useContext(MainContext);
 
     const [reinitializeValues, setReinitializeValues] = useState(null);
     const [avatarLoading, setAvatarLoading] = useState(false);
@@ -42,6 +42,7 @@ const Page = () => {
                 if (error.response.status === 401) {
                     await logoutAction();
                     setIsLogin(false);
+                    setIsAdmin(0);
                     notFound();
                 }
             } else {
@@ -99,7 +100,7 @@ const Page = () => {
             </div>
             <Formik
                 initialValues={reinitializeValues || initialValues}
-                onSubmit={(values, actions) => onSubmit(values, actions, setUser, setIsLogin, notFound)}
+                onSubmit={(values, actions) => onSubmit(values, actions, setUser, setIsLogin, setIsAdmin, notFound)}
                 validationSchema={validationSchema}
                 enableReinitialize
             >

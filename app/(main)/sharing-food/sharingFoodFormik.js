@@ -11,7 +11,7 @@ export const initialValues = {
     image: null,
 }
 
-export const onSubmit = async (values, actions, router, setIsLogin, notFound) => {
+export const onSubmit = async (values, actions, router, setIsLogin, setIsAdmin, notFound) => {
     try {
         const formData = convertObjectToFormData(values);
 
@@ -26,6 +26,7 @@ export const onSubmit = async (values, actions, router, setIsLogin, notFound) =>
             if (error.response.status === 401) {
                 await logoutAction();
                 setIsLogin(false);
+                setIsAdmin(0);
                 notFound();
             }
         } else {

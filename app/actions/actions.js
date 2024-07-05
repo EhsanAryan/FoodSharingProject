@@ -6,6 +6,7 @@ import User from "@/models/user";
 
 export const logoutAction = async () => {
     cookies().delete("foodToken");
+    cookies().delete("isAdmin");
 }
 
 export const checkTokenIsValid = async (token) => {

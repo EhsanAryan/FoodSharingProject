@@ -58,8 +58,9 @@ export async function POST(request) {
         const payload = {
             sub: existUser._id.toString(),
             username: existUser.username,
+            is_admin: existUser.is_admin,
             // first_name: existUser.first_name,
-            // last_name: existUser.last_name
+            // last_name: existUser.last_name,
         };
 
         const JWT_SECRET = process.env.JWT_SECRET;
@@ -71,6 +72,10 @@ export async function POST(request) {
         );
 
         cookies().set("foodToken", token, {
+            maxAge: 30 * 24 * 60 * 60,
+        });
+
+        cookies().set("isAdmin", existUser.is_admin, {
             maxAge: 30 * 24 * 60 * 60,
         });
 

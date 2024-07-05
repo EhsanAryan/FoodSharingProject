@@ -10,7 +10,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 
 const ProfileLayout = ({ children }) => {
-    const { user, setUser, isLogin, setIsLogin, isLoading } = useContext(MainContext);
+    const { user, setUser, isLogin, setIsLogin, setIsAdmin, isLoading } = useContext(MainContext);
 
     const [loading, setLoading] = useState(true);
 
@@ -22,6 +22,7 @@ const ProfileLayout = ({ children }) => {
             const response = await getUserInfoService();
             if (response.status === 200) {
                 setUser(response.data);
+                setIsAdmin(response.data.is_admin);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
@@ -29,6 +30,7 @@ const ProfileLayout = ({ children }) => {
                 if (error.response.status === 401) {
                     await logoutAction();
                     setIsLogin(false);
+                    setIsAdmin(0);
                     notFound();
                 } else {
                     router.back();

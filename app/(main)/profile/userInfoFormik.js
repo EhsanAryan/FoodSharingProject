@@ -8,7 +8,7 @@ export const initialValues = {
     last_name: "",
 }
 
-export const onSubmit = async (values, actions, setUser, setIsLogin, notFound) => {
+export const onSubmit = async (values, actions, setUser, setIsLogin, setIsAdmin, notFound) => {
     try {
         const response = await changeUserInfoService(values);
         if (response.status === 200) {
@@ -21,6 +21,7 @@ export const onSubmit = async (values, actions, setUser, setIsLogin, notFound) =
             if (error.response.status === 401) {
                 await logoutAction();
                 setIsLogin(false);
+                setIsAdmin(0);
                 notFound();
             }
         } else {

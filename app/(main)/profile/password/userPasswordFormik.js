@@ -9,7 +9,7 @@ export const initialValues = {
     confirm_password: "",
 }
 
-export const onSubmit = async (values, actions, setIsLogin, notFound) => {
+export const onSubmit = async (values, actions, setIsLogin, setIsAdmin, notFound) => {
     try {
         const response = await changeUserPasswordService(values);
         if (response.status === 200) {
@@ -22,6 +22,7 @@ export const onSubmit = async (values, actions, setIsLogin, notFound) => {
             if (error.response.status === 401) {
                 await logoutAction();
                 setIsLogin(false);
+                setIsAdmin(0);
                 notFound();
             }
         } else {

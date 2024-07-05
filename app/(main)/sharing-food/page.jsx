@@ -13,7 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const Page = () => {
-    const { isLogin, setIsLogin, isLoading } = useContext(MainContext);
+    const { isLogin, setIsLogin, isLoading, setIsAdmin } = useContext(MainContext);
 
     const [image, setImage] = useState(null);
     const [imageURL, setImageURL] = useState("");
@@ -50,7 +50,7 @@ const Page = () => {
             ) : isLogin ? (
                 <Formik
                     initialValues={initialValues}
-                    onSubmit={(values, actions) => onSubmit(values, actions, router, setIsLogin, notFound)}
+                    onSubmit={(values, actions) => onSubmit(values, actions, router, setIsLogin, setIsAdmin, notFound)}
                     validationSchema={validationSchema}
                     validateOnMount
                 >
