@@ -15,6 +15,10 @@ import { getUserInfoService } from '@/services/userServices';
 import { getCookieValue } from '@/utils/getCookieValue';
 import { logoutAction } from '@/app/actions/actions';
 import HomeIcon from '@mui/icons-material/Home';
+import LunchDiningIcon from '@mui/icons-material/LunchDining';
+import GroupIcon from '@mui/icons-material/Group';
+import { Alert } from '@/utils/popupWindows';
+import axios from 'axios';
 
 const navbarItems = [
     {
@@ -31,6 +35,19 @@ const navbarItems = [
         href: "/sharing-food",
         text: "اشتراک غذا",
         icon: <LocalDiningIcon />
+    },
+];
+
+const adminNavbarItems = [
+    {
+        href: "/",
+        text: "غذاها",
+        icon: <LunchDiningIcon />
+    },
+    {
+        href: "/users",
+        text: "کاربران",
+        icon: <GroupIcon />
     },
 ];
 
@@ -55,6 +72,24 @@ const Header = () => {
     const handleSetIsMenuOpen = () => setIsMenuOpen(prevValue => !prevValue)
 
     const pathname = usePathname();
+
+    // Axios response interceptors
+    axios.interceptors.response.use(
+        (response) => {
+            return response;
+        },
+        (error) => {
+            if (error?.response?.status && error?.response?.data?.message) {
+                // if (error.response.status !== 401) {
+                //     Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
+                // }
+                Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
+            } else {
+                Alert("خطا!", "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید.", "error");
+            }
+            return Promise.reject(error);
+        }
+    );
 
     const logoutHandler = async () => {
         await logoutAction();
@@ -109,31 +144,44 @@ const Header = () => {
                     alignItems: "center",
                     gap: "1rem"
                 }}>
-                    {!isLoading ? isLogin ? (
-                        navbarItems.map((item, index) => (
-                            <Link
-                                key={`link_${Math.random()}_${index}`}
-                                href={item.href}
-                                className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
-                                    pathname === item.href ? "navbar-acitve-link" : "navbar-link"
-                                    }`}
-                            >
-                                {item.text}
-                            </Link>
-                        ))
-                    ) : (
-                        noAuthNavbarItems.map((item, index) => (
-                            <Link
-                                key={`link_${Math.random()}_${index}`}
-                                href={item.href}
-                                className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
-                                    pathname === item.href ? "navbar-acitve-link" : "navbar-link"
-                                    }`}
-                            >
-                                {item.text}
-                            </Link>
-                        ))
-                    ) : null}
+                    {!isLoading ? isLogin ?
+                        isAdmin === 1 ? (
+                            adminNavbarItems.map((item, index) => (
+                                <Link
+                                    key={`link_${Math.random()}_${index}`}
+                                    href={item.href}
+                                    className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
+                                        pathname === item.href ? "navbar-acitve-link" : "navbar-link"
+                                        }`}
+                                >
+                                    {item.text}
+                                </Link>
+                            ))
+                        ) : (
+                            navbarItems.map((item, index) => (
+                                <Link
+                                    key={`link_${Math.random()}_${index}`}
+                                    href={item.href}
+                                    className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
+                                        pathname === item.href ? "navbar-acitve-link" : "navbar-link"
+                                        }`}
+                                >
+                                    {item.text}
+                                </Link>
+                            ))
+                        ) : (
+                            noAuthNavbarItems.map((item, index) => (
+                                <Link
+                                    key={`link_${Math.random()}_${index}`}
+                                    href={item.href}
+                                    className={`${item.href === "/profile" ? pathname.startsWith(item.href) ? "navbar-acitve-link" : "navbar-link" :
+                                        pathname === item.href ? "navbar-acitve-link" : "navbar-link"
+                                        }`}
+                                >
+                                    {item.text}
+                                </Link>
+                            ))
+                        ) : null}
                 </Box>
                 <IconButton
                     size="large"
@@ -186,7 +234,7 @@ const Header = () => {
             <DrawerNavbar
                 isMenuOpen={isMenuOpen}
                 handleSetIsMenuOpen={handleSetIsMenuOpen}
-                navbarItems={isLogin ? navbarItems : noAuthNavbarItems}
+                navbarItems={isLogin ? isAdmin === 1 ? adminNavbarItems : navbarItems : noAuthNavbarItems}
                 anchor="right"
                 isLoading={isLoading}
             />

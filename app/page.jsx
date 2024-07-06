@@ -14,7 +14,7 @@ const Home = () => {
 
 	useEffect(() => {
 		if (!isLoading) {
-			if (isAdmin && !isLogin) {
+			if (isAdmin === 1 && !isLogin) {
 				router.push("/login")
 			}
 		}
@@ -27,7 +27,7 @@ const Home = () => {
 					size={50}
 					className="my-14"
 				/>
-			) : isAdmin ? (
+			) : isAdmin === 1 ? (
 				<HomeAdmin />
 			) : (
 				<HomeUser />

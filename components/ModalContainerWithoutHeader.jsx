@@ -8,6 +8,7 @@ const ModalContainerWithoutHeader = ({
     className,
     children,
     keepMounted,
+    onClose,
     blur
 }) => {
 
@@ -28,7 +29,7 @@ const ModalContainerWithoutHeader = ({
                 backdropFilter: blur ? "blur(5px)" : "",
             }}
             keepMounted={keepMounted}
-            onClick={() => setIsOpen(false)}
+            onClick={onClose ? () => onClose() : () => setIsOpen(false)}
         >
             <Fade in={isOpen}>
                 <Box className={`overflow-auto relative outline-none

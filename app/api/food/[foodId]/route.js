@@ -153,7 +153,7 @@ export async function PUT(request, context) {
             );
         }
 
-        if (food.creator.toString() !== user._id.toString() && !user.is_admin) {
+        if (food.creator.toString() !== user._id.toString() && user.is_admin === 0) {
             return NextResponse.json(
                 {
                     message: "شما مجوز تغییر اطلاعات این غذا را ندارید"
@@ -303,7 +303,7 @@ export async function DELETE(request, context) {
                 }
             );
         }
-        if (food.creator.toString() !== user._id.toString() && !user.is_admin) {
+        if (food.creator.toString() !== user._id.toString() && user.is_admin === 0) {
             return NextResponse.json(
                 {
                     message: "شما مجوز حذف این غذا را ندارید"

@@ -59,7 +59,7 @@ const Page = async ({ params: { foodId } }) => {
             <div
                 className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear"
                 dangerouslySetInnerHTML={{
-                    __html: food.instruction ?
+                    __html: food?.instruction ?
                         food.instruction.replaceAll("\n", "<br />")
                         : ""
                 }}

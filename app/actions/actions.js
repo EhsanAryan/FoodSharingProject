@@ -33,6 +33,6 @@ export const checkIsOwner = async (id) => {
     const user = await User.findById(decodedToken.sub).lean();
     if (!user) return false;
     
-    if(user._id.toString() === id.toString() || user.is_admin) return true;
+    if(user._id.toString() === id.toString() || user.is_admin === 1) return true;
     return false;
 }

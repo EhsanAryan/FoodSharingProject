@@ -236,3 +236,11 @@
 .green-btn:hover {
   box-shadow: 0px 0px 15px #25910a, 0px 0px 25px #25910a;
 }
+
+.blue-btn {
+  background: linear-gradient(120deg, #0fa6cc, #1289a7);
+}
+
+.blue-btn:hover {
+  box-shadow: 0px 0px 15px #1289a7, 0px 0px 25px #1289a7;
+}

@@ -33,13 +33,6 @@ const DataTablePagination = ({
                 setPagesCount(response.data.pagesCount || 1);
             }
         } catch (error) {
-            if (error.response) {
-                if (error.response.status !== 500) {
-                    Alert(`خطا ${error.response.status}!`, error.message, "error");
-                }
-            } else {
-                Alert("خطا!", error.message, "error");
-            }
         } finally {
             setLoading(false);
         }
@@ -62,16 +55,17 @@ const DataTablePagination = ({
         handleGetData(currentPage, itemsCount, searchChar);
     }, [currentPage, itemsCount, searchChar]);
 
-    useEffect(() => {
-        setCurrentPage(1);
-        setSearchChar("");
-        handleGetData(1, itemsCount, "");
-        if (searchInputRef.current) {
-            searchInputRef.current.value = "";
-        }
-    }, [APIFunction, dataField])
+    // useEffect(() => {
+    //     setCurrentPage(1);
+    //     setSearchChar("");
+    //     handleGetData(1, itemsCount, "");
+    //     if (searchInputRef.current) {
+    //         searchInputRef.current.value = "";
+    //     }
+    // }, [APIFunction, dataField])
 
     useEffect(() => {
+        if(forceRequest === 0) return;
         if (data.length === 1 && currentPage > 1) {
             setCurrentPage(prevValue => prevValue - 1);
         } else {
