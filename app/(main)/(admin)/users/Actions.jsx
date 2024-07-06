@@ -9,11 +9,13 @@ import { Alert, Confirm } from '@/utils/popupWindows';
 import { MainContext } from '@/context/MainContextContainer';
 import KeyIcon from '@mui/icons-material/Key';
 import PasswordModal from './modals/PasswordModal';
+import InfoModal from './modals/InfoModal';
 
 const Actions = ({ rowData, setForceRequest }) => {
     const { setIsLogin, setIsAdmin } = useContext(MainContext);
 
     const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+    const [infoModalOpen, setInfoModalOpen] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -34,8 +36,7 @@ const Actions = ({ rowData, setForceRequest }) => {
                 className="px-4 py-1.5 rounded-lg yellow-btn
                 flex justify-center items-center gap-2"
             >
-                <EditIcon />
-                <span>ویرایش</span>
+                
             </Link> */}
                 <button
                     type="button"
@@ -46,6 +47,15 @@ const Actions = ({ rowData, setForceRequest }) => {
                     <KeyIcon />
                     <span>تغییر رمز</span>
                 </button>
+                <button
+                    type="button"
+                    className="px-4 py-1.5 rounded-lg yellow-btn
+                flex justify-center items-center gap-2"
+                    onClick={() => setInfoModalOpen(true)}
+                >
+                    <EditIcon />
+                    <span>ویرایش</span>
+                </button>
             </div>
 
             {/* Change password modal */}
@@ -54,6 +64,15 @@ const Actions = ({ rowData, setForceRequest }) => {
                 setIsOpen={setPasswordModalOpen}
                 rowData={rowData}
             />
+
+            {/* Change info modal */}
+            <InfoModal
+                isOpen={infoModalOpen}
+                setIsOpen={setInfoModalOpen}
+                rowData={rowData}
+                setForceRequest={setForceRequest}
+            />
+            
         </>
     );
 }

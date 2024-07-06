@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request) {
+export async function PUT(request, context) {
     try {
         if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
             return NextResponse.json(
@@ -48,83 +48,7 @@ export async function GET(request) {
             }
         }
 
-        await db.connect();
-
-        const user = await User.findById(decodedToken.sub).lean();
-
-        if (!user) {
-            return NextResponse.json(
-                {
-                    message: "کاربر مورد نظر یافت نشد"
-                },
-                {
-                    status: 404,
-                }
-            );
-        }
-
-        const { password, ...userData } = db.convertToObject(user);
-
-        return NextResponse.json(
-            userData
-            ,
-            {
-                status: 200,
-            }
-        );
-    } catch (err) {
-        return NextResponse.json(
-            {
-                message: "مشکلی از سمت سرور رخ داده است!\nلطفاً چند لحظه دیگر مجدداً تلاش کنید."
-            }
-            ,
-            {
-                status: 500,
-            }
-        );
-    }
-}
-
-export async function PUT(request) {
-    try {
-        if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
-            return NextResponse.json(
-                {
-                    message: "احراز هویت انجام نشده است."
-                },
-                {
-                    status: 401,
-                }
-            );
-        }
-
-        const token = cookies().get("foodToken").value;
-
-        const { decodedToken, error } = await checkTokenIsValid(token);
-
-        if (error) {
-            if (error.name === "TokenExpiredError") {
-                return NextResponse.json(
-                    {
-                        message: "توکن منقضی شده است!"
-                    }
-                    ,
-                    {
-                        status: 401,
-                    }
-                );
-            } else {
-                return NextResponse.json(
-                    {
-                        message: "توکن نامعتبر می‌باشد!"
-                    }
-                    ,
-                    {
-                        status: 401,
-                    }
-                );
-            }
-        }
+        const userId = context.params.userId;
 
         const data = await request.json();
 
@@ -142,11 +66,35 @@ export async function PUT(request) {
 
         await db.connect();
 
+        const me = await User.findById(decodedToken.sub).lean();
+
+        if (!me) {
+            return NextResponse.json(
+                {
+                    message: "اطلاعات حساب کاربری شما یافت نشد."
+                },
+                {
+                    status: 404
+                }
+            );
+        }
+
+        if (me.is_admin === 0) {
+            return NextResponse.json(
+                {
+                    message: "شما مجوز تغییر رمز عبور این کاربر را ندارید"
+                },
+                {
+                    status: 403
+                }
+            );
+        }
+
         const user = await User.findOne({
             username: data.username
         }).lean();
 
-        if (user && user._id.toString() !== decodedToken.sub) {
+        if (user && user._id.toString() !== userId) {
             return NextResponse.json(
                 {
                     message: "نام کاربری وارد شده در حال حاضر وجود دارد.\nلطفاً نام کاربری دیگری را انتخاب نمایید."
@@ -160,7 +108,7 @@ export async function PUT(request) {
 
         // Update new data of user
         const updatedUser = await User.findByIdAndUpdate(
-            decodedToken.sub,
+            userId,
             {
                 username: data.username,
                 first_name: data.first_name,
@@ -182,10 +130,8 @@ export async function PUT(request) {
 
         revalidatePath("/", "layout");
 
-        const { password, ...updatedUserData } = db.convertToObject(updatedUser);
-
         return NextResponse.json(
-            updatedUserData
+            {}
             ,
             {
                 status: 200
@@ -204,4 +150,3 @@ export async function PUT(request) {
         );
     }
 }
-

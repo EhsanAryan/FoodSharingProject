@@ -56,6 +56,7 @@ const Page = () => {
     useEffect(() => {
         if (user) {
             setReinitializeValues({
+                username: user.username,
                 first_name: user.first_name,
                 last_name: user.last_name
             });
@@ -95,9 +96,6 @@ const Page = () => {
                     />
                 )}
             </div>
-            <div className="mb-6 text-center text-primary font-bold text-xl">
-                {user?.username}
-            </div>
             <Formik
                 initialValues={reinitializeValues || initialValues}
                 onSubmit={(values, actions) => onSubmit(values, actions, setUser, setIsLogin, setIsAdmin, notFound)}
@@ -106,6 +104,16 @@ const Page = () => {
             >
                 {(formik) => (
                     <Form className="w-full flex flex-col gap-4 items-center">
+                        <div className="w-full max-w-sm">
+                            <GetField
+                                control="input"
+                                name="username"
+                                placeholder="نام کاربری"
+                                label="نام کاربری"
+                                formik={formik}
+                                ltr
+                            />
+                        </div>
                         <div className="w-full max-w-sm">
                             <GetField
                                 control="input"

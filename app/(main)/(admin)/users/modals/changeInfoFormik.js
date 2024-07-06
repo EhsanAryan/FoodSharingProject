@@ -1,5 +1,5 @@
 import { logoutAction } from "@/app/actions/actions";
-import { changeUserInfoService } from "@/services/userServices";
+import { changeUserInfoByAdminService } from "@/services/userServices";
 import { Alert } from "@/utils/popupWindows";
 import * as Yup from "yup";
 
@@ -9,12 +9,13 @@ export const initialValues = {
     last_name: "",
 }
 
-export const onSubmit = async (values, actions, setUser, setIsLogin, setIsAdmin, notFound) => {
+export const onSubmit = async (values, actions, setIsLogin, setIsAdmin, notFound, rowData, setIsOpen, setForceRequest) => {
     try {
-        const response = await changeUserInfoService(values);
+        const response = await changeUserInfoByAdminService(rowData._id, values);
         if (response.status === 200) {
-            setUser(response.data);
-            Alert(null, "اطلاعات شما با موفقیت به روز رسانی شد.", "success");
+            Alert(null, `اطلاعات کاربر با موفقیت به روز رسانی شد.`, "success");
+            setIsOpen(false);
+            setForceRequest(prevValue => prevValue + 1);
         }
     } catch (error) {
         if (error?.response?.status && error?.response?.data?.message) {

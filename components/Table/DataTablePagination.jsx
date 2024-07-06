@@ -1,6 +1,7 @@
+"use client";
+
 import { CircularProgress, Pagination } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert } from '../../utils/popupWindows';
 
 const DataTablePagination = ({
     tableCols,

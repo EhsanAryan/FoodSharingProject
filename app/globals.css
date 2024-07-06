@@ -244,3 +244,8 @@
 .blue-btn:hover {
   box-shadow: 0px 0px 15px #1289a7, 0px 0px 25px #1289a7;
 }
+
+/* Override styles */
+.swal-text {
+  text-align: center;
+}
