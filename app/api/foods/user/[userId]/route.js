@@ -9,6 +9,7 @@ export async function GET(request, context) {
     try {
         const userId = context.params.userId;
         const search = new URL(request.url).searchParams.get("search") || "";
+        const category = new URL(request.url).searchParams.get("category") || "";
 
         await db.connect();
 
@@ -25,7 +26,17 @@ export async function GET(request, context) {
             );
         }
 
-        const foods = await Food.find(search.trim() ? {
+        const foods = await Food.find((category.trim() && search.trim()) ? {
+            creator: userId,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            },
+            category: category.trim()
+        } : category.trim() ? {
+            creator: userId,
+            category: category.trim()
+        } : search.trim() ? {
             creator: userId,
             title: {
                 $regex: search.trim(),

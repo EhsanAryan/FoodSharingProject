@@ -16,8 +16,8 @@ export const changeUserAvatarService = (formData) => {
     return httpService("/api/user/avatar", "post", formData, "multipart/form-data");
 }
 
-export const getUserFoodsService = (searchChar = "") => {
-    return httpService(`/api/user/foods?search=${searchChar}`, "get");
+export const getUserFoodsService = (searchChar = "", category="") => {
+    return httpService(`/api/user/foods?search=${searchChar}&category=${category}`, "get");
 }
 
 // Only admin APIs

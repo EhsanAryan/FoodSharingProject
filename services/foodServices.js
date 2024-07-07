@@ -20,6 +20,6 @@ export const deleteFoodService = (foodId) => {
     return httpService(`/api/food/${foodId}`, "delete")
 }
 
-export const getFoodsOfUserService = (userId, searchChar="") => {
-    return httpService(`/api/foods/user/${userId}?search=${searchChar}`, "get");
+export const getFoodsOfUserService = (userId, searchChar="", category="") => {
+    return httpService(`/api/foods/user/${userId}?search=${searchChar}&category=${category}`, "get");
 }

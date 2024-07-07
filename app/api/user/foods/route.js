@@ -49,6 +49,7 @@ export async function GET(request) {
         }
 
         const search = new URL(request.url).searchParams.get("search") || "";
+        const category = new URL(request.url).searchParams.get("category") || "";
 
         await db.connect();
 
@@ -65,14 +66,24 @@ export async function GET(request) {
             );
         }
 
-        const foods = await Food.find(search.trim() ? {
-            creator: user._id,
+        const foods = await Food.find((category.trim() && search.trim()) ? {
+            creator: decodedToken.sub,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            },
+            category: category.trim()
+        } : category.trim() ? {
+            creator: decodedToken.sub,
+            category: category.trim()
+        } : search.trim() ? {
+            creator: decodedToken.sub,
             title: {
                 $regex: search.trim(),
                 $options: "i"
             }
         } : {
-            creator: user._id
+            creator: decodedToken.sub
         }).populate("creator").lean();
 
         foods.forEach((food) => {

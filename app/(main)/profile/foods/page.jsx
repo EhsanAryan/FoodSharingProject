@@ -10,12 +10,33 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+const foodCategoryOptions = [
+    {
+        text: "همه",
+        value: ""
+    },
+    {
+        text: "پیش غذا",
+        value: "B"
+    },
+    {
+        text: "غذای اصلی",
+        value: "M"
+    },
+    {
+        text: "دسر",
+        value: "A"
+    },
+
+];
+
 const Page = () => {
     const { setIsLogin, isLogin, setIsAdmin } = useContext(MainContext);
 
     const [loading, setLoading] = useState(true);
     const [foods, setFoods] = useState([]);
     const [searchChar, setSearchChar] = useState("");
+    const [category, setCategory] = useState("");
 
     const router = useRouter();
 
@@ -26,7 +47,7 @@ const Page = () => {
     const getUserFoodsHandler = async () => {
         setLoading(true);
         try {
-            const response = await getUserFoodsService(searchChar);
+            const response = await getUserFoodsService(searchChar, category);
             if (response.status === 200) {
                 setFoods(response.data);
                 setTimeout(() => {
@@ -52,32 +73,55 @@ const Page = () => {
         }
     }
 
-    const setSearchCharHandler = (char) => {
+    const setSearchCharHandler = (ev) => {
+        const char = ev.target.value
         if (searchTimeout) clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
             setSearchChar(char.trim());
         }, 1000);
     }
 
+    const handleSetCategory = (ev) => {
+        const value = ev.target.value;
+        setCategory(value);
+    }
+
     useEffect(() => {
-        if(isLogin) getUserFoodsHandler();
-    }, [searchChar]);
+        if (isLogin) getUserFoodsHandler();
+    }, [searchChar, category]);
 
     return (
         <>
             <h1 className="text-primary text-3xl mb-3 text-center font-bold">غذاهای شما</h1>
-            <div className="text-center mb-7">
+            <div
+                className={`flex justify-center mb-7 
+                ${loading ? "pointer-events-none" : ""}`}
+            >
                 <input
                     type="text"
                     name="search"
                     id="search"
                     placeholder="نام غذا را وارد کنید"
                     className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
-                    rounded-[20px] placeholder:text-sm disabled:opacity-60"
-                    onChange={(ev) => setSearchCharHandler(ev.target.value)}
+                    rounded-s-[20px] placeholder:text-sm disabled:opacity-60"
+                    onChange={(ev) => setSearchCharHandler(ev)}
                     ref={inputRef}
-                    disabled={loading}
                 />
+                <select
+                    value={category}
+                    onChange={(ev) => handleSetCategory(ev)}
+                    className="bg-slate-700 px-3 py-1.5 outline-none
+                    max-w-[140px] border-none rounded-e-[20px]"
+                >
+                    {foodCategoryOptions.map(opt => (
+                        <option
+                            key={`status_${opt.value}`}
+                            value={opt.value}
+                        >
+                            {opt.text}
+                        </option>
+                    ))}
+                </select>
             </div>
             {loading ? (
                 <Loading

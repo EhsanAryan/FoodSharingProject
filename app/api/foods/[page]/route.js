@@ -19,17 +19,14 @@ export async function GET(request, context) {
                 $options: "i"
             },
             category: category.trim()
-        } : category.trim() ?
-            {
-                category: category.trim()
-
-            } : search.trim() ? {
-                title: {
-                    $regex: search.trim(),
-                    $options: "i"
-                },
-            } :
-                {});
+        } : category.trim() ? {
+            category: category.trim()
+        } : search.trim() ? {
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            }
+        } : {});
         const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
 
         if (page > pagesCount) {
