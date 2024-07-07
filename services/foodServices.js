@@ -1,7 +1,7 @@
 import httpService from "./httpService"
 
-export const getFoodsService = (page, pageSize=20, searchChar="") => {
-    return httpService(`/api/foods/${page}?page_size=${pageSize}&search=${searchChar}`, "get");
+export const getFoodsService = (page, pageSize=20, searchChar="", category="") => {
+    return httpService(`/api/foods/${page}?page_size=${pageSize}&search=${searchChar}&category=${category}`, "get");
 }
 
 export const getSingleFoodService = (foodId) => {

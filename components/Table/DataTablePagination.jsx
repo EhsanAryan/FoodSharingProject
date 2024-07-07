@@ -13,6 +13,9 @@ const DataTablePagination = ({
     forceRequest,
     rowTitle,
     noDataText,
+    hasCategory,
+    categoryOptions = [],
+    defaultCategory,
 }) => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
@@ -20,20 +23,32 @@ const DataTablePagination = ({
     const [currentPage, setCurrentPage] = useState(1);
     const [searchChar, setSearchChar] = useState("");
     const [itemsCount, setItemsCount] = useState(20);
+    const [category, setCategory] = useState(defaultCategory || "");
 
     const searchInputRef = useRef(null);
 
     let searchCharTimeout;
 
-    const handleGetData = async (currentPage, itemsCnt, char) => {
+    const handleGetData = async (currentPage, itemsCnt, char, cat) => {
+        console.log(cat);
         setLoading(true);
         try {
-            const response = await APIFunction(currentPage, itemsCnt, char);
+            let response;
+            if (!withoutSearch && hasCategory) {
+                response = await APIFunction(currentPage, itemsCnt, char, cat);
+            } else if (withoutSearch && hasCategory) {
+                response = await APIFunction(currentPage, itemsCnt, cat);
+            } else if (!withoutSearch && !hasCategory) {
+                response = await APIFunction(currentPage, itemsCnt, char);
+            } else if (withoutSearch && !hasCategory) {
+                response = await APIFunction(currentPage, itemsCnt);
+            }
             if (response.status === 200) {
                 setData(response.data[dataField]);
                 setPagesCount(response.data.pagesCount || 1);
             }
         } catch (error) {
+            
         } finally {
             setLoading(false);
         }
@@ -52,9 +67,15 @@ const DataTablePagination = ({
         }, 1000);
     }
 
+    const handleSetCategory = (ev) => {
+        const value = ev.target.value;
+        setCategory(value);
+        setCurrentPage(1);
+    }
+
     useEffect(() => {
-        handleGetData(currentPage, itemsCount, searchChar);
-    }, [currentPage, itemsCount, searchChar]);
+        handleGetData(currentPage, itemsCount, searchChar, category);
+    }, [currentPage, itemsCount, searchChar, category]);
 
     // useEffect(() => {
     //     setCurrentPage(1);
@@ -66,7 +87,7 @@ const DataTablePagination = ({
     // }, [APIFunction, dataField])
 
     useEffect(() => {
-        if(forceRequest === 0) return;
+        if (forceRequest === 0) return;
         if (data.length === 1 && currentPage > 1) {
             setCurrentPage(prevValue => prevValue - 1);
         } else {
@@ -83,17 +104,36 @@ const DataTablePagination = ({
     return (
         <>
             <div className="flex justify-between items-center flex-wrap gap-3 px-2 mt-1 mb-3">
-                {!withoutSearch && (
-                    <div>
+                <div className={`flex ${loading ? "pointer-events-none" : ""}`}>
+                    {!withoutSearch && (
                         <input type="text"
-                            className="bg-slate-800 min-w-[200px] sm:w-[280px] max-w-sm px-3 py-1.5 outline-none
-                            rounded-[20px] placeholder:text-sm disabled:opacity-60"
+                            className={`bg-slate-800 max-w-[150px] sm:w-[250px] sm:max-w-none 
+                            border-none px-3 py-1.5 outline-none placeholder:text-sm disabled:opacity-60
+                            ${hasCategory ? "rounded-s-[20px]" : "rounded-[20px]"}`}
                             placeholder={searchTitle || "جست و جو"}
                             onChange={(ev) => handleSetSearchChar(ev)}
                             ref={searchInputRef}
                         />
-                    </div>
-                )}
+                    )}
+                    {hasCategory && (
+                        <select
+                            value={category}
+                            onChange={(ev) => handleSetCategory(ev)}
+                            className="bg-slate-700 px-3 py-1.5 outline-none
+                                max-w-[140px] border-none rounded-e-[20px]"
+                        >
+                            {categoryOptions.map(opt => (
+                                <option
+                                    key={`status_${opt.value}`}
+                                    value={opt.value}
+                                >
+                                    {opt.text}
+                                </option>
+                            ))}
+                        </select>
+                    )}
+                </div>
+
                 {children && (
                     <div className="flex items-center flex-wrap gap-4">
                         {children}

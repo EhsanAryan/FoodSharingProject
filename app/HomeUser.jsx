@@ -8,12 +8,33 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Loading from '@/components/Loading';
 
+const foodCategoryOptions = [
+    {
+        text: "همه",
+        value: ""
+    },
+    {
+        text: "پیش غذا",
+        value: "B"
+    },
+    {
+        text: "غذای اصلی",
+        value: "M"
+    },
+    {
+        text: "دسر",
+        value: "A"
+    },
+
+];
+
 const HomeUser = () => {
     const [foods, setFoods] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [pagesCount, setPagesCount] = useState(1);
     const [searchChar, setSearchChar] = useState("");
+    const [category, setCategory] = useState("");
 
     const inputRef = useRef(null);
 
@@ -26,7 +47,7 @@ const HomeUser = () => {
     const getFoodsHandler = async () => {
         setLoading(true);
         try {
-            const response = await getFoodsService(page, 20, searchChar);
+            const response = await getFoodsService(page, 20, searchChar, category);
             if (response.status === 200) {
                 setFoods(response.data.data);
                 setPagesCount(response.data.pagesCount);
@@ -45,7 +66,8 @@ const HomeUser = () => {
         }
     }
 
-    const setSearchCharHandler = (char) => {
+    const setSearchCharHandler = (ev) => {
+        const char = ev.target.value;
         if (searchTimeout) clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
             setSearchChar(char.trim());
@@ -53,25 +75,48 @@ const HomeUser = () => {
         }, 1000);
     }
 
+    const handleSetCategory = (ev) => {
+        const value = ev.target.value;
+        setCategory(value);
+        setPage(1);
+    }
+
     useEffect(() => {
         getFoodsHandler();
-    }, [page, searchChar])
+    }, [page, searchChar, category])
 
     return (
         <>
             <h1 className="text-primary mb-3 text-center text-4xl">غذاها</h1>
-            <div className="text-center mb-7">
+            <div
+                className={`flex justify-center mb-7 
+                ${loading ? "pointer-events-none" : ""}`}
+            >
                 <input
                     type="text"
                     name="search"
                     id="search"
                     placeholder="نام غذا را وارد کنید"
                     className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
-                    rounded-[20px] placeholder:text-sm disabled:opacity-60"
-                    onChange={(ev) => setSearchCharHandler(ev.target.value)}
+                    rounded-s-[20px] placeholder:text-sm disabled:opacity-60"
+                    onChange={(ev) => setSearchCharHandler(ev)}
                     ref={inputRef}
-                    disabled={loading}
                 />
+                <select
+                    value={category}
+                    onChange={(ev) => handleSetCategory(ev)}
+                    className="bg-slate-700 px-3 py-1.5 outline-none
+                    max-w-[140px] border-none rounded-e-[20px]"
+                >
+                    {foodCategoryOptions.map(opt => (
+                        <option
+                            key={`status_${opt.value}`}
+                            value={opt.value}
+                        >
+                            {opt.text}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div>
                 {loading ? (
@@ -118,7 +163,7 @@ const HomeUser = () => {
                         غذایی برای نمایش موجود نیست!
                     </div>
                 )}
-                
+
                 {pagesCount > 1 && (
                     <div className={`mt-8 w-full
                   flex justify-center items-center

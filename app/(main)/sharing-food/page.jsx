@@ -12,6 +12,22 @@ import { Alert } from '@/utils/popupWindows';
 import Image from 'next/image';
 import Link from 'next/link';
 
+const foodCategoryOptions = [
+    {
+        text: "پیش غذا",
+        value: "B"
+    },
+    {
+        text: "غذای اصلی",
+        value: "M"
+    },
+    {
+        text: "دسر",
+        value: "A"
+    },
+
+];
+
 const Page = () => {
     const { isLogin, setIsLogin, isLoading, setIsAdmin } = useContext(MainContext);
 
@@ -76,6 +92,17 @@ const Page = () => {
                                             formik={formik}
                                         />
                                     </div>
+                                </div>
+                                <div className="top-appear">
+                                    <GetField
+                                        control="select"
+                                        name="category"
+                                        placeholder="دسته بندی"
+                                        label="دسته بندی"
+                                        formik={formik}
+                                        options={foodCategoryOptions}
+                                        title="دسته بندی را انتخاب کنید"
+                                    />
                                 </div>
                                 <div className="bottom-appear">
                                     <GetField

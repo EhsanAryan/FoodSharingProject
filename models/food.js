@@ -22,6 +22,11 @@ const foodSchema = mongoose.Schema({
         ref: 'User', // Reference to the User model
         required: true,
     },
+    category: {
+        type: String,
+        required: true,
+        enum: ["B", "M", "A"], // Before, Main, After
+    },
 });
 
 const Food = mongoose.models.Food || mongoose.model("Food", foodSchema);

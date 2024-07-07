@@ -1,5 +1,5 @@
 import { logoutAction } from "@/app/actions/actions";
-import { createNewFoodService, updateFoodService } from "@/services/foodServices";
+import { updateFoodService } from "@/services/foodServices";
 import { convertObjectToFormData } from "@/utils/convertObjectToFormData";
 import { Alert } from "@/utils/popupWindows";
 import * as Yup from "yup";
@@ -8,6 +8,7 @@ export const initialValues = {
     title: "",
     summary: "",
     instruction: "",
+    category: "",
     image: null,
 }
 
@@ -39,6 +40,8 @@ export const validationSchema = Yup.object({
     title: Yup.string().required("این فیلد الزامی می‌باشد"),
     summary: Yup.string().required("این فیلد الزامی می‌باشد"),
     instruction: Yup.string().required("این فیلد الزامی می‌باشد"),
+    category: Yup.string().required("این فیلد الزامی می‌باشد")
+        .oneOf(["B", "M", "A"], "فقط از مقادیر مجاز برای این فیلد استفاده کنید"),
     image: Yup.mixed().required("این فیلد الزامی می‌باشد")
         .test("filesize", "حداکثر سایز تصویر باید 3 مگابایت باشد", value => {
             return (value && value?.size <= 3 * 1024 * 1024);

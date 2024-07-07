@@ -15,6 +15,22 @@ import { getSingleFoodService } from '@/services/foodServices';
 import axios from 'axios';
 import { base_api_url } from '@/services/httpService';
 
+const foodCategoryOptions = [
+    {
+        text: "پیش غذا",
+        value: "B"
+    },
+    {
+        text: "غذای اصلی",
+        value: "M"
+    },
+    {
+        text: "دسر",
+        value: "A"
+    },
+
+];
+
 const Page = ({ params: { foodId } }) => {
     const { isLogin, setIsLogin, isLoading, setIsAdmin } = useContext(MainContext);
 
@@ -86,6 +102,7 @@ const Page = ({ params: { foodId } }) => {
             title: foodData.title,
             summary: foodData.summary,
             instruction: foodData.instruction,
+            category: foodData.category,
             image: image,
         });
     }
@@ -145,6 +162,17 @@ const Page = ({ params: { foodId } }) => {
                                             formik={formik}
                                         />
                                     </div>
+                                </div>
+                                <div className="top-appear">
+                                    <GetField
+                                        control="select"
+                                        name="category"
+                                        placeholder="دسته بندی"
+                                        label="دسته بندی"
+                                        formik={formik}
+                                        options={foodCategoryOptions}
+                                        title="دسته بندی را انتخاب کنید"
+                                    />
                                 </div>
                                 <div className="bottom-appear">
                                     <GetField

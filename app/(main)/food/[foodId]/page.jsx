@@ -53,6 +53,14 @@ const Page = async ({ params: { foodId } }) => {
             <div className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear">
                 {food?.summary}
             </div>
+            <div className="text-sm sm:text-base mt-6 sm:px-4 md:px-8 right-appear">
+                دسته بندی: 
+            </div>
+            <div className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear">
+                {food?.category === "B" ? "پیش غذا" :
+                food?.category === "M" ? "غذای اصلی" :
+                food?.category === "A" ? "دسر" : ""}
+            </div>
             <div className="text-sm sm:text-base mt-8 sm:px-4 md:px-8 right-appear">
                 دستور پخت:
             </div>

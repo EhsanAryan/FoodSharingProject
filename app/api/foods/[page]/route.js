@@ -9,15 +9,27 @@ export async function GET(request, context) {
         const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
         const page = Number(context.params.page) || 1;
         const search = new URL(request.url).searchParams.get("search") || "";
+        const category = new URL(request.url).searchParams.get("category") || "";
 
         await db.connect();
 
-        const count = await Food.countDocuments(search.trim() ? {
+        const count = await Food.countDocuments((category.trim() && search.trim()) ? {
             title: {
                 $regex: search.trim(),
                 $options: "i"
-            }
-        } : {});
+            },
+            category: category.trim()
+        } : category.trim() ?
+            {
+                category: category.trim()
+
+            } : search.trim() ? {
+                title: {
+                    $regex: search.trim(),
+                    $options: "i"
+                },
+            } :
+                {});
         const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
 
         if (page > pagesCount) {
@@ -31,12 +43,23 @@ export async function GET(request, context) {
             );
         }
 
-        const foods = await Food.find(search.trim() ? {
+        const foods = await Food.find((category.trim() && search.trim()) ? {
             title: {
                 $regex: search.trim(),
                 $options: "i"
-            }
-        } : {})
+            },
+            category: category.trim()
+        } : category.trim() ?
+            {
+                category: category.trim()
+
+            } : search.trim() ? {
+                title: {
+                    $regex: search.trim(),
+                    $options: "i"
+                },
+            } :
+                {})
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .populate("creator")

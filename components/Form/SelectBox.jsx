@@ -8,7 +8,10 @@ const SelectBox = ({
     label,
     title,
     className,
-    fieldCalss,
+    fieldClass,
+    formik,
+    disabled,
+    ltr,
     ...rest
 }) => {
     return (
@@ -19,8 +22,12 @@ const SelectBox = ({
                 </label>
             )}
             <FastField name={name} id={name} as="select"
-                className={`w-full bg-transparent
-                border border-black px-2 py-1 rounded-lg ${fieldCalss || ""}`}
+                className={`bg-slate-800 px-2 py-1 outline-none w-full h-full
+                rounded-md placeholder:text-sm disabled:opacity-60 border
+                ${disabled ? "border-gray-500" : !formik.touched[name] ? "border-gray-500" : formik.errors[name] ? "border-red-500" : "border-green-500"}
+                ${ltr ? "dir-ltr" : ""}
+                ${fieldClass || ""}`}
+                disabled={disabled}
                 {...rest}
             >
                 {title && (
