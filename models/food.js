@@ -13,19 +13,25 @@ const foodSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
-        type: String,
+    images: {
+        type: [String], // An array of strings
         required: true,
-    },
-    creator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
-        required: true,
+        validate: {
+            validator: function (v) {
+                return v.length <= 4;
+            },
+            message: props => `${props.value} exceeds the limit of 4 images.`
+        }
     },
     category: {
         type: String,
         required: true,
         enum: ["B", "M", "A"], // Before, Main, After
+    },
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User', // Reference to the User model
+        required: true,
     },
 });
 

@@ -99,9 +99,10 @@ export async function PUT(request, context) {
         const title = formData.get("title");
         const summary = formData.get("summary");
         const instruction = formData.get("instruction");
-        const image = formData.get("image");
+        const category = formData.get("category");
+        const images = formData.getAll("images");
 
-        if (!(title && summary && instruction && image)) {
+        if (!(title && summary && instruction && category && images.length)) {
             return NextResponse.json(
                 {
                     message: "لطفاً تمام فیلدهای الزامی را ارسال کنید"
@@ -113,16 +114,18 @@ export async function PUT(request, context) {
             );
         }
 
-        if (!(image instanceof File)) {
-            return NextResponse.json(
-                {
-                    message: "فایل ارسال شده، نامعتبر می‌باشد"
-                }
-                ,
-                {
-                    status: 400
-                }
-            );
+        for (let item of images) {
+            if (!(item instanceof File)) {
+                return NextResponse.json(
+                    {
+                        message: "فایل‌های ارسال شده، نامعتبر می‌باشند"
+                    }
+                    ,
+                    {
+                        status: 400
+                    }
+                );
+            }
         }
 
         await db.connect();
@@ -164,27 +167,32 @@ export async function PUT(request, context) {
             );
         }
 
-        // Delete the food image if exists
-        const existImagePath = path.join(process.cwd(), "public", food.image);
-        if (fs.existsSync(existImagePath)) {
-            fs.unlinkSync(existImagePath);
+        // Delete the food images
+        for (let image of food.images) {
+            const existImagePath = path.join(process.cwd(), "public", image);
+            if (fs.existsSync(existImagePath)) {
+                fs.unlinkSync(existImagePath);
+            }
         }
 
-        // Write food image
-        const imageExtension = image.name.split(".").pop();
-        const imageName = `food_${decodedToken.sub}_${Math.random()}.${imageExtension}`;
-        const imageDir = path.join(process.cwd(), "public", "foods");
-        const imagePath = path.join(imageDir, imageName);
-        const imageDatabasePath = `/foods/${imageName}`;
+        // Write food images
+        const allImageDatabasePaths = [];
+        for (let image of images) {
+            const imageExtension = image.name.split(".").pop();
+            const imageName = `food_${decodedToken.sub}_${allImageDatabasePaths.length + 1}_${Math.random()}.${imageExtension}`;
+            const imageDir = path.join(process.cwd(), "public", "foods");
+            const imagePath = path.join(imageDir, imageName);
+            allImageDatabasePaths.push(`/foods/${imageName}`);
 
-        const fileStream = fs.createWriteStream(imagePath);
-        const bufferedAvatar = await image.arrayBuffer();
-        fileStream.write(Buffer.from(bufferedAvatar), (err) => {
-            if (err) {
-                throw new Error("Saving image failed!");
-            }
-        });
-        fileStream.end();
+            const fileStream = fs.createWriteStream(imagePath);
+            const bufferedImage = await image.arrayBuffer();
+            fileStream.write(Buffer.from(bufferedImage), (err) => {
+                if (err) {
+                    throw new Error("Saving image failed!");
+                }
+            });
+            fileStream.end();
+        }
 
         // Update the food
         const updatedFood = await Food.findByIdAndUpdate(
@@ -193,7 +201,8 @@ export async function PUT(request, context) {
                 title,
                 summary,
                 instruction,
-                image: imageDatabasePath,
+                category,
+                images: allImageDatabasePaths,
             },
             { new: true } // Return the updated document
         ).lean();
@@ -303,6 +312,7 @@ export async function DELETE(request, context) {
                 }
             );
         }
+
         if (food.creator.toString() !== user._id.toString() && user.is_admin === 0) {
             return NextResponse.json(
                 {
@@ -312,6 +322,14 @@ export async function DELETE(request, context) {
                     status: 403
                 }
             );
+        }
+
+        // Delete the food images
+        for (let image of food.images) {
+            const existImagePath = path.join(process.cwd(), "public", image);
+            if (fs.existsSync(existImagePath)) {
+                fs.unlinkSync(existImagePath);
+            }
         }
 
         const deletedFood = await Food.findByIdAndDelete(foodId).lean();

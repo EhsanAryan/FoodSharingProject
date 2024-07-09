@@ -139,7 +139,7 @@ const Page = () => {
                         >
                             <div className="relative w-full h-[300px]">
                                 <Image
-                                    src={item.image}
+                                    src={item.images[0]}
                                     alt={item.title}
                                     fill
                                     className="object-cover"

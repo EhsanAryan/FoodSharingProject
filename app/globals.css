@@ -249,3 +249,21 @@
 .swal-text {
   text-align: center;
 }
+
+.hidden-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  scale: 1 0;
+  background-color: #282c34da;
+  transition: all 200ms ease-in-out;
+  transform-origin: bottom;
+}
+
+.image-container:hover .hidden-card {
+  opacity: 1;
+  scale: 1 1;
+}

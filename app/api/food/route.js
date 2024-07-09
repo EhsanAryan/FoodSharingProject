@@ -23,36 +23,6 @@ export async function POST(request) {
             );
         }
 
-        const formData = await request.formData();
-        const title = formData.get("title");
-        const summary = formData.get("summary");
-        const instruction = formData.get("instruction");
-        const image = formData.get("image");
-
-        if (!(title && summary && instruction && image)) {
-            return NextResponse.json(
-                {
-                    message: "لطفاً تمام فیلدهای الزامی را ارسال کنید"
-                }
-                ,
-                {
-                    status: 400
-                }
-            );
-        }
-
-        if (!(image instanceof File)) {
-            return NextResponse.json(
-                {
-                    message: "فایل ارسال شده، نامعتبر می‌باشد"
-                }
-                ,
-                {
-                    status: 400
-                }
-            );
-        }
-
         const token = cookies().get("foodToken").value;
 
         const { decodedToken, error } = await checkTokenIsValid(token);
@@ -81,6 +51,39 @@ export async function POST(request) {
             }
         }
 
+        const formData = await request.formData();
+        const title = formData.get("title");
+        const summary = formData.get("summary");
+        const instruction = formData.get("instruction");
+        const category = formData.get("category");
+        const images = formData.getAll("images");
+
+        if (!(title && summary && instruction && category && images.length)) {
+            return NextResponse.json(
+                {
+                    message: "لطفاً تمام فیلدهای الزامی را ارسال کنید"
+                }
+                ,
+                {
+                    status: 400
+                }
+            );
+        }
+
+        for (let item of images) {
+            if (!(item instanceof File)) {
+                return NextResponse.json(
+                    {
+                        message: "فایل‌های ارسال شده، نامعتبر می‌باشند"
+                    }
+                    ,
+                    {
+                        status: 400
+                    }
+                );
+            }
+        }
+
         await db.connect();
 
         const user = await User.findById(decodedToken.sub).lean();
@@ -96,27 +99,31 @@ export async function POST(request) {
             );
         }
 
-        // Write food image
-        const imageExtension = image.name.split(".").pop();
-        const imageName = `food_${decodedToken.sub}_${Math.random()}.${imageExtension}`;
-        const imageDir = path.join(process.cwd(), "public", "foods");
-        const imagePath = path.join(imageDir, imageName);
-        const imageDatabasePath = `/foods/${imageName}`;
-
-        const fileStream = fs.createWriteStream(imagePath);
-        const bufferedAvatar = await image.arrayBuffer();
-        fileStream.write(Buffer.from(bufferedAvatar), (err) => {
-            if (err) {
-                throw new Error("Saving image failed!");
-            }
-        });
-        fileStream.end();
+        // Write food images
+        const allImageDatabasePaths = [];
+        for(let image of images) {
+            const imageExtension = image.name.split(".").pop();
+            const imageName = `food_${decodedToken.sub}_${allImageDatabasePaths.length + 1}_${Math.random()}.${imageExtension}`;
+            const imageDir = path.join(process.cwd(), "public", "foods");
+            const imagePath = path.join(imageDir, imageName);
+            allImageDatabasePaths.push(`/foods/${imageName}`);
+    
+            const fileStream = fs.createWriteStream(imagePath);
+            const bufferedImage = await image.arrayBuffer();
+            fileStream.write(Buffer.from(bufferedImage), (err) => {
+                if (err) {
+                    throw new Error("Saving image failed!");
+                }
+            });
+            fileStream.end();
+        }
 
         const newUser = new Food({
             title,
             summary,
             instruction,
-            image: imageDatabasePath,
+            category,
+            images: allImageDatabasePaths,
             creator: user._id
         });
         await newUser.save();
@@ -132,6 +139,7 @@ export async function POST(request) {
         );
 
     } catch (err) {
+        console.log(err);
         return NextResponse.json(
             {
                 message: "مشکلی از سمت سرور رخ داده است.\nلطفاً چند لحظه بعد مجدداً تلاش کنید."

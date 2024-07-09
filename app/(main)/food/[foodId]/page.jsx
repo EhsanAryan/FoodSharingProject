@@ -36,13 +36,13 @@ const Page = async ({ params: { foodId } }) => {
     if(food === null) notFound();
 
     return (
-        <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 py-6 max-w-screen-xl mx-auto">
+        <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 py-5 max-w-screen-xl mx-auto">
             <h1 className="mt-2 mb-6 text-3xl sm:text-4xl font-bold text-primary text-center yop-appear">
                 {food?.title}
             </h1>
             <div className="relative w-full max-w-[500px] h-[300px] md:h-[350px] mx-auto rounded-xl">
                 <Image
-                    src={food?.image}
+                    src={food?.images[0]}
                     alt={food?.title}
                     fill
                     className="object-cover top-appear
@@ -57,14 +57,14 @@ const Page = async ({ params: { foodId } }) => {
             <div className="text-sm sm:text-base mt-6 sm:px-4 md:px-8 right-appear">
                 توضیحات:
             </div>
-            <div className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear">
+            <div className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear break-words">
                 {food?.summary}
             </div>
             <div className="text-sm sm:text-base mt-8 sm:px-4 md:px-8 right-appear">
                 دستور پخت:
             </div>
             <div
-                className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear"
+                className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear break-words"
                 dangerouslySetInnerHTML={{
                     __html: food?.instruction ?
                         food.instruction.replaceAll("\n", "<br />")

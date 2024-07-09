@@ -14,6 +14,9 @@ import Link from 'next/link';
 import { getSingleFoodService } from '@/services/foodServices';
 import axios from 'axios';
 import { base_api_url } from '@/services/httpService';
+import DeleteIcon from '@mui/icons-material/Delete';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { IconButton } from '@mui/material';
 
 const foodCategoryOptions = [
     {
@@ -38,8 +41,8 @@ const Page = ({ params: { foodId } }) => {
     const [foodData, setFoodData] = useState(null);
     const [reinitializeValues, setReinitializeValues] = useState(null);
 
-    const [image, setImage] = useState(null);
-    const [imageURL, setImageURL] = useState("");
+    const [images, setImages] = useState([]);
+    const [imageURLs, setImageURLs] = useState([]);
 
     const router = useRouter()
 
@@ -48,11 +51,22 @@ const Page = ({ params: { foodId } }) => {
     const changeImageHandler = (ev, props) => {
         const file = ev.target.files[0];
         if (!file) return;
+        if (images.length >= 4) return Alert("خطا!", "حداکثر میتوانید 4 تصویر را بارگذاری کنید", "error");
         if (!file.type.includes("image/")) return Alert("خطا!", "لطفاً یک تصویر بارگذاری کنید", "error");
         if (file.size > 2 * 1024 * 1024) return Alert("خطا!", "حداکثر سایز تصویر باید 2 مگابایت باشد", "error");
-        setImage(file);
-        setImageURL(URL.createObjectURL(file));
-        props.form.setFieldValue("image", file);
+        setImages(prevValue => [...prevValue, file]);
+        setImageURLs(prevValue => [...prevValue, URL.createObjectURL(file)]);
+        props.form.setFieldValue("images", [...images, file]);
+    }
+
+    const deleteImageHandler = (index, formik) => {
+        let allImages = images;
+        let allImageURLs = imageURLs;
+        allImages.splice(index, 1);
+        allImageURLs.splice(index, 1);
+        setImages(allImages);
+        setImageURLs(allImageURLs);
+        formik.setFieldValue("images", allImages);
     }
 
     const getFoodDataHandler = async () => {
@@ -95,15 +109,23 @@ const Page = ({ params: { foodId } }) => {
     }
 
     const setReinitializeValuesHandler = async () => {
-        const image = await getFileByPath(foodData.image);
-        setImage(image);
-        setImageURL(URL.createObjectURL(image));
+        const allImages = [];
+        const allImageURLs = [];
+        for (let item of foodData.images) {
+            const image = await getFileByPath(item);
+            if (image) {
+                allImages.push(image);
+                allImageURLs.push(URL.createObjectURL(image));
+            }
+        }
+        setImages(allImages);
+        setImageURLs(allImageURLs);
         setReinitializeValues({
             title: foodData.title,
             summary: foodData.summary,
             instruction: foodData.instruction,
             category: foodData.category,
-            image: image,
+            images: allImages,
         });
     }
 
@@ -189,8 +211,8 @@ const Page = ({ params: { foodId } }) => {
                                         {(props) => (
                                             <input
                                                 type="file"
-                                                name="image"
-                                                id="image"
+                                                name="images"
+                                                id="images"
                                                 className="hidden"
                                                 ref={imageInputRef}
                                                 onChange={(ev) => changeImageHandler(ev, props)}
@@ -203,23 +225,53 @@ const Page = ({ params: { foodId } }) => {
                                             className="bg-cyan-600 px-4 py-2 rounded-lg"
                                             onClick={() => imageInputRef?.current?.click()}
                                         >
-                                            {image ? "تغییر تصویر" : "بارگذاری تصویر"}
+                                            بارگذاری تصویر
                                         </button>
                                     </div>
-                                    {image ? (
-                                        <div className="relative mt-1 w-full max-w-[300px] 
-                                        h-[220px] rounded-xl">
-                                            <Image
-                                                src={imageURL}
-                                                alt={image.name}
-                                                fill
-                                                className="object-cover rounded-xl cursor-pointer
-                                                shadow-lg shadow-gray-700"
-                                                onClick={() => window.open(imageURL)}
-                                            />
+                                    {images.length ? (
+                                        <div className="flex items-center gap-4 flex-wrap">
+                                            {images.map((item, index) => (
+                                                <div
+                                                    key={`image_${item.name}_${index}`}
+                                                    className="relative mt-1 w-full max-w-[300px] 
+                                                    h-[220px] rounded-xl image-container"
+                                                >
+                                                    <Image
+                                                        src={imageURLs[index]}
+                                                        alt={item.name}
+                                                        fill
+                                                        className="object-cover rounded-xl
+                                                        shadow-lg shadow-gray-700"
+                                                    />
+                                                    <div className="hidden-card flex justify-center 
+                                                    items-center gap-2 rounded-xl z-[1]"
+                                                    >
+                                                        <IconButton
+                                                            onClick={() => window.open(imageURLs[index])}
+                                                        >
+                                                            <RemoveRedEyeIcon
+                                                                sx={{
+                                                                    color: "#30c014dd",
+                                                                    fontSize: "2rem"
+                                                                }}
+                                                            />
+                                                        </IconButton>
+                                                        <IconButton
+                                                            onClick={() => deleteImageHandler(index, formik)}
+                                                        >
+                                                            <DeleteIcon
+                                                                sx={{
+                                                                    color: "red",
+                                                                    fontSize: "2rem"
+                                                                }}
+                                                            />
+                                                        </IconButton>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     ) : null}
-                                    <ErrorMessage name={"image"} component={ShowError} />
+                                    <ErrorMessage name={"images"} component={ShowError} />
                                 </div>
                                 <div className="mt-8 flex justify-end gap-4 left-appear">
                                     <Link
