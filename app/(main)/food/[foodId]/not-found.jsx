@@ -5,7 +5,7 @@ const NotFound = () => {
     return (
         <div className="my-14 text-center flex flex-col gap-6 items-center">
             <span className="text-primary text-4xl">
-                صفحه مورد نظر یافت نشد!
+                غذای مورد نظر یافت نشد!
             </span>
             <Link
                 href="/"

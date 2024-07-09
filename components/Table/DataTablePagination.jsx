@@ -30,7 +30,6 @@ const DataTablePagination = ({
     let searchCharTimeout;
 
     const handleGetData = async (currentPage, itemsCnt, char, cat) => {
-        console.log(cat);
         setLoading(true);
         try {
             let response;

@@ -11,16 +11,16 @@ export const dynamic = "force-dynamic";
 const getFoodHandler = async (foodId) => {
     try {
         await db.connect();
-    
+
         const food = await Food.findById(foodId).populate("creator").lean();
-    
-        if (!(food && food.creator)) notFound();
-    
+
+        if (!(food && food?.creator)) return null;
+
         food.creator = db.convertToObject(food.creator);
         delete food.creator.password;
-    
+
         let is_owner = await checkIsOwner(food.creator._id.toString());
-    
+
         return {
             ...db.convertToObject(food),
             is_owner
@@ -33,8 +33,13 @@ const getFoodHandler = async (foodId) => {
 const Page = async ({ params: { foodId } }) => {
     const food = await getFoodHandler(foodId);
 
+    if(food === null) notFound();
+
     return (
         <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 py-6 max-w-screen-xl mx-auto">
+            <h1 className="mt-2 mb-6 text-3xl sm:text-4xl font-bold text-primary text-center yop-appear">
+                {food?.title}
+            </h1>
             <div className="relative w-full max-w-[500px] h-[300px] md:h-[350px] mx-auto rounded-xl">
                 <Image
                     src={food?.image}
@@ -44,22 +49,16 @@ const Page = async ({ params: { foodId } }) => {
                     rounded-xl shadow-lg shadow-gray-700"
                 />
             </div>
-            <h1 className="mt-7 text-3xl sm:text-4xl font-bold text-primary text-center bottom-appear">
-                {food?.title}
-            </h1>
+            <h2 className="mt-7 text-xl sm:text-2xl text-center bottom-appear">
+                {food?.category === "B" ? "پیش غذا" :
+                    food?.category === "M" ? "غذای اصلی" :
+                        food?.category === "A" ? "دسر" : ""}
+            </h2>
             <div className="text-sm sm:text-base mt-6 sm:px-4 md:px-8 right-appear">
                 توضیحات:
             </div>
             <div className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear">
                 {food?.summary}
-            </div>
-            <div className="text-sm sm:text-base mt-6 sm:px-4 md:px-8 right-appear">
-                دسته بندی: 
-            </div>
-            <div className="sm:text-lg mt-2 px-2 sm:px-6 md:px-10 right-appear">
-                {food?.category === "B" ? "پیش غذا" :
-                food?.category === "M" ? "غذای اصلی" :
-                food?.category === "A" ? "دسر" : ""}
             </div>
             <div className="text-sm sm:text-base mt-8 sm:px-4 md:px-8 right-appear">
                 دستور پخت:
