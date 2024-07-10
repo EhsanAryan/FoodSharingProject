@@ -267,3 +267,20 @@
   opacity: 1;
   scale: 1 1;
 }
+
+/* Start swiper slide */
+.swiper-button-prev, .swiper-button-next {
+  color: white !important;
+  scale: 0.5;
+}
+
+.swiper-pagination-bullet {
+  background: transparent !important;
+  border: 2px solid white;
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: white !important;
+  scale: 1.25;
+}
+/* End swiper slide */

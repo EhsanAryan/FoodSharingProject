@@ -14,6 +14,7 @@ import Link from 'next/link';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { IconButton } from '@mui/material';
+import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
 
 const foodCategoryOptions = [
     {
@@ -36,6 +37,9 @@ const Page = () => {
 
     const [images, setImages] = useState([]);
     const [imageURLs, setImageURLs] = useState([]);
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [modalImagePath, setModalImagePath] = useState("");
 
     const router = useRouter()
 
@@ -85,7 +89,7 @@ const Page = () => {
                     validateOnMount
                 >
                     {(formik) => {
-                    console.log(formik.values["images"]);
+                        console.log(formik.values["images"]);
                         return (
                             <Form className="flex flex-col gap-4">
                                 <div className="flex flex-col gap-4 md:flex-row top-appear">
@@ -170,7 +174,10 @@ const Page = () => {
                                                     items-center gap-2 rounded-xl z-[1]"
                                                     >
                                                         <IconButton
-                                                            onClick={() => window.open(imageURLs[index])}
+                                                            onClick={() => {
+                                                                setModalImagePath(imageURLs[index]);
+                                                                setIsOpen(true);
+                                                            }}
                                                         >
                                                             <RemoveRedEyeIcon
                                                                 sx={{
@@ -219,6 +226,22 @@ const Page = () => {
                     }}
                 </Formik>
             ) : null}
+
+            {/* Image modal */}
+            <ModalContainerWithoutHeader
+                isOpen={isOpen && modalImagePath}
+                setIsOpen={setIsOpen}
+                blur
+                className="bg-transparent text-white rounded-xl w-[75vw] h-[85vh]
+                border-2 border-gray-200"
+            >
+                <Image
+                    src={modalImagePath}
+                    alt="Modal Image"
+                    className="rounded-xl object-cover"
+                    fill
+                />
+            </ModalContainerWithoutHeader>
         </div>
     );
 }

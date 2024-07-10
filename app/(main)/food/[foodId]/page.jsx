@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import Details from './Details';
+import CustomSlider from '@/components/CustomSlider';
+import FoodSlider from '../FoodSlider';
 
 export const dynamic = "force-dynamic";
 
@@ -33,14 +35,17 @@ const getFoodHandler = async (foodId) => {
 const Page = async ({ params: { foodId } }) => {
     const food = await getFoodHandler(foodId);
 
-    if(food === null) notFound();
+    if (food === null) notFound();
 
     return (
         <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 py-5 max-w-screen-xl mx-auto">
             <h1 className="mt-2 mb-6 text-3xl sm:text-4xl font-bold text-primary text-center yop-appear">
                 {food?.title}
             </h1>
-            <div className="relative w-full max-w-[500px] h-[300px] md:h-[350px] mx-auto rounded-xl">
+            {food && (
+                <FoodSlider images={food.images} />
+            )}
+            {/* <div className="relative w-full max-w-[500px] h-[300px] md:h-[350px] mx-auto rounded-xl">
                 <Image
                     src={food?.images[0]}
                     alt={food?.title}
@@ -48,7 +53,7 @@ const Page = async ({ params: { foodId } }) => {
                     className="object-cover top-appear
                     rounded-xl shadow-lg shadow-gray-700"
                 />
-            </div>
+            </div> */}
             <h2 className="mt-7 text-xl sm:text-2xl text-center bottom-appear">
                 {food?.category === "B" ? "پیش غذا" :
                     food?.category === "M" ? "غذای اصلی" :
