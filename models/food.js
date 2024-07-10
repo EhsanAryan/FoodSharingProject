@@ -26,14 +26,14 @@ const foodSchema = mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ["B", "M", "A"], // Before, Main, After
+        enum: ["B", "M", "A"], // Valid values for this field (B: Before, M: Main, A: After)
     },
     creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: "User", // Reference to the User model
         required: true,
     },
-});
+}, { timestamps: true });
 
 const Food = mongoose.models.Food || mongoose.model("Food", foodSchema);
 

@@ -32,3 +32,11 @@ export const changeUserPasswordByAdminService = (userId, data) => {
 export const changeUserInfoByAdminService = (userId, data) => {
     return httpService(`/api/admin/users/info/${userId}`, "put", data);
 }
+
+export const addFoodToFavoritesService = (foodId) => {
+    return httpService(`/api/user/favorite/${foodId}`, "put")
+}
+
+export const removeFoodFromFavoritesService = (foodId) => {
+    return httpService(`/api/user/favorite/${foodId}`, "delete")
+}

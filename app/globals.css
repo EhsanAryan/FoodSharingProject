@@ -284,3 +284,14 @@
   scale: 1.25;
 }
 /* End swiper slide */
+
+.favorite-icon {
+  transition: all 200ms ease-in-out;
+  opacity: 0;
+  scale: 0;
+}
+
+.favorite-icon.active {
+  opacity: 1;
+  scale: 1;
+}

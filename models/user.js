@@ -27,7 +27,16 @@ const userSchema = mongoose.Schema({
         required: true,
         default: 0
     },
-});
+    // favorites: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Food", // Reference to the Food model
+    // }],
+    favorites: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Food", // Reference to the Food model
+        default: []
+    },
+}, { timestamps: true });
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 

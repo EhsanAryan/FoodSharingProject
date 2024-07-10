@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import User from "@/models/user";
+import db from "@/utils/db";
 
 export const logoutAction = async () => {
     cookies().delete("foodToken");
@@ -30,9 +31,30 @@ export const checkIsOwner = async (id) => {
     const { decodedToken, error } = await checkTokenIsValid(token);
     if (error) return false;
 
+    await db.connect();
+
     const user = await User.findById(decodedToken.sub).lean();
     if (!user) return false;
     
     if(user._id.toString() === id.toString() || user.is_admin === 1) return true;
+    return false;
+}
+
+export const checkIsFavorite = async (id) => {
+    if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
+        return false;
+    }
+
+    const token = cookies().get("foodToken").value;
+
+    const { decodedToken, error } = await checkTokenIsValid(token);
+    if (error) return false;
+
+    await db.connect();
+
+    const user = await User.findById(decodedToken.sub).lean();
+    if (!user) return false;
+    
+    if(user.favorites.find(item => item.toString() === id.toString())) return true;
     return false;
 }

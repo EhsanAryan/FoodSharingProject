@@ -89,7 +89,6 @@ const Page = () => {
                     validateOnMount
                 >
                     {(formik) => {
-                        console.log(formik.values["images"]);
                         return (
                             <Form className="flex flex-col gap-4">
                                 <div className="flex flex-col gap-4 md:flex-row top-appear">
