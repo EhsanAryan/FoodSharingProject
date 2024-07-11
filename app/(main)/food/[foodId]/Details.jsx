@@ -65,7 +65,9 @@ const Details = ({ food }) => {
                                     sx={{
                                         width: "65px",
                                         height: "65px",
+                                        cursor: "pointer"
                                     }}
+                                    onClick={() => router.push(`/user/${food?.creator?._id}`)}
                                 />
                                 <div className="flex flex-col gap-1">
                                     <small>
@@ -109,7 +111,9 @@ const Details = ({ food }) => {
                         sx={{
                             width: "65px",
                             height: "65px",
+                            cursor: "pointer"
                         }}
+                        onClick={() => router.push(`/user/${food?.creator?._id}`)}
                     />
                     <div className="flex flex-col gap-1">
                         <small>

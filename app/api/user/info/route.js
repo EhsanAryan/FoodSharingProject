@@ -50,7 +50,11 @@ export async function GET(request) {
 
         await db.connect();
 
-        const user = await User.findById(decodedToken.sub).lean();
+        const user = await User.findById(decodedToken.sub).populate("favorites").lean();
+
+        for (let item of user.favorites) {
+            item = db.convertToObject(item);
+        }
 
         if (!user) {
             return NextResponse.json(

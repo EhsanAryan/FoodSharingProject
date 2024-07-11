@@ -5,9 +5,14 @@ import DataTablePagination from '@/components/Table/DataTablePagination';
 import Actions from './Actions';
 import { getUsersService } from '@/services/userServices';
 import { Avatar } from '@mui/material';
+import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
+import Image from 'next/image';
 
 const Page = () => {
     const [forceRequest, setForceRequest] = useState(0);
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [modalImagePath, setModalImagePath] = useState("");
 
     const tableCols = [
         {
@@ -27,7 +32,10 @@ const Page = () => {
                             height: "75px",
                             cursor: "pointer"
                         }}
-                        onClick={() => window.open(rowData.avatar)}
+                        onClick={() => {
+                            setModalImagePath(rowData.avatar);
+                            setIsOpen(true);
+                        }}
                     />
                 ) : (
                     <span className="text-red-500 text-center">فاقد آواتار</span>
@@ -45,7 +53,7 @@ const Page = () => {
         {
             text: "عملیات",
             field: null,
-            element : (rowData) => <Actions rowData={rowData} setForceRequest={setForceRequest} />
+            element: (rowData) => <Actions rowData={rowData} setForceRequest={setForceRequest} />
         },
     ];
 
@@ -62,6 +70,22 @@ const Page = () => {
                 noDataText="کاربری برای نمایش موجود نیست!"
             >
             </DataTablePagination>
+
+            {/* Image modal */}
+            <ModalContainerWithoutHeader
+                isOpen={isOpen && modalImagePath}
+                setIsOpen={setIsOpen}
+                blur
+                className="bg-transparent text-white rounded-full w-[200px] h-[200px] 
+                sm:w-[400px] sm:h-[400px]"
+            >
+                <Image
+                    src={modalImagePath}
+                    alt="Modal Image"
+                    className="rounded-full object-cover"
+                    fill
+                />
+            </ModalContainerWithoutHeader>
         </>
     );
 }

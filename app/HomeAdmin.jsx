@@ -4,26 +4,7 @@ import { getFoodsService } from '@/services/foodServices';
 import React, { useState } from 'react';
 import DataTablePagination from '@/components/Table/DataTablePagination';
 import Actions from './Actions';
-
-const foodCategoryOptions = [
-    {
-        text: "همه",
-        value: ""
-    },
-    {
-        text: "پیش غذا",
-        value: "B"
-    },
-    {
-        text: "غذای اصلی",
-        value: "M"
-    },
-    {
-        text: "دسر",
-        value: "A"
-    },
-
-];
+import { foodCategoryOptions } from '@/data/data';
 
 const HomeAdmin = () => {
     const [forceRequest, setForceRequest] = useState(0);

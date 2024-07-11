@@ -9,26 +9,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { foodCategoryOptions } from '@/data/data';
 
-const foodCategoryOptions = [
-    {
-        text: "همه",
-        value: ""
-    },
-    {
-        text: "پیش غذا",
-        value: "B"
-    },
-    {
-        text: "غذای اصلی",
-        value: "M"
-    },
-    {
-        text: "دسر",
-        value: "A"
-    },
-
-];
 
 const Page = () => {
     const { setIsLogin, isLogin, setIsAdmin } = useContext(MainContext);
@@ -153,7 +135,7 @@ const Page = () => {
                                 <div>
                                     <Link
                                         href={`/food/${item._id}`}
-                                        className="bg-primary px-4 py-2 rounded-lg box-hoverable"
+                                        className="px-4 py-2 rounded-lg yellow-btn"
                                     >
                                         مشاهده جزئیات
                                     </Link>
@@ -163,7 +145,7 @@ const Page = () => {
                     ))}
                 </div>
             ) : (
-                <div className="my-12 text-red-500 text-2xl md:text-3xl text-center">
+                <div className="my-12 text-red-500 text-xl md:text-2xl text-center">
                     غذایی برای نمایش موجود نیست!
                 </div>
             )}

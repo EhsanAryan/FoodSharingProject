@@ -15,22 +15,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { IconButton } from '@mui/material';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
+import { foodCategoryOptions } from '@/data/data';
 
-const foodCategoryOptions = [
-    {
-        text: "پیش غذا",
-        value: "B"
-    },
-    {
-        text: "غذای اصلی",
-        value: "M"
-    },
-    {
-        text: "دسر",
-        value: "A"
-    },
-
-];
 
 const Page = () => {
     const { isLogin, setIsLogin, isLoading, setIsAdmin } = useContext(MainContext);

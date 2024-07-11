@@ -7,26 +7,7 @@ import { Pagination } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import Loading from '@/components/Loading';
-
-const foodCategoryOptions = [
-    {
-        text: "همه",
-        value: ""
-    },
-    {
-        text: "پیش غذا",
-        value: "B"
-    },
-    {
-        text: "غذای اصلی",
-        value: "M"
-    },
-    {
-        text: "دسر",
-        value: "A"
-    },
-
-];
+import { foodCategoryOptions } from '@/data/data';
 
 const HomeUser = () => {
     const [foods, setFoods] = useState([]);
@@ -149,7 +130,7 @@ const HomeUser = () => {
                                     <div className="mt-auto">
                                         <Link
                                             href={`/food/${item._id}`}
-                                            className="bg-primary px-4 py-2 rounded-lg box-hoverable"
+                                            className="px-4 py-2 rounded-lg yellow-btn"
                                         >
                                             مشاهده جزئیات
                                         </Link>

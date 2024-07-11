@@ -27,10 +27,6 @@ const userSchema = mongoose.Schema({
         required: true,
         default: 0
     },
-    // favorites: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Food", // Reference to the Food model
-    // }],
     favorites: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: "Food", // Reference to the Food model

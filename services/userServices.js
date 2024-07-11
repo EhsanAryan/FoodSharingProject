@@ -4,6 +4,10 @@ export const getUserInfoService = () => {
     return httpService("/api/user/info", "get");
 }
 
+export const getSingleUserService = (userId) => {
+    return httpService(`/api/user/info/${userId}`, "get");
+}
+
 export const changeUserInfoService = (data) => {
     return httpService("/api/user/info", "put", data);
 }
@@ -16,9 +20,18 @@ export const changeUserAvatarService = (formData) => {
     return httpService("/api/user/avatar", "post", formData, "multipart/form-data");
 }
 
-export const getUserFoodsService = (searchChar = "", category="") => {
+export const getUserFoodsService = (searchChar = "", category = "") => {
     return httpService(`/api/user/foods?search=${searchChar}&category=${category}`, "get");
 }
+
+export const addFoodToFavoritesService = (foodId) => {
+    return httpService(`/api/user/favorite/${foodId}`, "put")
+}
+
+export const removeFoodFromFavoritesService = (foodId) => {
+    return httpService(`/api/user/favorite/${foodId}`, "delete")
+}
+
 
 // Only admin APIs
 export const getUsersService = (page, pageSize = 20, searchChar = "") => {
@@ -31,12 +44,4 @@ export const changeUserPasswordByAdminService = (userId, data) => {
 
 export const changeUserInfoByAdminService = (userId, data) => {
     return httpService(`/api/admin/users/info/${userId}`, "put", data);
-}
-
-export const addFoodToFavoritesService = (foodId) => {
-    return httpService(`/api/user/favorite/${foodId}`, "put")
-}
-
-export const removeFoodFromFavoritesService = (foodId) => {
-    return httpService(`/api/user/favorite/${foodId}`, "delete")
 }

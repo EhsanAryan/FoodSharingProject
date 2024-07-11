@@ -1,23 +1,9 @@
 "use client";
 
+import { profileSections } from '@/data/data';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
-
-const profileSections = [
-    {
-        href: "/profile",
-        title: "ویرایش اطلاعات"
-    },
-    {
-        href: "/profile/password",
-        title: "تغییر رمز عبور"
-    },
-    {
-        href: "/profile/foods",
-        title: "غذاها"
-    },
-];
 
 const Sidebar = () => {
     const pathname = usePathname();
@@ -26,7 +12,6 @@ const Sidebar = () => {
         <div className="bg-slate-800 w-full
         md:fixed md:top-[70px] md:right-0 md:h-full md:w-[22%] 
         md:overflow-x-hidden md:overflow-y-auto md:pb-[70px]">
-            {/* md:absolute md:top-0 md:right-0 md:h-full md:w-[22%]"> */}
                 {profileSections.map((item, index) => (
                     <Link
                         key={`profile_section_${index}`}

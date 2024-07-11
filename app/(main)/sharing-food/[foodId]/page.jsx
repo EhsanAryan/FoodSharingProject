@@ -18,27 +18,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { IconButton } from '@mui/material';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
+import { foodCategoryOptions } from '@/data/data';
 
-const foodCategoryOptions = [
-    {
-        text: "پیش غذا",
-        value: "B"
-    },
-    {
-        text: "غذای اصلی",
-        value: "M"
-    },
-    {
-        text: "دسر",
-        value: "A"
-    },
-
-];
 
 const Page = ({ params: { foodId } }) => {
     const { isLogin, setIsLogin, isLoading, setIsAdmin } = useContext(MainContext);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [foodData, setFoodData] = useState(null);
     const [reinitializeValues, setReinitializeValues] = useState(null);
 
@@ -74,7 +60,7 @@ const Page = ({ params: { foodId } }) => {
     }
 
     const getFoodDataHandler = async () => {
-        setLoading(true)
+        setLoading(true);
         try {
             const response = await getSingleFoodService(foodId);
             if (response.status === 200) {
@@ -107,8 +93,6 @@ const Page = ({ params: { foodId } }) => {
             return null;
         } catch (error) {
             return null;
-        } finally {
-            setLoading(false);
         }
     }
 
@@ -131,6 +115,7 @@ const Page = ({ params: { foodId } }) => {
             category: foodData.category,
             images: allImages,
         });
+        setLoading(false);
     }
 
     useEffect(() => {

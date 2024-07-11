@@ -10,7 +10,7 @@ import { addFoodToFavoritesService, removeFoodFromFavoritesService } from '@/ser
 import { Alert } from '@/utils/popupWindows';
 
 const Favorite = ({ food }) => {
-    const { setIsLogin, setIsAdmin } = useContext(MainContext);
+    const { setIsLogin, setIsAdmin, setForceGetUserInfo } = useContext(MainContext);
 
     const [isFavorite, setIsFavorite] = useState(food.is_favorite);
     const [loading, setLoading] = useState(false);
@@ -22,6 +22,7 @@ const Favorite = ({ food }) => {
             if (response.status === 201) {
                 Alert(null, "غذای مورد نظر به علاقه مندی‌های شما افزوده شد.", "success");
                 setIsFavorite(true);
+                setForceGetUserInfo(prevValue => prevValue + 1);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
@@ -46,6 +47,7 @@ const Favorite = ({ food }) => {
             if (response.status === 200) {
                 Alert(null, "غذای مورد نظر از علاقه مندی‌های شما حذف شد.", "success");
                 setIsFavorite(false);
+                setForceGetUserInfo(prevValue => prevValue + 1);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {

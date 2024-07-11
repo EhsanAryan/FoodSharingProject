@@ -9,7 +9,7 @@ const NotFound = () => {
             </span>
             <Link
                 href="/"
-                className="bg-primary px-4 py-2 rounded-lg box-hoverable"
+                className="px-4 py-2 rounded-lg yellow-btn"
             >
                 بازگشت به صفحه اصلی
             </Link>

@@ -23,25 +23,18 @@ const Actions = ({ rowData, setForceRequest }) => {
         <>
             <div className={`flex items-center justify-center gap-4
         ${loading ? "pointer-events-none" : ""}`}>
-                {/* <Link
-                href={`/food/${rowData._id}`}
-                className="px-4 py-1.5 rounded-lg green-btn
-                flex justify-center items-center gap-2"
-            >
-                <SubjectIcon />
-                <span>جزئیات</span>
-            </Link>
-            <Link
-                href={`/sharing-food/${rowData._id}`}
-                className="px-4 py-1.5 rounded-lg yellow-btn
-                flex justify-center items-center gap-2"
-            >
-                
-            </Link> */}
+                <Link
+                    href={`/user/${rowData._id}`}
+                    className="px-4 py-1.5 rounded-lg blue-btn
+                    flex justify-center items-center gap-2"
+                >
+                    <SubjectIcon />
+                    <span>جزئیات</span>
+                </Link>
                 <button
                     type="button"
-                    className="px-4 py-1.5 rounded-lg blue-btn
-                flex justify-center items-center gap-2"
+                    className="px-4 py-1.5 rounded-lg green-btn
+                    flex justify-center items-center gap-2"
                     onClick={() => setPasswordModalOpen(true)}
                 >
                     <KeyIcon />
@@ -50,7 +43,7 @@ const Actions = ({ rowData, setForceRequest }) => {
                 <button
                     type="button"
                     className="px-4 py-1.5 rounded-lg yellow-btn
-                flex justify-center items-center gap-2"
+                    flex justify-center items-center gap-2"
                     onClick={() => setInfoModalOpen(true)}
                 >
                     <EditIcon />
@@ -72,7 +65,7 @@ const Actions = ({ rowData, setForceRequest }) => {
                 rowData={rowData}
                 setForceRequest={setForceRequest}
             />
-            
+
         </>
     );
 }

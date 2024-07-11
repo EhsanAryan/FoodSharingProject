@@ -4,68 +4,29 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
 import DrawerNavbar from './DrawerNavbar';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import MenuIcon from '@mui/icons-material/Menu';
 import FastfoodIcon from '@mui/icons-material/Fastfood';
-import LoginIcon from '@mui/icons-material/Login';
 import { Avatar, Box, IconButton } from '@mui/material';
 import { MainContext } from '@/context/MainContextContainer';
 import { getUserInfoService } from '@/services/userServices';
 import { getCookieValue } from '@/utils/getCookieValue';
 import { logoutAction } from '@/app/actions/actions';
-import HomeIcon from '@mui/icons-material/Home';
-import LunchDiningIcon from '@mui/icons-material/LunchDining';
-import GroupIcon from '@mui/icons-material/Group';
 import { Alert } from '@/utils/popupWindows';
 import axios from 'axios';
-
-const navbarItems = [
-    {
-        href: "/",
-        text: "خانه",
-        icon: <HomeIcon />
-    },
-    {
-        href: "/profile",
-        text: "حساب کاربری",
-        icon: <AccountBoxIcon />
-    },
-    {
-        href: "/sharing-food",
-        text: "اشتراک غذا",
-        icon: <LocalDiningIcon />
-    },
-];
-
-const adminNavbarItems = [
-    {
-        href: "/",
-        text: "غذاها",
-        icon: <LunchDiningIcon />
-    },
-    {
-        href: "/users",
-        text: "کاربران",
-        icon: <GroupIcon />
-    },
-];
-
-const noAuthNavbarItems = [
-    {
-        href: "/",
-        text: "خانه",
-        icon: <HomeIcon />
-    },
-    {
-        href: "/login",
-        text: "ورود/ثبت نام",
-        icon: <LoginIcon />
-    },
-];
+import { adminNavbarItems, navbarItems, noAuthNavbarItems } from '@/data/data';
 
 const Header = () => {
-    const { user, setUser, isLogin, setIsLogin, isAdmin, setIsAdmin, isLoading, setIsLoading } = useContext(MainContext);
+    const {
+        user,
+        setUser,
+        isLogin,
+        setIsLogin,
+        isAdmin,
+        setIsAdmin,
+        isLoading,
+        setIsLoading,
+        forceGetUserInfo
+    } = useContext(MainContext);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -131,6 +92,12 @@ const Header = () => {
             setIsLoading(false);
         }
     }, [isLogin]);
+
+    useEffect(() => {
+        if (forceGetUserInfo > 0) {
+            getUserInfoHandler();
+        }
+    }, [forceGetUserInfo]);
 
     return (
         <header className=" w-full h-[70px] bg-primary px-3 md:px-5 
