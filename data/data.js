@@ -56,11 +56,6 @@ export const adminNavbarItems = [
         icon: <GroupIcon />
     },
     {
-        href: "/sharing-food",
-        text: "اشتراک غذا",
-        icon: <LocalDiningIcon />
-    },
-    {
         href: "/profile",
         text: "حساب کاربری",
         icon: <AccountBoxIcon />

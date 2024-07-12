@@ -53,7 +53,7 @@ const Page = ({ params: { foodId } }) => {
                 />
             ) : food ? (
                 <>
-                    <h1 className="mt-2 mb-6 text-3xl sm:text-4xl font-bold text-primary text-center yop-appear">
+                    <h1 className="mt-2 mb-6 text-3xl sm:text-4xl font-bold text-primary text-center top-appear">
                         {food.title}
                     </h1>
                     <FoodSlider images={food.images} />

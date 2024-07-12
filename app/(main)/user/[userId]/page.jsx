@@ -127,10 +127,13 @@ const Page = ({ params: { userId } }) => {
                             </span>
                         </div>
                     </div>
-                    <div className="divider top-appear mt-6 mb-8"></div>
+                    <div className="divider top-appear my-6"></div>
                     <div className="w-full px-2 sm:px-4 bottom-appear">
+                        <h1 className="mb-6 text-2xl sm:text-3xl font-bold text-primary text-center">
+                            غذاهای کاربر
+                        </h1>
                         <div
-                            className={`flex justify-center mb-8 
+                            className={`flex justify-center mb-7 
                             ${foodLoading ? "pointer-events-none" : ""}`}
                         >
                             <input

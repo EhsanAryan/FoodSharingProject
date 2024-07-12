@@ -16,7 +16,7 @@ const Sidebar = () => {
                     <Link
                         key={`profile_section_${index}`}
                         href={item.href}
-                        className={`w-full block px-2 py-3 border-b-2 border-slate-900
+                        className={`w-full block px-2 py-3 border-b-2 border-b-slate-900
                         hover:bg-slate-900 
                         ${pathname === item.href ? "bg-slate-900" : ""}`}
                     >

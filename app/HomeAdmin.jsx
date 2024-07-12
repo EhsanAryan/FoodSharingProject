@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import DataTablePagination from '@/components/Table/DataTablePagination';
 import Actions from './Actions';
 import { foodCategoryOptions } from '@/data/data';
+import Link from 'next/link';
 
 const HomeAdmin = () => {
     const [forceRequest, setForceRequest] = useState(0);
@@ -25,7 +26,7 @@ const HomeAdmin = () => {
         {
             text: "عملیات",
             field: null,
-            element : (rowData) => <Actions rowData={rowData} setForceRequest={setForceRequest} />
+            element: (rowData) => <Actions rowData={rowData} setForceRequest={setForceRequest} />
         }
 
     ];
@@ -45,6 +46,12 @@ const HomeAdmin = () => {
                 categoryOptions={foodCategoryOptions}
                 defaultCategory=""
             >
+                <Link
+                    href="/sharing-food"
+                    className="px-4 py-1.5 rounded-lg yellow-btn"
+                >
+                    افزودن غذا
+                </Link>
             </DataTablePagination>
         </>
     );
