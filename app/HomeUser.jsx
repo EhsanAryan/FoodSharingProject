@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Loading from '@/components/Loading';
 import { foodCategoryOptions } from '@/data/data';
+import { base_api_url } from '@/services/httpService';
 
 const HomeUser = () => {
     const [foods, setFoods] = useState([]);
@@ -116,7 +117,7 @@ const HomeUser = () => {
                             >
                                 <div className="relative w-full h-[300px]">
                                     <Image
-                                        src={item.images[0]}
+                                        src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}/${item.images[0]}`}
                                         alt={item.title}
                                         fill
                                         className="object-cover"

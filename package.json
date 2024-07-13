@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3002",
     "build": "next build",
-    "start": "next start --port 3002",
+    "start": "set NODE_ENV=production&& node server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.20",
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
     "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",

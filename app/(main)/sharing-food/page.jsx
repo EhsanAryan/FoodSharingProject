@@ -16,6 +16,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { IconButton } from '@mui/material';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
 import { foodCategoryOptions } from '@/data/data';
+import { base_api_url } from '@/services/httpService';
 
 
 const Page = () => {
@@ -149,7 +150,7 @@ const Page = () => {
                                                     h-[220px] rounded-xl image-container"
                                                 >
                                                     <Image
-                                                        src={imageURLs[index]}
+                                                        src={imageURLs[index]?.startsWith("blob") ? imageURLs[index] : `${base_api_url}/${imageURLs[index]}`}
                                                         alt={item.name}
                                                         fill
                                                         className="object-cover rounded-xl
@@ -221,7 +222,7 @@ const Page = () => {
                 border-2 border-gray-200"
             >
                 <Image
-                    src={modalImagePath}
+                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}/${modalImagePath}`}
                     alt="Modal Image"
                     className="rounded-xl object-cover"
                     fill

@@ -1,6 +1,7 @@
 "use client";
 
 import { MainContext } from '@/context/MainContextContainer';
+import { base_api_url } from '@/services/httpService';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useContext, useEffect } from 'react';
@@ -29,7 +30,7 @@ const Page = () => {
                         >
                             <div className="relative w-full h-[300px]">
                                 <Image
-                                    src={item.images[0]}
+                                    src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}/${item.images[0]}`}
                                     alt={item.title}
                                     fill
                                     className="object-cover"

@@ -7,6 +7,7 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/swiper-bundle.css";
 import Image from "next/image";
+import { base_api_url } from "@/services/httpService";
 
 
 const CustomSlider = ({
@@ -38,16 +39,16 @@ const CustomSlider = ({
             pagination={pagination ? { clickable: true } : false}
             grabCursor={true}
             effect="cards"
-            // cardsEffect={{
-            //     rotate: 50,
-            //     slideShadows: true,
-            // }}
+        // cardsEffect={{
+        //     rotate: 50,
+        //     slideShadows: true,
+        // }}
         >
             {items.map((item, index) => (
-                <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => {}}>
+                <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => { }}>
                     <div className={`w-full h-full flex justify-center ${slideClasses || ""}`}>
                         <Image
-                            src={item}
+                            src={item?.startsWith("blob") ? item : `${base_api_url}/${item}`}
                             className={`w-full h-full object-cover ${imageClasses || ""}`}
                             fill
                             alt={`Slide pic ${index + 1}`}
@@ -71,19 +72,19 @@ const CustomSlider = ({
             pagination={pagination ? { clickable: true } : false}
             grabCursor={true}
             effect="coverflow"
-            // coverflowEffect={{
-            //     rotate: 50,
-            //     stretch: 0,
-            //     depth: 100,
-            //     modifier: 1,
-            //     slideShadows: true,
-            // }}
+        // coverflowEffect={{
+        //     rotate: 50,
+        //     stretch: 0,
+        //     depth: 100,
+        //     modifier: 1,
+        //     slideShadows: true,
+        // }}
         >
             {items.map((item, index) => (
-                <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => {}}>
+                <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => { }}>
                     <div className={`w-full h-full flex justify-center ${slideClasses || ""}`}>
                         <Image
-                            src={item}
+                            src={item?.startsWith("blob") ? item : `${base_api_url}/${item}`}
                             className={`w-full h-full object-cover ${imageClasses || ""}`}
                             fill
                             alt={`Slide pic ${index + 1}`}
@@ -108,10 +109,10 @@ const CustomSlider = ({
             grabCursor={true}
         >
             {items.map((item, index) => (
-                <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => {}}>
+                <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => { }}>
                     <div className={`w-full h-full flex justify-center ${slideClasses || ""}`}>
                         <Image
-                            src={item}
+                            src={item?.startsWith("blob") ? item : `${base_api_url}/${item}`}
                             className={`w-full h-full object-cover ${imageClasses || ""}`}
                             fill
                             alt={`Slide pic ${index + 1}`}

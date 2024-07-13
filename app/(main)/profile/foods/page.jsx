@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { foodCategoryOptions } from '@/data/data';
+import { base_api_url } from '@/services/httpService';
 
 
 const Page = () => {
@@ -121,7 +122,7 @@ const Page = () => {
                         >
                             <div className="relative w-full h-[300px]">
                                 <Image
-                                    src={item.images[0]}
+                                    src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}/${item.images[0]}`}
                                     alt={item.title}
                                     fill
                                     className="object-cover"

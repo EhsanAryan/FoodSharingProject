@@ -4,6 +4,7 @@ import Loading from '@/components/Loading';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
 import { foodCategoryOptions } from '@/data/data';
 import { getFoodsOfUserService } from '@/services/foodServices';
+import { base_api_url } from '@/services/httpService';
 import { getSingleUserService } from '@/services/userServices';
 import { Alert } from '@/utils/popupWindows';
 import { Avatar } from '@mui/material';
@@ -179,7 +180,7 @@ const Page = ({ params: { userId } }) => {
                                         >
                                             <div className="relative w-full h-[300px]">
                                                 <Image
-                                                    src={item.images[0]}
+                                                    src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}/${item.images[0]}`}
                                                     alt={item.title}
                                                     fill
                                                     className="object-cover"
@@ -221,7 +222,7 @@ const Page = ({ params: { userId } }) => {
                 sm:w-[400px] sm:h-[400px]"
             >
                 <Image
-                    src={modalImagePath}
+                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}/${modalImagePath}`}
                     alt="Modal Image"
                     className="rounded-full object-cover"
                     fill

@@ -2,6 +2,7 @@
 
 import CustomSlider from '@/components/CustomSlider';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
+import { base_api_url } from '@/services/httpService';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -28,7 +29,7 @@ const FoodSlider = ({ images }) => {
             ) : (
                 <div className="relative w-full max-w-[500px] h-[300px] md:h-[350px] rounded-xl mx-auto">
                     <Image
-                        src={images[0]}
+                        src={images[0]?.startsWith("blob") ? images[0] : `${base_api_url}/${images[0]}`}
                         alt="Food Image"
                         fill
                         className="object-cover top-appear
@@ -50,7 +51,7 @@ const FoodSlider = ({ images }) => {
                 border-2 border-gray-200"
             >
                 <Image
-                    src={imageURL}
+                    src={imageURL?.startsWith("blob") ? imageURL : `${base_api_url}/${imageURL}`}
                     alt="Modal Image"
                     className="rounded-xl object-cover"
                     fill

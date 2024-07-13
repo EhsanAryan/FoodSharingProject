@@ -7,13 +7,13 @@ const connect = async () => {
             useUnifiedTopology: true,
             serverSelectionTimeoutMS: 7000, // 7 seconds
         });
-        console.log("======================");
-        console.log("Connected to the database");
-        console.log("======================");
+        // console.log("======================");
+        // console.log("Connected to the database");
+        // console.log("======================");
     } catch (error) {
-        console.log("======================");
-        console.log(error);
-        console.log("======================");
+        // console.log("======================");
+        // console.log(error);
+        // console.log("======================");
     }
 }
 

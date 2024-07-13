@@ -7,6 +7,7 @@ import { getUsersService } from '@/services/userServices';
 import { Avatar } from '@mui/material';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
 import Image from 'next/image';
+import { base_api_url } from '@/services/httpService';
 
 const Page = () => {
     const [forceRequest, setForceRequest] = useState(0);
@@ -80,7 +81,7 @@ const Page = () => {
                 sm:w-[400px] sm:h-[400px]"
             >
                 <Image
-                    src={modalImagePath}
+                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}/${modalImagePath}`}
                     alt="Modal Image"
                     className="rounded-full object-cover"
                     fill
