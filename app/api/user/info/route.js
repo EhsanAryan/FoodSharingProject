@@ -1,3 +1,5 @@
+// I don't use Food model in this file, but it is necessary to recognize the foodSchema, because it's the first API has been called in the project (GET /api/user/info)
+import Food from "@/models/food";
 import User from "@/models/user";
 import db from "@/utils/db";
 import { cookies } from "next/headers";
@@ -52,10 +54,6 @@ export async function GET(request) {
 
         const user = await User.findById(decodedToken.sub).populate("favorites").lean();
 
-        for (let item of user.favorites) {
-            item = db.convertToObject(item);
-        }
-
         if (!user) {
             return NextResponse.json(
                 {
@@ -65,6 +63,10 @@ export async function GET(request) {
                     status: 404,
                 }
             );
+        }
+        
+        for (let item of user.favorites) {
+            item = db.convertToObject(item);
         }
 
         const { password, ...userData } = db.convertToObject(user);

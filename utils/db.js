@@ -1,7 +1,20 @@
 import mongoose from "mongoose";
 
 const connect = async () => {
-    await mongoose.connect("mongodb://localhost:27017/food");
+    try {
+        await mongoose.connect("mongodb://localhost:27017/food", {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 7000, // 7 seconds
+        });
+        console.log("======================");
+        console.log("Connected to the database");
+        console.log("======================");
+    } catch (error) {
+        console.log("======================");
+        console.log(error);
+        console.log("======================");
+    }
 }
 
 const close = async () => {
@@ -14,7 +27,7 @@ const convertToObject = (doc) => {
     return doc;
 }
 
-const db = { 
+const db = {
     connect,
     close,
     convertToObject

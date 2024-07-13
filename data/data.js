@@ -4,6 +4,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import HomeIcon from '@mui/icons-material/Home';
 import LunchDiningIcon from '@mui/icons-material/LunchDining';
 import GroupIcon from '@mui/icons-material/Group';
+import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 
 export const foodCategoryOptions = [
     {
@@ -38,6 +39,11 @@ export const navbarItems = [
         icon: <LocalDiningIcon />
     },
     {
+        href: "/contact-us",
+        text: "ارتباط با ما",
+        icon: <ContactSupportIcon />
+    },
+    {
         href: "/profile",
         text: "حساب کاربری",
         icon: <AccountBoxIcon />
@@ -67,6 +73,11 @@ export const noAuthNavbarItems = [
         href: "/",
         text: "خانه",
         icon: <HomeIcon />
+    },
+    {
+        href: "/contact-us",
+        text: "ارتباط با ما",
+        icon: <ContactSupportIcon />
     },
     {
         href: "/login",
