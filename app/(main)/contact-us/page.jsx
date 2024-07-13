@@ -1,6 +1,6 @@
 import React from 'react';
 import EmailIcon from '@mui/icons-material/Email';
-import ContactPageIcon from '@mui/icons-material/ContactPage';
+import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
 // import Link from 'next/link';
 
 const Page = () => {
@@ -19,7 +19,7 @@ const Page = () => {
             <div className="bg-primary text-black px-4 py-2 rounded-xl w-full max-w-[400px]
             flex flex-col sm:flex-row justify-between items-center gap-y-2 gap-x-10">
                 <span className="flex items-center gap-1">
-                    <ContactPageIcon />
+                    <PhoneEnabledRoundedIcon />
                     <span>شماره تماس:</span>
                 </span>
                 {/* <Link href="tel:+989197477916" className="dir-ltr">+989197477916</Link> */}
