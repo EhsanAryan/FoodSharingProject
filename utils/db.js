@@ -3,8 +3,6 @@ import mongoose from "mongoose";
 const connect = async () => {
     try {
         await mongoose.connect("mongodb://localhost:27017/food", {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
             serverSelectionTimeoutMS: 7000, // 7 seconds
         });
         // console.log("======================");

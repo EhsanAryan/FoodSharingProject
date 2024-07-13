@@ -1,3 +1,5 @@
+// I don't use User model in this file, but it is necessary to recognize the userSchema, because it's the first API has been called in the project if user is not authenticated (GET /api/foods/[page])
+import User from "@/models/user";
 import db from "@/utils/db";
 import Food from "@/models/food";
 import { NextResponse } from "next/server";
