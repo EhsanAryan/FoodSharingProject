@@ -22,7 +22,7 @@ const BYekan = localFont({
 export default function RootLayout({ children }) {
     return (
         <html lang="ar" dir="rtl">
-            <body className={`${BYekan.className}`}>
+            <body className={`rtl ${BYekan.className}`}>
                 <MainContextContainer>
                     <Header />
                     <main className="bg-slate-950 main-content-section fixed top-[70px] right-0 

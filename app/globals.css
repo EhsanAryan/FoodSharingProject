@@ -58,7 +58,7 @@
   }
 }
 
-*:not(.dir-ltr) {
+body.rtl, body.rtl *:not(.dir-ltr) {
   direction: rtl !important;
 }
 
