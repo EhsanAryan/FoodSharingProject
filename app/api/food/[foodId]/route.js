@@ -1,7 +1,7 @@
 import db from "@/utils/db";
+import User from "@/models/user";
 import Food from "@/models/food";
 import { NextResponse } from "next/server";
-import User from "@/models/user";
 import { cookies } from "next/headers";
 import fs from 'fs';
 import path from 'path';

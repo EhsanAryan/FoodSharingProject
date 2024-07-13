@@ -1,5 +1,6 @@
 import db from "@/utils/db";
 import User from "@/models/user";
+import Food from "@/models/food";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { checkTokenIsValid } from "@/app/actions/actions";
