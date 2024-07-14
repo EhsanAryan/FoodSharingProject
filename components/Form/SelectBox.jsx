@@ -22,7 +22,7 @@ const SelectBox = ({
                 </label>
             )}
             <FastField name={name} id={name} as="select"
-                className={`bg-slate-800 px-2 py-1 outline-none w-full h-full
+                className={`bg-slate-800 px-2 py-1 outline-none w-full
                 rounded-md placeholder:text-sm disabled:opacity-60 border
                 ${disabled ? "border-gray-500" : !formik.touched[name] ? "border-gray-500" : formik.errors[name] ? "border-red-500" : "border-green-500"}
                 ${ltr ? "dir-ltr" : ""}

@@ -58,7 +58,8 @@
   }
 }
 
-body.rtl, body.rtl *:not(.dir-ltr) {
+body.rtl,
+body.rtl *:not(.dir-ltr) {
   direction: rtl !important;
 }
 
@@ -124,7 +125,6 @@ body.rtl, body.rtl *:not(.dir-ltr) {
   font-family: "BYekan" !important;
 }
 
-
 .hover-shadow {
   transition: all 150ms ease-in-out;
 }
@@ -175,7 +175,7 @@ body.rtl, body.rtl *:not(.dir-ltr) {
   animation: left-appear 400ms ease-in-out 120ms forwards;
 }
 
-@keyframes left-appear  {
+@keyframes left-appear {
   from {
     opacity: 0;
     translate: -20px 0;
@@ -193,7 +193,7 @@ body.rtl, body.rtl *:not(.dir-ltr) {
   animation: right-appear 400ms ease-in-out 120ms forwards;
 }
 
-@keyframes right-appear  {
+@keyframes right-appear {
   from {
     opacity: 0;
     translate: 20px 0;
@@ -268,7 +268,8 @@ body.rtl, body.rtl *:not(.dir-ltr) {
 }
 
 /* Start swiper slide */
-.swiper-button-prev, .swiper-button-next {
+.swiper-button-prev,
+.swiper-button-next {
   color: white !important;
   scale: 0.5;
 }

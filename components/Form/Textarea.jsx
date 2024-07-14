@@ -35,7 +35,7 @@ const Textarea = ({
                     name={name}
                     placeholder={placeholder}
                     rows={rows || 3}
-                    className={`bg-slate-800 w-full h-full
+                    className={`bg-slate-800 w-full
                     border outline-none rounded-md
                     placeholder:text-sm px-2 py-1 disabled:opacity-60
                     ${disabled ? "border-gray-500" : !formik.touched[name] ? "border-gray-500" : formik.errors[name] ? "border-red-500" : "border-green-500"}
