@@ -27,7 +27,7 @@ const AuthLayout = ({ children }) => {
                 />
             ) : !isLogin ? (
                 <div className="bg-primary fixed top-0 right-0 w-full h-screen 
-                    overflow-x-hidden overflow-y-auto px-4 py-10">
+                    overflow-x-hidden overflow-y-auto px-4 pt-10 pb-24 sm:pb-10">
                     {children}
                 </div>
             ) : null}

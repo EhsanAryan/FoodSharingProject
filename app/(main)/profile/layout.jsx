@@ -68,7 +68,7 @@ const ProfileLayout = ({ children }) => {
             ) : user ? (
                 <div className="absolute top-0 right-0 w-full h-full">
                     <Sidebar />
-                    <div className="w-full px-4 md:px-6 lg:px-8 py-8
+                    <div className="w-full px-4 md:px-6 lg:px-8 pt-8 pb-[5.5rem] sm:pb-8 
                     md:absolute md:top-0 md:left-0 md:w-[78%]">
                         <div className="w-full bg-slate-900 rounded-xl 
                         max-w-screen-xl mx-auto px-4 md:px-6 py-6">
