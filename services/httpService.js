@@ -7,7 +7,8 @@ export const base_api_url = "http://localhost:3002";
 const httpService = (url, method, data=null, contentType="application/json", responseType="json") => {
     const token = localStorage.getItem("foodToken") ? JSON.parse(localStorage.getItem("foodToken")) : null;
     return axios({
-        url: base_api_url + url,
+        // url: base_api_url + url,
+        url: url,
         method,
         data,
         responseType,

@@ -26,7 +26,7 @@ const Page = () => {
             element: (rowData) => {
                 return rowData.avatar ? (
                     <Avatar
-                        src={rowData.avatar?.startsWith("blob") ? rowData.avatar : `${base_api_url}${rowData.avatar}`}
+                        src={rowData?.avatar || ""}
                         alt="Food Creator avatar"
                         sx={{
                             width: "75px",

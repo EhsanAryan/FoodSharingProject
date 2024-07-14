@@ -107,7 +107,7 @@ const Page = ({ params: { userId } }) => {
                 <>
                     <div className="w-full flex flex-col justify-center items-center gap-5 top-appear">
                         <Avatar
-                            src={user?.avatar ? user?.avatar?.startsWith("blob") ? user?.avatar : `${base_api_url}${user?.avatar}` : ""}
+                            src={user?.avatar || ""}
                             alt="Food Creator avatar"
                             sx={{
                                 width: "100px",

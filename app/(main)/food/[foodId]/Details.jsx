@@ -62,7 +62,7 @@ const Details = ({ food }) => {
                         <>
                             <div className="right-appear flex items-center gap-4">
                                 <Avatar
-                                    src={food?.creator?.avatar ? food?.creator?.avatar?.startsWith("blob") ? food?.creator?.avatar : `${base_api_url}${food?.creator?.avatar}` : ""}
+                                    src={food?.creator?.avatar || ""}
                                     alt="Food Creator avatar"
                                     sx={{
                                         width: "65px",
@@ -108,7 +108,7 @@ const Details = ({ food }) => {
                     sm:px-4 md:px-8"
                 >
                     <Avatar
-                        src={food?.creator?.avatar ? food?.creator?.avatar?.startsWith("blob") ? food?.creator?.avatar : `${base_api_url}${food?.creator?.avatar}` : ""}
+                        src={food?.creator?.avatar || ""}
                         alt="Food Creator avatar"
                         sx={{
                             width: "65px",

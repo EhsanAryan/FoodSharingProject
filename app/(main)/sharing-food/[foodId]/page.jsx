@@ -80,7 +80,8 @@ const Page = ({ params: { foodId } }) => {
 
     const getFileByPath = async (path) => {
         try {
-            const response = await axios.get(`${base_api_url}${path}`, {
+            // const response = await axios.get(`${base_api_url}${path}`, {
+            const response = await axios.get(path, {
                 responseType: "blob"
             });
             if (response.status === 200) {

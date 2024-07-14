@@ -186,7 +186,7 @@ const Header = () => {
                 >
                     {!isLoading ? isLogin ? (
                         <Avatar
-                            src={user?.avatar ? user?.avatar?.startsWith("blob") ? user?.avatar : `${base_api_url}${user?.avatar}` : ""}
+                            src={user?.avatar || ""}
                             alt="User avatar"
                             sx={{
                                 width: "55px",
