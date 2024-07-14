@@ -14,6 +14,7 @@ import { logoutAction } from '@/app/actions/actions';
 import { Alert } from '@/utils/popupWindows';
 import axios from 'axios';
 import { adminNavbarItems, navbarItems, noAuthNavbarItems } from '@/data/data';
+import { base_api_url } from '@/services/httpService';
 
 const Header = () => {
     const {
@@ -185,7 +186,7 @@ const Header = () => {
                 >
                     {!isLoading ? isLogin ? (
                         <Avatar
-                            src={user?.avatar || ""}
+                            src={user?.avatar ? user?.avatar?.startsWith("blob") ? user?.avatar : `${base_api_url}${user?.avatar}` : ""}
                             alt="User avatar"
                             sx={{
                                 width: "55px",

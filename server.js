@@ -15,10 +15,10 @@ app.prepare().then(() => {
   server.use('/foods', express.static(path.join(__dirname, 'public/foods')));
   server.use('/images', express.static(path.join(__dirname, 'public/images')));
 
-//   server.use('/foods', (req, res, next) => {
-//     res.set('Cache-Control', 'no-store'); // Disable caching
-//     express.static(path.join(__dirname, 'public/foods'))(req, res, next);
-//   });
+  // server.use('/foods', (req, res, next) => {
+  //   res.set('Cache-Control', 'no-store'); // Disable caching
+  //   express.static(path.join(__dirname, 'public/foods'))(req, res, next);
+  // });
 
   // All other requests are handled by Next.js
   server.all('*', (req, res) => {
@@ -27,6 +27,8 @@ app.prepare().then(() => {
 
   server.listen(3002, (err) => {
     if (err) throw err;
-    console.log('> Ready on http://localhost:3002');
+    console.log("++++++++++++++++++++++++++++++++\n");
+    console.log('> Ready on http://localhost:3002 \n');
+    console.log("++++++++++++++++++++++++++++++++");
   });
 });

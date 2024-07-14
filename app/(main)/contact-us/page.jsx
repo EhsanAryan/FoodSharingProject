@@ -5,8 +5,9 @@ import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
 
 const Page = () => {
     return (
-        <div className="w-full min-h-[300px] bg-slate-900 rounded-md px-4 md:px-6 py-5 
+        <div className="w-full min-h-[300px] bg-slate-900 rounded-md px-4 md:px-6 py-10 
         max-w-screen-lg mx-auto flex flex-col justify-center items-center gap-4">
+            <h1 className="text-2xl sm:text-3xl text-primary text-center mb-4">راه‌های ارتباطی</h1>
             <div className="bg-primary text-black px-4 py-2 rounded-xl w-full max-w-[400px]
             flex flex-col sm:flex-row justify-between items-center gap-y-2 gap-x-10">
                 <span className="flex items-center gap-1">

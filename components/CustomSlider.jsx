@@ -48,7 +48,7 @@ const CustomSlider = ({
                 <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => { }}>
                     <div className={`w-full h-full flex justify-center ${slideClasses || ""}`}>
                         <Image
-                            src={item?.startsWith("blob") ? item : `${base_api_url}/${item}`}
+                            src={item?.startsWith("blob") ? item : `${base_api_url}${item}`}
                             className={`w-full h-full object-cover ${imageClasses || ""}`}
                             fill
                             alt={`Slide pic ${index + 1}`}
@@ -84,7 +84,7 @@ const CustomSlider = ({
                 <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => { }}>
                     <div className={`w-full h-full flex justify-center ${slideClasses || ""}`}>
                         <Image
-                            src={item?.startsWith("blob") ? item : `${base_api_url}/${item}`}
+                            src={item?.startsWith("blob") ? item : `${base_api_url}${item}`}
                             className={`w-full h-full object-cover ${imageClasses || ""}`}
                             fill
                             alt={`Slide pic ${index + 1}`}
@@ -112,7 +112,7 @@ const CustomSlider = ({
                 <SwiperSlide key={`slide_${index}`} onClick={onClick ? () => onClick(item) : () => { }}>
                     <div className={`w-full h-full flex justify-center ${slideClasses || ""}`}>
                         <Image
-                            src={item?.startsWith("blob") ? item : `${base_api_url}/${item}`}
+                            src={item?.startsWith("blob") ? item : `${base_api_url}${item}`}
                             className={`w-full h-full object-cover ${imageClasses || ""}`}
                             fill
                             alt={`Slide pic ${index + 1}`}

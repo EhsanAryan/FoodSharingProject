@@ -11,9 +11,10 @@ import Loading from '@/components/Loading';
 import { MainContext } from '@/context/MainContextContainer';
 import { logoutAction } from '@/app/actions/actions';
 import { deleteFoodService } from '@/services/foodServices';
+import { base_api_url } from '@/services/httpService';
 
 const Details = ({ food }) => {
-    const { setIsLogin, setIsAdmin } = useContext(MainContext);
+    const { setIsLogin, setIsAdmin, setForceGetUserInfo } = useContext(MainContext);
 
     const [loading, setLoading] = useState(false);
 
@@ -27,6 +28,7 @@ const Details = ({ food }) => {
             const response = await deleteFoodService(foodId);
             if (response.status === 200) {
                 Alert(null, "غذای مورد نظر با موفقیت حذف شد", "success");
+                setForceGetUserInfo(prevValue => prevValue + 1);
                 router.back();
             }
         } catch (error) {
@@ -60,7 +62,7 @@ const Details = ({ food }) => {
                         <>
                             <div className="right-appear flex items-center gap-4">
                                 <Avatar
-                                    src={food?.creator?.avatar || ""}
+                                    src={food?.creator?.avatar ? food?.creator?.avatar?.startsWith("blob") ? food?.creator?.avatar : `${base_api_url}${food?.creator?.avatar}` : ""}
                                     alt="Food Creator avatar"
                                     sx={{
                                         width: "65px",
@@ -106,7 +108,7 @@ const Details = ({ food }) => {
                     sm:px-4 md:px-8"
                 >
                     <Avatar
-                        src={food?.creator?.avatar || ""}
+                        src={food?.creator?.avatar ? food?.creator?.avatar?.startsWith("blob") ? food?.creator?.avatar : `${base_api_url}${food?.creator?.avatar}` : ""}
                         alt="Food Creator avatar"
                         sx={{
                             width: "65px",

@@ -13,7 +13,7 @@ import Favorite from './Favorite';
 export const dynamic = "force-dynamic";
 
 const Page = ({ params: { foodId } }) => {
-    const { isLogin, isLoading } = useContext(MainContext);
+    const { isLogin, isLoading, setForceGetUserInfo } = useContext(MainContext);
 
     const [food, setFood] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -29,6 +29,9 @@ const Page = ({ params: { foodId } }) => {
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
+                if(error.response.status === 404) {
+                    setForceGetUserInfo(prevValue => prevValue + 1);
+                }
                 await Alert(`خطا ${error.response.status}!`, error.response.data.message, "error");
                 router.back();
             } else {

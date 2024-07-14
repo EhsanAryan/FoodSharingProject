@@ -107,7 +107,7 @@ const Page = ({ params: { userId } }) => {
                 <>
                     <div className="w-full flex flex-col justify-center items-center gap-5 top-appear">
                         <Avatar
-                            src={user.avatar || ""}
+                            src={user?.avatar ? user?.avatar?.startsWith("blob") ? user?.avatar : `${base_api_url}${user?.avatar}` : ""}
                             alt="Food Creator avatar"
                             sx={{
                                 width: "100px",
@@ -180,7 +180,7 @@ const Page = ({ params: { userId } }) => {
                                         >
                                             <div className="relative w-full h-[300px]">
                                                 <Image
-                                                    src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}/${item.images[0]}`}
+                                                    src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}${item.images[0]}`}
                                                     alt={item.title}
                                                     fill
                                                     className="object-cover"
@@ -222,7 +222,7 @@ const Page = ({ params: { userId } }) => {
                 sm:w-[400px] sm:h-[400px]"
             >
                 <Image
-                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}/${modalImagePath}`}
+                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}${modalImagePath}`}
                     alt="Modal Image"
                     className="rounded-full object-cover"
                     fill

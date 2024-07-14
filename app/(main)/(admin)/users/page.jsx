@@ -26,7 +26,7 @@ const Page = () => {
             element: (rowData) => {
                 return rowData.avatar ? (
                     <Avatar
-                        src={rowData.avatar || ""}
+                        src={rowData.avatar?.startsWith("blob") ? rowData.avatar : `${base_api_url}${rowData.avatar}`}
                         alt="Food Creator avatar"
                         sx={{
                             width: "75px",
@@ -81,7 +81,7 @@ const Page = () => {
                 sm:w-[400px] sm:h-[400px]"
             >
                 <Image
-                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}/${modalImagePath}`}
+                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}${modalImagePath}`}
                     alt="Modal Image"
                     className="rounded-full object-cover"
                     fill

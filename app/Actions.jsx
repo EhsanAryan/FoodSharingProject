@@ -11,7 +11,7 @@ import { logoutAction } from './actions/actions';
 import { MainContext } from '@/context/MainContextContainer';
 
 const Actions = ({ rowData, setForceRequest }) => {
-    const { setIsLogin, setIsAdmin } = useContext(MainContext);
+    const { setIsLogin, setIsAdmin, setForceGetUserInfo } = useContext(MainContext);
 
     const [loading, setLoading] = useState(false);
 
@@ -24,6 +24,7 @@ const Actions = ({ rowData, setForceRequest }) => {
             if (response.status === 200) {
                 Alert(null, "غذای مورد نظر با موفقیت حذف شد", "success");
                 setForceRequest(prevValue => prevValue + 1);
+                setForceGetUserInfo(prevValue => prevValue + 1);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {

@@ -11,6 +11,7 @@ import { MainContext } from '@/context/MainContextContainer';
 import { changeUserAvatarService } from '@/services/userServices';
 import Loading from '@/components/Loading';
 import { logoutAction } from '@/app/actions/actions';
+import { base_api_url } from '@/services/httpService';
 
 const Page = () => {
     const { user, setUser, setIsLogin, setIsAdmin } = useContext(MainContext);
@@ -85,7 +86,7 @@ const Page = () => {
                     />
                 ) : (
                     <Avatar
-                        src={user?.avatar || ""}
+                        src={user?.avatar ? user?.avatar?.startsWith("blob") ? user?.avatar : `${base_api_url}${user?.avatar}` : ""}
                         alt="User avatar"
                         sx={{
                             width: "200px",

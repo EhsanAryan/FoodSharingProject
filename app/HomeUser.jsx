@@ -117,7 +117,7 @@ const HomeUser = () => {
                             >
                                 <div className="relative w-full h-[300px]">
                                     <Image
-                                        src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}/${item.images[0]}`}
+                                        src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}${item.images[0]}`}
                                         alt={item.title}
                                         fill
                                         className="object-cover"

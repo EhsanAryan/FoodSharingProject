@@ -150,7 +150,7 @@ const Page = () => {
                                                     h-[220px] rounded-xl image-container"
                                                 >
                                                     <Image
-                                                        src={imageURLs[index]?.startsWith("blob") ? imageURLs[index] : `${base_api_url}/${imageURLs[index]}`}
+                                                        src={imageURLs[index]?.startsWith("blob") ? imageURLs[index] : `${base_api_url}${imageURLs[index]}`}
                                                         alt={item.name}
                                                         fill
                                                         className="object-cover rounded-xl
@@ -222,7 +222,7 @@ const Page = () => {
                 border-2 border-gray-200"
             >
                 <Image
-                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}/${modalImagePath}`}
+                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}${modalImagePath}`}
                     alt="Modal Image"
                     className="rounded-xl object-cover"
                     fill
