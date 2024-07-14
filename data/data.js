@@ -35,7 +35,7 @@ export const navbarItems = [
     },
     {
         href: "/sharing-food",
-        text: "اشتراک غذا",
+        text: "افزودن غذا",
         icon: <LocalDiningIcon />
     },
     {
