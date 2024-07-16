@@ -20,8 +20,8 @@ export const changeUserAvatarService = (formData) => {
     return httpService("/api/user/avatar", "post", formData, "multipart/form-data");
 }
 
-export const getUserFoodsService = (searchChar = "", category = "") => {
-    return httpService(`/api/user/foods?search=${searchChar}&category=${category}`, "get");
+export const getUserFoodsService = (page=1, pageSize=20, searchChar = "", category = "") => {
+    return httpService(`/api/user/foods/${page}?page_size=${pageSize}&search=${searchChar}&category=${category}`, "get");
 }
 
 export const addFoodToFavoritesService = (foodId) => {
@@ -34,7 +34,7 @@ export const removeFoodFromFavoritesService = (foodId) => {
 
 
 // Only admin APIs
-export const getUsersService = (page, pageSize = 20, searchChar = "") => {
+export const getUsersService = (page=1, pageSize = 20, searchChar = "") => {
     return httpService(`/api/admin/users/${page}?page_size=${pageSize}&search=${searchChar}`, "get");
 }
 

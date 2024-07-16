@@ -7,7 +7,7 @@ import { checkTokenIsValid } from "@/app/actions/actions";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request) {
+export async function GET(request, context) {
     try {
         if (!(cookies().has("foodToken") && cookies().get("foodToken")?.value)) {
             return NextResponse.json(
@@ -48,6 +48,8 @@ export async function GET(request) {
             }
         }
 
+        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
+        const page = Number(context.params.page) || 1;
         const search = new URL(request.url).searchParams.get("search") || "";
         const category = new URL(request.url).searchParams.get("category") || "";
 
@@ -62,6 +64,38 @@ export async function GET(request) {
                 },
                 {
                     status: 404
+                }
+            );
+        }
+
+        const count = await Food.countDocuments((category.trim() && search.trim()) ? {
+            creator: decodedToken.sub,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            },
+            category: category.trim()
+        } : category.trim() ? {
+            creator: decodedToken.sub,
+            category: category.trim()
+        } : search.trim() ? {
+            creator: decodedToken.sub,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            }
+        } : {
+            creator: decodedToken.sub
+        });
+        const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
+
+        if (page > pagesCount) {
+            return NextResponse.json(
+                {
+                    message: "صفحه یافت نشد!"
+                },
+                {
+                    status: 404,
                 }
             );
         }
@@ -84,7 +118,11 @@ export async function GET(request) {
             }
         } : {
             creator: decodedToken.sub
-        }).populate("creator").lean();
+        })
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .populate("creator")
+            .lean();
 
         foods.forEach((food) => {
             food.creator = db.convertToObject(food.creator);
@@ -92,8 +130,10 @@ export async function GET(request) {
         });
 
         return NextResponse.json(
-            foods.map(item => db.convertToObject(item))
-            ,
+            {
+                pagesCount,
+                data: foods.map(item => db.convertToObject(item))
+            },
             {
                 status: 200,
             }

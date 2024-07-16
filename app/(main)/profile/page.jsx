@@ -20,6 +20,7 @@ const Page = () => {
     const [avatarLoading, setAvatarLoading] = useState(false);
 
     const router = useRouter();
+    
     const imageInputRef = useRef(null);
 
     const changeAvatarHandler = async (ev) => {
@@ -81,7 +82,7 @@ const Page = () => {
                 {avatarLoading ? (
                     <Loading
                         size={40}
-                        className="my-10"
+                        className="my-12"
                         noText
                     />
                 ) : (

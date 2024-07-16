@@ -48,17 +48,15 @@ export async function GET(request, context) {
                 $options: "i"
             },
             category: category.trim()
-        } : category.trim() ?
-            {
-                category: category.trim()
+        } : category.trim() ? {
+            category: category.trim()
 
-            } : search.trim() ? {
-                title: {
-                    $regex: search.trim(),
-                    $options: "i"
-                },
-            } :
-                {})
+        } : search.trim() ? {
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            },
+        } : {})
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .populate("creator")

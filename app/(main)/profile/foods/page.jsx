@@ -11,13 +11,16 @@ import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { foodCategoryOptions } from '@/data/data';
 import { base_api_url } from '@/services/httpService';
+import { Pagination } from '@mui/material';
 
 
 const Page = () => {
     const { setIsLogin, isLogin, setIsAdmin } = useContext(MainContext);
 
-    const [loading, setLoading] = useState(true);
     const [foods, setFoods] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [pagesCount, setPagesCount] = useState(1);
     const [searchChar, setSearchChar] = useState("");
     const [category, setCategory] = useState("");
 
@@ -27,12 +30,17 @@ const Page = () => {
 
     let searchTimeout;
 
+    const handleSetCurrentPage = (ev, newPage) => {
+        setPage(newPage);
+    }
+
     const getUserFoodsHandler = async () => {
         setLoading(true);
         try {
-            const response = await getUserFoodsService(searchChar, category);
+            const response = await getUserFoodsService(page, 20, searchChar, category);
             if (response.status === 200) {
-                setFoods(response.data);
+                setFoods(response.data.data);
+                setPagesCount(response.data.pagesCount);
                 setTimeout(() => {
                     inputRef?.current?.focus();
                 }, 50);
@@ -61,17 +69,19 @@ const Page = () => {
         if (searchTimeout) clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
             setSearchChar(char.trim());
+            setPage(1);
         }, 1000);
     }
 
     const handleSetCategory = (ev) => {
         const value = ev.target.value;
         setCategory(value);
+        setPage(1);
     }
 
     useEffect(() => {
         if (isLogin) getUserFoodsHandler();
-    }, [searchChar, category]);
+    }, [page, searchChar, category]);
 
     return (
         <>
@@ -148,6 +158,32 @@ const Page = () => {
             ) : (
                 <div className="my-12 text-red-500 text-xl md:text-2xl text-center">
                     غذایی برای نمایش موجود نیست!
+                </div>
+            )}
+
+            {pagesCount > 1 && (
+                <div className={`mt-8 w-full
+                  flex justify-center items-center children-dir-ltr
+                  ${loading ? "pointer-events-none" : ""}`}>
+                    <Pagination
+                        count={pagesCount}
+                        page={page}
+                        boundaryCount={1}
+                        onChange={(ev, newPage) => handleSetCurrentPage(ev, newPage)}
+                        color="primary"
+                        sx={{
+                            direction: "ltr !important",
+                            "& .MuiPagination-ul": {
+                                direction: "ltr !important",
+                            },
+                            "& .MuiPagination-ul li>:is(button, div)": {
+                                color: "white"
+                            },
+                            "& button.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected:not(.MuiPaginationItem-previousNext)": {
+                                backgroundColor: "#343840 !important",
+                            }
+                        }}
+                    />
                 </div>
             )}
         </>

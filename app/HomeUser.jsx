@@ -148,7 +148,7 @@ const HomeUser = () => {
 
                 {pagesCount > 1 && (
                     <div className={`mt-8 w-full
-                  flex justify-center items-center
+                  flex justify-center items-center children-dir-ltr
                   ${loading ? "pointer-events-none" : ""}`}>
                         <Pagination
                             count={pagesCount}
