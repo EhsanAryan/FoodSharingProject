@@ -48,8 +48,8 @@ export async function GET(request, context) {
             }
         }
 
-        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
         const page = Number(context.params.page) || 1;
+        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
         const search = new URL(request.url).searchParams.get("search") || "";
         const category = new URL(request.url).searchParams.get("category") || "";
 

@@ -8,6 +8,8 @@ export const dynamic = "force-dynamic";
 export async function GET(request, context) {
     try {
         const userId = context.params.userId;
+        const page = context.params.page;
+        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
         const search = new URL(request.url).searchParams.get("search") || "";
         const category = new URL(request.url).searchParams.get("category") || "";
 
@@ -22,6 +24,38 @@ export async function GET(request, context) {
                 },
                 {
                     status: 404
+                }
+            );
+        }
+
+        const count = await Food.countDocuments((category.trim() && search.trim()) ? {
+            creator: userId,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            },
+            category: category.trim()
+        } : category.trim() ? {
+            creator: userId,
+            category: category.trim()
+        } : search.trim() ? {
+            creator: userId,
+            title: {
+                $regex: search.trim(),
+                $options: "i"
+            }
+        } : {
+            creator: userId,
+        });
+        const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
+
+        if (page > pagesCount) {
+            return NextResponse.json(
+                {
+                    message: "صفحه یافت نشد!"
+                },
+                {
+                    status: 404,
                 }
             );
         }
@@ -44,7 +78,11 @@ export async function GET(request, context) {
             }
         } : {
             creator: userId
-        }).populate("creator").lean();
+        })
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .populate("creator")
+            .lean();
 
         foods.forEach((food) => {
             food.creator = db.convertToObject(food.creator);
@@ -52,8 +90,10 @@ export async function GET(request, context) {
         });
 
         return NextResponse.json(
-            foods.map(item => db.convertToObject(item))
-            ,
+            {
+                pagesCount,
+                data: foods.map(item => db.convertToObject(item))
+            },
             {
                 status: 200,
             }

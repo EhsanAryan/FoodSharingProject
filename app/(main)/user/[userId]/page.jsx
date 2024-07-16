@@ -7,7 +7,7 @@ import { getFoodsOfUserService } from '@/services/foodServices';
 import { base_api_url } from '@/services/httpService';
 import { getSingleUserService } from '@/services/userServices';
 import { Alert } from '@/utils/popupWindows';
-import { Avatar } from '@mui/material';
+import { Avatar, Pagination } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -16,9 +16,11 @@ import React, { useEffect, useRef, useState } from 'react';
 const Page = ({ params: { userId } }) => {
     const [loading, setLoading] = useState(true);
     const [foodLoading, setFoodLoading] = useState(true);
-    const [user, setUser] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [userFoods, setUserFoods] = useState([]);
 
+    const [page, setPage] = useState(1);
+    const [pagesCount, setPagesCount] = useState(1);
     const [searchChar, setSearchChar] = useState("");
     const [category, setCategory] = useState("");
 
@@ -27,17 +29,20 @@ const Page = ({ params: { userId } }) => {
 
     const inputRef = useRef(null);
 
+    const router = useRouter();
+
     let searchTimeout;
 
-    const router = useRouter();
+    const handleSetCurrentPage = (ev, newPage) => {
+        setPage(newPage);
+    }
 
     const getUserDataHandler = async () => {
         setLoading(true);
         try {
             const response = await getSingleUserService(userId);
             if (response.status === 200) {
-                setUser(response.data);
-                getUserFoodsHandler();
+                setUserData(response.data);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
@@ -55,9 +60,10 @@ const Page = ({ params: { userId } }) => {
     const getUserFoodsHandler = async () => {
         setFoodLoading(true);
         try {
-            const response = await getFoodsOfUserService(userId, searchChar, category);
+            const response = await getFoodsOfUserService(userId, page, 20, searchChar, category);
             if (response.status === 200) {
-                setUserFoods(response.data);
+                setUserFoods(response.data.data);
+                setPagesCount(response.data.pagesCount);
                 setTimeout(() => {
                     inputRef?.current?.focus();
                 }, 50);
@@ -80,12 +86,14 @@ const Page = ({ params: { userId } }) => {
         if (searchTimeout) clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
             setSearchChar(char.trim());
+            setPage(1);
         }, 1000);
     }
 
     const handleSetCategory = (ev) => {
         const value = ev.target.value;
         setCategory(value);
+        setPage(1);
     }
 
     useEffect(() => {
@@ -94,7 +102,7 @@ const Page = ({ params: { userId } }) => {
 
     useEffect(() => {
         getUserFoodsHandler();
-    }, [searchChar, category]);
+    }, [page, searchChar, category]);
 
     return (
         <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 py-6">
@@ -103,28 +111,28 @@ const Page = ({ params: { userId } }) => {
                     size={50}
                     className="my-20"
                 />
-            ) : user ? (
+            ) : userData ? (
                 <>
                     <div className="w-full flex flex-col justify-center items-center gap-5 top-appear">
                         <Avatar
-                            src={user?.avatar || ""}
+                            src={userData?.avatar || ""}
                             alt="Food Creator avatar"
                             sx={{
                                 width: "100px",
                                 height: "100px",
-                                cursor: user.avatar ? "pointer" : "auto"
+                                cursor: userData.avatar ? "pointer" : "auto"
                             }}
-                            onClick={user.avatar ? () => {
-                                setModalImagePath(user.avatar);
+                            onClick={userData.avatar ? () => {
+                                setModalImagePath(userData.avatar);
                                 setIsOpen(true);
                             } : () => { }}
                         />
                         <div className="flex flex-col items-center gap-0.5">
                             <span className="text-xl">
-                                {user.username}
+                                {userData.username}
                             </span>
                             <span>
-                                {`${user.first_name || ""} ${user.last_name || ""}`}
+                                {`${userData.first_name || ""} ${userData.last_name || ""}`}
                             </span>
                         </div>
                     </div>
@@ -209,6 +217,32 @@ const Page = ({ params: { userId } }) => {
                                 </div>
                             )}
                         </div>
+
+                        {pagesCount > 1 && (
+                            <div className={`mt-8 w-full
+                            flex justify-center items-center children-dir-ltr
+                            ${foodLoading ? "pointer-events-none" : ""}`}>
+                                <Pagination
+                                    count={pagesCount}
+                                    page={page}
+                                    boundaryCount={1}
+                                    onChange={(ev, newPage) => handleSetCurrentPage(ev, newPage)}
+                                    color="primary"
+                                    sx={{
+                                        direction: "ltr !important",
+                                        "& .MuiPagination-ul": {
+                                            direction: "ltr !important",
+                                        },
+                                        "& .MuiPagination-ul li>:is(button, div)": {
+                                            color: "white"
+                                        },
+                                        "& button.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected:not(.MuiPaginationItem-previousNext)": {
+                                            backgroundColor: "#343840 !important",
+                                        }
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
                 </>
             ) : null}

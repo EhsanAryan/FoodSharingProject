@@ -1,6 +1,6 @@
 import httpService from "./httpService"
 
-export const getFoodsService = (page=1, pageSize=20, searchChar="", category="") => {
+export const getFoodsService = (page = 1, pageSize = 20, searchChar = "", category = "") => {
     return httpService(`/api/foods/${page}?page_size=${pageSize}&search=${searchChar}&category=${category}`, "get");
 }
 
@@ -20,6 +20,6 @@ export const deleteFoodService = (foodId) => {
     return httpService(`/api/food/${foodId}`, "delete")
 }
 
-export const getFoodsOfUserService = (userId, searchChar="", category="") => {
-    return httpService(`/api/foods/user/${userId}?search=${searchChar}&category=${category}`, "get");
+export const getFoodsOfUserService = (userId, page = 1, pageSize = 20, searchChar = "", category = "") => {
+    return httpService(`/api/foods/user/${userId}/${page}?page_size=${pageSize}&search=${searchChar}&category=${category}`, "get");
 }
