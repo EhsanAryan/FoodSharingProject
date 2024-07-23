@@ -13,6 +13,7 @@ const Favorite = ({ food }) => {
     const { setIsLogin, setIsAdmin, setForceGetUserInfo } = useContext(MainContext);
 
     const [isFavorite, setIsFavorite] = useState(food.is_favorite);
+    const [likes, setLikes] = useState(food.likes)
     const [loading, setLoading] = useState(false);
 
     const addFoodToFavoritesHandler = async (foodId) => {
@@ -22,6 +23,7 @@ const Favorite = ({ food }) => {
             if (response.status === 201) {
                 Alert(null, "غذای مورد نظر به علاقه مندی‌های شما افزوده شد.", "success");
                 setIsFavorite(true);
+                setLikes(prevValue => prevValue + 1);
                 setForceGetUserInfo(prevValue => prevValue + 1);
             }
         } catch (error) {
@@ -47,6 +49,9 @@ const Favorite = ({ food }) => {
             if (response.status === 200) {
                 Alert(null, "غذای مورد نظر از علاقه مندی‌های شما حذف شد.", "success");
                 setIsFavorite(false);
+                if (likes > 0) {
+                    setLikes(prevValue => prevValue - 1);
+                }
                 setForceGetUserInfo(prevValue => prevValue + 1);
             }
         } catch (error) {
@@ -66,25 +71,30 @@ const Favorite = ({ food }) => {
     }
 
     return (
-        <div className={`w-full relative mt-12 pb-8 sm:px-4 md:px-8 flex justify-end items-center
-        ${loading ? "pointer-events-none" : ""}`}>
-            <FavoriteIcon sx={{ fontSize: "2.5rem", color: "#dc2626" }}
-                className={`absolute top-0 bottom-0 my-auto left-[2.5%]
-                favorite-icon ${isFavorite ? "active" : ""}`}
-            />
-            <Tooltip
-                title={isFavorite ? "حذف از علاقه مندی‌ها" : "افزودن به علاقه مندی‌ها"}
-                arrow
-                placement="top-start"
-            >
-                <FavoriteBorderIcon sx={{ fontSize: "2.5rem", color: "#dc2626" }}
-                    className="absolute top-0 bottom-0 my-auto left-[2.5%] cursor-pointer z-[1]"
-                    onClick={isFavorite ?
-                        () => removeFoodFromFavoritesHandler(food._id) :
-                        () => addFoodToFavoritesHandler(food._id)
-                    }
+        <div
+            className={`w-full relative mt-12 py-9 ${loading ? "pointer-events-none" : ""}`}
+        >
+            <div className="absolute top-0 left-[2.5%] flex flex-col items-center gap-2">
+                <FavoriteIcon sx={{ fontSize: "2.5rem", color: "#dc2626" }}
+                    className={`favorite-icon ${isFavorite ? "active" : ""}`}
                 />
-            </Tooltip>
+                <Tooltip
+                    title={isFavorite ? "حذف از علاقه مندی‌ها" : "افزودن به علاقه مندی‌ها"}
+                    arrow
+                    placement="top-start"
+                >
+                    <FavoriteBorderIcon sx={{ fontSize: "2.5rem", color: "#dc2626" }}
+                        className="absolute top-0 left-0 cursor-pointer z-[1]"
+                        onClick={isFavorite ?
+                            () => removeFoodFromFavoritesHandler(food._id) :
+                            () => addFoodToFavoritesHandler(food._id)
+                        }
+                    />
+                </Tooltip>
+                <div className="text-xl text-[#dc2626] font-bold">
+                    {likes}
+                </div>
+            </div>
         </div>
     );
 }

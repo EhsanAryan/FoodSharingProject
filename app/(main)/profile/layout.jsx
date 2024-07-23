@@ -31,7 +31,6 @@ const ProfileLayout = ({ children }) => {
                     await logoutAction();
                     setIsLogin(false);
                     setIsAdmin(0);
-                    notFound();
                 } else {
                     router.back();
                 }

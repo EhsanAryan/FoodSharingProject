@@ -16,7 +16,8 @@ const FoodSlider = ({ images }) => {
                 <div className="w-full">
                     <CustomSlider
                         items={images}
-                        className="w-[85%] max-w-[500px] h-[300px] md:h-[350px] rounded-xl"
+                        className="w-[85%] max-w-[500px] h-[300px] md:h-[350px] mx-auto rounded-xl"
+                        imageClasses="rounded-xl"
                         autoplay={true}
                         effect="cards"
                         navigation={false}
@@ -27,7 +28,7 @@ const FoodSlider = ({ images }) => {
                     />
                 </div>
             ) : (
-                <div className="relative w-full max-w-[500px] h-[300px] md:h-[350px] rounded-xl mx-auto">
+                <div className="relative w-full max-w-[500px] h-[300px] md:h-[350px] mx-auto rounded-xl">
                     <Image
                         src={images[0]?.startsWith("blob") ? images[0] : `${base_api_url}${images[0]}`}
                         alt="Food Image"
@@ -47,8 +48,7 @@ const FoodSlider = ({ images }) => {
                 isOpen={isOpen && imageURL}
                 setIsOpen={setIsOpen}
                 blur
-                className="bg-transparent text-white rounded-xl w-[75vw] h-[85vh]
-                border-2 border-gray-200"
+                className="bg-transparent text-white rounded-xl w-[75vw] h-[85vh]"
             >
                 <Image
                     src={imageURL?.startsWith("blob") ? imageURL : `${base_api_url}${imageURL}`}

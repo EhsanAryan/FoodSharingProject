@@ -66,7 +66,7 @@ export async function PUT(request, context) {
             );
         }
 
-        const food = await Food.findById(foodId).lean();
+        const food = await Food.findById(foodId);
 
         if (!food) {
             return NextResponse.json(
@@ -89,6 +89,10 @@ export async function PUT(request, context) {
                 }
             );
         }
+
+        // Update the food (to use save() method to update an existing document, you must not use lean() method when getting the food)
+        food.likes += 1;
+        await food.save();
 
         // Update the user
         const updatedUser = await User.findByIdAndUpdate(
@@ -191,7 +195,7 @@ export async function DELETE(request, context) {
             );
         }
 
-        const food = await Food.findById(foodId).lean();
+        const food = await Food.findById(foodId);
 
         if (!food) {
             return NextResponse.json(
@@ -202,6 +206,12 @@ export async function DELETE(request, context) {
                     status: 404,
                 }
             );
+        }
+
+        // Update the food (to use save() method to update an existing document, you must not use lean() method when getting the food)
+        if (food.likes > 0) {
+            food.likes -= 1;
+            await food.save();
         }
 
         // Update the user

@@ -23,6 +23,17 @@ const foodSchema = new mongoose.Schema({
             message: props => `${props.value} exceeds the limit of 4 images.`
         }
     },
+    likes: {
+        type: Number,
+        required: true,
+        default: 0,
+        validate: {
+            validator: function (v) {
+                return v >= 0;
+            },
+            message: props => `Number of likes (${props.value}) Can't be negative.`
+        }
+    },
     category: {
         type: String,
         required: true,

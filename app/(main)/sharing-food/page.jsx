@@ -223,8 +223,7 @@ const Page = () => {
                 isOpen={isOpen && modalImagePath}
                 setIsOpen={setIsOpen}
                 blur
-                className="bg-transparent text-white rounded-xl w-[75vw] h-[85vh]
-                border-2 border-gray-200"
+                className="bg-transparent text-white rounded-xl w-[75vw] h-[85vh]"
             >
                 <Image
                     src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}${modalImagePath}`}
