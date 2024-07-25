@@ -34,10 +34,15 @@ const FoodSlider = ({ images }) => {
                         alt="Food Image"
                         fill
                         className="object-cover top-appear
-                        rounded-xl shadow-lg shadow-gray-700 cursor-pointer"
+                        rounded-xl cursor-pointer"
+                        placeholder="blur"
+                        blurDataURL="/images/svg/loader.svg"
                         onClick={() => {
                             setImageURL(images[0]);
                             setIsOpen(true);
+                        }}
+                        onLoad={(ev) => {
+                            ev.target.classList.add("shadow-lg", "shadow-gray-700");
                         }}
                     />
                 </div>

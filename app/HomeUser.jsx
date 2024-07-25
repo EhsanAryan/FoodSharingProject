@@ -121,6 +121,8 @@ const HomeUser = () => {
                                         alt={item.title}
                                         fill
                                         className="object-cover"
+                                        placeholder="blur"
+                                        blurDataURL="/images/svg/loader.svg"
                                     />
                                 </div>
                                 <div className="px-3 pt-3 pb-6 flex-1 flex flex-col">

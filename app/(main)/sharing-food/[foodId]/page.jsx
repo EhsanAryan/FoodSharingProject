@@ -236,6 +236,8 @@ const Page = ({ params: { foodId } }) => {
                                                             fill
                                                             className="object-cover rounded-xl
                                                             shadow-lg shadow-gray-700"
+                                                            placeholder="blur"
+                                                            blurDataURL="/images/svg/loader.svg"
                                                         />
                                                         <div className="hidden-card flex justify-center 
                                                              items-center gap-2 rounded-xl z-[1]"

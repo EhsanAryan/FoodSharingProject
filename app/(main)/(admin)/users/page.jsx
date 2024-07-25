@@ -85,6 +85,8 @@ const Page = () => {
                     alt="Modal Image"
                     className="rounded-full object-cover"
                     fill
+                    placeholder="blur"
+                    blurDataURL="/images/svg/loader.svg"
                 />
             </ModalContainerWithoutHeader>
         </>
