@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { IconButton } from '@mui/material';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
-import { foodCategoryOptions } from '@/data/data';
+import { createFoodCategoryOptions } from '@/data/data';
 
 
 const Page = ({ params: { foodId } }) => {
@@ -186,7 +186,7 @@ const Page = ({ params: { foodId } }) => {
                                             placeholder="دسته بندی"
                                             label="دسته بندی"
                                             formik={formik}
-                                            options={foodCategoryOptions}
+                                            options={createFoodCategoryOptions}
                                             title="دسته بندی را انتخاب کنید"
                                         />
                                     </div>

@@ -23,7 +23,21 @@ export const foodCategoryOptions = [
         text: "دسر",
         value: "A"
     },
+];
 
+export const createFoodCategoryOptions = [
+    {
+        text: "پیش غذا",
+        value: "B"
+    },
+    {
+        text: "غذای اصلی",
+        value: "M"
+    },
+    {
+        text: "دسر",
+        value: "A"
+    },
 ];
 
 
