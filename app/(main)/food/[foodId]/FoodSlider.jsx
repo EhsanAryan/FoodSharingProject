@@ -48,14 +48,15 @@ const FoodSlider = ({ images }) => {
                 isOpen={isOpen && imageURL}
                 setIsOpen={setIsOpen}
                 blur
-                className="bg-transparent text-white rounded-xl w-[75vw] h-[85vh]"
+                className="bg-transparent text-white rounded-xl max-w-[90vw] max-h-[90vh]"
             >
-                <Image
-                    src={imageURL?.startsWith("blob") ? imageURL : `${base_api_url}${imageURL}`}
+                {/* eslint-disable  */}
+                <img
+                    src={imageURL}
                     alt="Modal Image"
-                    className="rounded-xl object-cover"
-                    fill
+                    className="rounded-xl max-w-[90vw] max-h-[90vh]"
                 />
+                {/* eslint-enable */}
             </ModalContainerWithoutHeader>
         </>
     );

@@ -300,14 +300,15 @@ const Page = ({ params: { foodId } }) => {
                 isOpen={isOpen && modalImagePath}
                 setIsOpen={setIsOpen}
                 blur
-                className="bg-transparent text-white rounded-xl w-[75vw] h-[85vh]"
+                className="bg-transparent text-white rounded-xl max-w-[90vw] max-h-[90vh]"
             >
-                <Image
-                    src={modalImagePath?.startsWith("blob") ? modalImagePath : `${base_api_url}${modalImagePath}`}
+                {/* eslint-disable  */}
+                <img
+                    src={modalImagePath}
                     alt="Modal Image"
-                    className="rounded-xl object-cover"
-                    fill
+                    className="rounded-xl max-w-[90vw] max-h-[90vh]"
                 />
+                {/* eslint-enable */}
             </ModalContainerWithoutHeader>
         </div>
     );
