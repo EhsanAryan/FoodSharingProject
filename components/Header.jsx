@@ -14,7 +14,6 @@ import { logoutAction } from '@/app/actions/actions';
 import { Alert } from '@/utils/popupWindows';
 import axios from 'axios';
 import { adminNavbarItems, navbarItems, noAuthNavbarItems } from '@/data/data';
-import { base_api_url } from '@/services/httpService';
 
 const Header = () => {
     const {

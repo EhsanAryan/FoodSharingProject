@@ -34,7 +34,7 @@ const FoodSlider = ({ images }) => {
                         alt="Food Image"
                         fill
                         className="object-cover top-appear
-                        rounded-xl shadow-lg shadow-gray-700"
+                        rounded-xl shadow-lg shadow-gray-700 cursor-pointer"
                         onClick={() => {
                             setImageURL(images[0]);
                             setIsOpen(true);
