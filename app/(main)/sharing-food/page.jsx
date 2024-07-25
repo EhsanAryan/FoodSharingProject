@@ -204,7 +204,7 @@ const Page = () => {
                                         <GetField
                                             control="submit"
                                             formik={formik}
-                                            text="ارسال"
+                                            text="ایجاد"
                                             disabledButton
                                             sx={{
                                                 background: "linear-gradient(120deg, #cfc205, #f16d01)"

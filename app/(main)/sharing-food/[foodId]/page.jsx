@@ -281,7 +281,7 @@ const Page = ({ params: { foodId } }) => {
                                         <GetField
                                             control="submit"
                                             formik={formik}
-                                            text="ارسال"
+                                            text="ویرایش"
                                             disabledButton
                                             sx={{
                                                 background: "linear-gradient(120deg, #cfc205, #f16d01)"
