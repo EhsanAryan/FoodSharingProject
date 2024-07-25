@@ -51,8 +51,8 @@ export const validationSchema = Yup.object({
         .oneOf(["B", "M", "A"], "فقط از مقادیر مجاز برای این فیلد استفاده کنید"),
     images: Yup.array().of(
         Yup.mixed().required("این فیلد الزامی می‌باشد")
-            .test("filesize", "حداکثر سایز تصویر باید 3 مگابایت باشد", value => {
-                return (value && value?.size <= 3 * 1024 * 1024);
+            .test("filesize", "حداکثر سایز تصویر باید 2 مگابایت باشد", value => {
+                return (value && value?.size <= 2 * 1024 * 1024);
             })
             .test("format", "لطفاً یک تصویر بارگذاری کنید", value => {
                 return (value && value?.type?.includes("image/"));

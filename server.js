@@ -27,8 +27,8 @@ app.prepare().then(() => {
 
   server.listen(3002, (err) => {
     if (err) throw err;
-    console.log("++++++++++++++++++++++++++++++++\n");
+    console.log("========================================\n");
     console.log('> Ready on http://localhost:3002 \n');
-    console.log("++++++++++++++++++++++++++++++++");
+    console.log("========================================");
   });
 });
