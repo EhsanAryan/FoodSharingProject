@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { checkTokenIsValid } from "@/app/actions/actions";
 import { revalidatePath } from "next/cache";
+import xss from "xss";
 
 export const dynamic = "force-dynamic";
 
@@ -121,7 +122,7 @@ export async function POST(request) {
         const newUser = new Food({
             title,
             summary,
-            instruction,
+            instruction: xss(instruction),
             category,
             images: allImageDatabasePaths,
             creator: user._id
