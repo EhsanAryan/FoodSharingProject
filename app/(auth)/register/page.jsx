@@ -69,22 +69,35 @@ const Page = () => {
                                 formik={formik}
                             />
                         </div>
-                        <div className="mt-4 flex justify-between items-center gap-2">
+                        <div className="mt-4 flex flex-wrap-reverse justify-between items-center 
+                        gap-x-2 gap-y-4">
                             <Link
                                 href="/login"
                                 className="text-sm text-primary border-b border-b-[#f16d01]"
                             >
-                               قبلاً حساب کاربری ایجاد کرده‌ام
+                                قبلاً حساب کاربری ایجاد کرده‌ام
                             </Link>
-                            <GetField
-                                control="submit"
-                                formik={formik}
-                                text="ثبت نام"
-                                disabledButton
-                                sx={{
-                                    background: "linear-gradient(120deg, #cfc205, #f16d01)"
-                                }}
-                            />
+                            <div className="flex gap-3">
+                                <Link
+                                    href="/"
+                                    className="flex justify-center items-center 
+                                    px-4 rounded-[4px]"
+                                    style={{
+                                        background: "linear-gradient(120deg, #bd1600, #e60000)"
+                                    }}
+                                >
+                                    لغو
+                                </Link>
+                                <GetField
+                                    control="submit"
+                                    formik={formik}
+                                    text="ثبت نام"
+                                    disabledButton
+                                    sx={{
+                                        background: "linear-gradient(120deg, #cfc205, #f16d01)"
+                                    }}
+                                />
+                            </div>
                         </div>
                     </Form>
                 )}
