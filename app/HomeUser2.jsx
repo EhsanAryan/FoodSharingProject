@@ -22,26 +22,19 @@ const HomeUser = () => {
 
     let searchTimeout;
 
+    const handleSetCurrentPage = (ev, newPage) => {
+        setPage(newPage);
+    }
+
     const getFoodsHandler = async () => {
         setLoading(true);
-        let prevScrollTop = 0;
-        if (document.querySelector(".main-content-section")) {
-            prevScrollTop = document.querySelector(".main-content-section").scrollTop;
-        }
         try {
-            const response = await getFoodsService(page, 16, searchChar, category);
+            const response = await getFoodsService(page, 20, searchChar, category);
             if (response.status === 200) {
-                if (page === 1) {
-                    setFoods(response.data.data);
-                } else {
-                    setFoods(prevValue => [...prevValue, ...response.data.data]);
-                }
+                setFoods(response.data.data);
                 setPagesCount(response.data.pagesCount);
                 setTimeout(() => {
                     inputRef?.current?.focus();
-                    if (page > 1 && document.querySelector(".main-content-section")) {
-                        document.querySelector(".main-content-section").scrollTop = prevScrollTop;
-                    }
                 }, 50);
             }
         } catch (error) {
@@ -108,7 +101,7 @@ const HomeUser = () => {
                 </select>
             </div>
             <div>
-                {(loading && page === 1 && foods.length === 0) ? (
+                {loading ? (
                     <Loading
                         size={50}
                         className="my-12"
@@ -166,28 +159,31 @@ const HomeUser = () => {
                     </div>
                 )}
 
-                <div
-                    className="mt-12 w-full flex justify-center items-center"
-                >
-                    <button
-                        className={`w-full max-w-[170px] blue-btn px-4 py-3 rounded-lg
-                        ${loading ? "pointer-events-none" : ""}
-                        ${(pagesCount === 1 || page >= pagesCount || foods.length === 0) ?
-                                "opacity-0 pointer-events-none" :
-                                ""}`}
-                        onClick={() => setPage(prevValue => prevValue + 1)}
-                    >
-                        {loading ? (
-                            <Loading
-                                size={30}
-                                color="#fff"
-                                noText
-                            />
-                        ) : (
-                            "مشاهده بیشتر"
-                        )}
-                    </button>
-                </div>
+                {pagesCount > 1 && (
+                    <div className={`mt-8 w-full
+                  flex justify-center items-center children-dir-ltr
+                  ${loading ? "pointer-events-none" : ""}`}>
+                        <Pagination
+                            count={pagesCount}
+                            page={page}
+                            boundaryCount={1}
+                            onChange={(ev, newPage) => handleSetCurrentPage(ev, newPage)}
+                            color="primary"
+                            sx={{
+                                direction: "ltr !important",
+                                "& .MuiPagination-ul": {
+                                    direction: "ltr !important",
+                                },
+                                "& .MuiPagination-ul li>:is(button, div)": {
+                                    color: "white"
+                                },
+                                "& button.MuiButtonBase-root.MuiPaginationItem-root.Mui-selected:not(.MuiPaginationItem-previousNext)": {
+                                    backgroundColor: "#343840 !important",
+                                }
+                            }}
+                        />
+                    </div>
+                )}
             </div>
         </>
     );
