@@ -295,3 +295,20 @@ body.rtl *:not(.dir-ltr, .children-dir-ltr *) {
   opacity: 1;
   scale: 1;
 }
+
+.food-cart:hover > div:first-child > img:first-of-type {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.food-cart > div:first-child > img:nth-of-type(2) {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+}
+
+.food-cart:hover > div:first-child > img:nth-of-type(2) {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}

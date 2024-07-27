@@ -127,25 +127,36 @@ const Page = () => {
                     {foods.map((item, index) => (
                         <div
                             key={`food_${item._id}_${index}`}
-                            className="bg-slate-800 rounded-lg overflow-hidden
-                                normal-transition hover:translate-y-[-10px]"
+                            className={`bg-slate-800 rounded-lg overflow-hidden
+                            normal-transition hover:translate-y-[-10px] flex flex-col
+                            ${item.images.length > 1 ? "food-cart" : ""}`}
                         >
                             <div className="relative w-full h-[300px]">
                                 <Image
                                     src={item.images[0]?.startsWith("blob") ? item.images[0] : `${base_api_url}${item.images[0]}`}
                                     alt={item.title}
                                     fill
-                                    className="object-cover"
+                                    className="object-cover rounded-t-lg slow-transition"
                                     placeholder="blur"
                                     blurDataURL="/images/svg/loader.svg"
                                 />
+                                {item.images.length > 1 && (
+                                    <Image
+                                        src={item.images[1]?.startsWith("blob") ? item.images[1] : `${base_api_url}${item.images[1]}`}
+                                        alt={item.title}
+                                        fill
+                                        className="object-cover z-[1] rounded-t-lg slow-transition"
+                                        placeholder="blur"
+                                        blurDataURL="/images/svg/loader.svg"
+                                    />
+                                )}
                             </div>
-                            <div className="px-3 pt-3 pb-6">
+                            <div className="px-3 pt-3 pb-6 flex-1 flex flex-col">
                                 <h4 className="text-xl text-center">{item.title}</h4>
-                                <div className="mt-2 mb-8">
+                                <div className="mt-2 mb-8 break-words">
                                     {item.summary}
                                 </div>
-                                <div>
+                                <div className="mt-auto">
                                     <Link
                                         href={`/food/${item._id}`}
                                         className="px-4 py-2 rounded-lg yellow-btn"
