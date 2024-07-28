@@ -223,7 +223,7 @@ const Page = ({ params: { foodId } }) => {
                                             </button>
                                         </div>
                                         {images.length ? (
-                                            <div className="flex items-center gap-4 flex-wrap">
+                                            <div className="flex items-center gap-x-4 gap-y-6 flex-wrap">
                                                 {images.map((item, index) => (
                                                     <div
                                                         key={`image_${item.name}_${index}`}
@@ -238,6 +238,7 @@ const Page = ({ params: { foodId } }) => {
                                                             shadow-lg shadow-gray-700"
                                                             placeholder="blur"
                                                             blurDataURL="/images/svg/loader.svg"
+                                                            quality={70}
                                                         />
                                                         <div className="hidden-card flex justify-center 
                                                              items-center gap-2 rounded-xl z-[1]"

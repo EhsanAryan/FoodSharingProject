@@ -133,6 +133,7 @@ const Page = () => {
                                     className="object-cover rounded-t-lg slow-transition"
                                     placeholder="blur"
                                     blurDataURL="/images/svg/loader.svg"
+                                    quality={70}
                                 />
                                 {item.images.length > 1 && (
                                     <Image
@@ -142,6 +143,7 @@ const Page = () => {
                                         className="object-cover z-[1] rounded-t-lg slow-transition"
                                         placeholder="blur"
                                         blurDataURL="/images/svg/loader.svg"
+                                        quality={70}
                                     />
                                 )}
                             </div>
