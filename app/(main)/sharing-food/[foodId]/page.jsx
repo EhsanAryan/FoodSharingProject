@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { IconButton } from '@mui/material';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
-import { createFoodCategoryOptions } from '@/data/data';
+import { createFoodCategoryOptions, loaderDataURL } from '@/data/data';
 
 
 const Page = ({ params: { foodId } }) => {
@@ -236,8 +236,7 @@ const Page = ({ params: { foodId } }) => {
                                                             fill
                                                             className="object-cover rounded-xl
                                                             shadow-lg shadow-gray-700"
-                                                            placeholder="blur"
-                                                            blurDataURL="/images/svg/loader.svg"
+                                                            placeholder={loaderDataURL}
                                                             quality={70}
                                                         />
                                                         <div className="hidden-card flex justify-center 

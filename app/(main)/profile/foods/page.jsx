@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
-import { foodCategoryOptions } from '@/data/data';
+import { foodCategoryOptions, loaderDataURL } from '@/data/data';
 import { base_api_url } from '@/services/httpService';
 import { Pagination } from '@mui/material';
 
@@ -131,8 +131,7 @@ const Page = () => {
                                     alt={item.title}
                                     fill
                                     className="object-cover rounded-t-lg slow-transition"
-                                    placeholder="blur"
-                                    blurDataURL="/images/svg/loader.svg"
+                                    placeholder={loaderDataURL}
                                     quality={70}
                                 />
                                 {item.images.length > 1 && (
@@ -141,8 +140,7 @@ const Page = () => {
                                         alt={item.title}
                                         fill
                                         className="object-cover z-[1] rounded-t-lg slow-transition"
-                                        placeholder="blur"
-                                        blurDataURL="/images/svg/loader.svg"
+                                        placeholder={loaderDataURL}
                                         quality={70}
                                     />
                                 )}

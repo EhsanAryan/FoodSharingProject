@@ -2,6 +2,7 @@
 
 import CustomSlider from '@/components/CustomSlider';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
+import { loaderDataURL } from '@/data/data';
 import { base_api_url } from '@/services/httpService';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -35,8 +36,7 @@ const FoodSlider = ({ images }) => {
                         fill
                         className="object-cover top-appear
                         rounded-xl cursor-pointer"
-                        placeholder="blur"
-                        blurDataURL="/images/svg/loader.svg"
+                        placeholder={loaderDataURL}
                         onClick={() => {
                             setImageURL(images[0]);
                             setIsOpen(true);

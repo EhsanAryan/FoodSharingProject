@@ -8,6 +8,7 @@ import { Avatar } from '@mui/material';
 import ModalContainerWithoutHeader from '@/components/ModalContainerWithoutHeader';
 import Image from 'next/image';
 import { base_api_url } from '@/services/httpService';
+import { loaderDataURL } from '@/data/data';
 
 const Page = () => {
     const [forceRequest, setForceRequest] = useState(0);
@@ -85,8 +86,7 @@ const Page = () => {
                     alt="Modal Image"
                     className="rounded-full object-cover"
                     fill
-                    placeholder="blur"
-                    blurDataURL="/images/svg/loader.svg"
+                    placeholder={loaderDataURL}
                 />
             </ModalContainerWithoutHeader>
         </>
