@@ -7,7 +7,7 @@ import { Pagination } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 const Page = () => {
     const { user } = useContext(MainContext);
@@ -22,8 +22,6 @@ const Page = () => {
     const [itemsCount, setItemsCount] = useState(20);
 
     const router = useRouter();
-
-    const inputRef = useRef(null);
 
     const handleSetCurrentPage = (ev, newPage) => {
         setPage(newPage);
@@ -70,9 +68,6 @@ const Page = () => {
             setPage(1);
         } else {
             setShowFavoritesHandler();
-            setTimeout(() => {
-                inputRef?.current?.focus();
-            }, 50);
         }
     }, [page, searchChar, category]);
 
@@ -90,7 +85,6 @@ const Page = () => {
                     className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
                     rounded-s-[20px] placeholder:text-sm disabled:opacity-60"
                     onChange={(ev) => setSearchCharHandler(ev)}
-                    ref={inputRef}
                 />
                 <select
                     value={category}

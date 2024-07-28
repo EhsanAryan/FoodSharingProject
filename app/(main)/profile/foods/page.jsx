@@ -8,7 +8,7 @@ import { Alert } from '@/utils/popupWindows';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { foodCategoryOptions } from '@/data/data';
 import { base_api_url } from '@/services/httpService';
 import { Pagination } from '@mui/material';
@@ -26,8 +26,6 @@ const Page = () => {
 
     const router = useRouter();
 
-    const inputRef = useRef(null);
-
     let searchTimeout;
 
     const handleSetCurrentPage = (ev, newPage) => {
@@ -41,9 +39,6 @@ const Page = () => {
             if (response.status === 200) {
                 setFoods(response.data.data);
                 setPagesCount(response.data.pagesCount);
-                setTimeout(() => {
-                    inputRef?.current?.focus();
-                }, 50);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
@@ -98,7 +93,6 @@ const Page = () => {
                     className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
                     rounded-s-[20px] placeholder:text-sm disabled:opacity-60"
                     onChange={(ev) => setSearchCharHandler(ev)}
-                    ref={inputRef}
                 />
                 <select
                     value={category}

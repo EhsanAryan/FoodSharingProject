@@ -2,7 +2,7 @@
 
 import { getFoodsService } from '@/services/foodServices';
 import { Alert } from '@/utils/popupWindows';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pagination } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,7 +18,6 @@ const HomeUser = () => {
     const [searchChar, setSearchChar] = useState("");
     const [category, setCategory] = useState("");
 
-    const inputRef = useRef(null);
 
     let searchTimeout;
 
@@ -33,9 +32,6 @@ const HomeUser = () => {
             if (response.status === 200) {
                 setFoods(response.data.data);
                 setPagesCount(response.data.pagesCount);
-                setTimeout(() => {
-                    inputRef?.current?.focus();
-                }, 50);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
@@ -82,7 +78,6 @@ const HomeUser = () => {
                     className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
                     rounded-s-[20px] placeholder:text-sm disabled:opacity-60"
                     onChange={(ev) => setSearchCharHandler(ev)}
-                    ref={inputRef}
                 />
                 <select
                     value={category}

@@ -11,7 +11,6 @@ import { MainContext } from '@/context/MainContextContainer';
 import { changeUserAvatarService } from '@/services/userServices';
 import Loading from '@/components/Loading';
 import { logoutAction } from '@/app/actions/actions';
-import { base_api_url } from '@/services/httpService';
 
 const Page = () => {
     const { user, setUser, setIsLogin, setIsAdmin } = useContext(MainContext);

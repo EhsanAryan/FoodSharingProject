@@ -11,7 +11,7 @@ import { Avatar, Pagination } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Page = ({ params: { userId } }) => {
     const [loading, setLoading] = useState(true);
@@ -26,8 +26,6 @@ const Page = ({ params: { userId } }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [modalImagePath, setModalImagePath] = useState("");
-
-    const inputRef = useRef(null);
 
     const router = useRouter();
 
@@ -64,9 +62,6 @@ const Page = ({ params: { userId } }) => {
             if (response.status === 200) {
                 setUserFoods(response.data.data);
                 setPagesCount(response.data.pagesCount);
-                setTimeout(() => {
-                    inputRef?.current?.focus();
-                }, 50);
             }
         } catch (error) {
             if (error?.response?.status && error?.response?.data?.message) {
@@ -153,7 +148,6 @@ const Page = ({ params: { userId } }) => {
                                 className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
                                 rounded-s-[20px] placeholder:text-sm disabled:opacity-60"
                                 onChange={(ev) => setSearchCharHandler(ev)}
-                                ref={inputRef}
                             />
                             <select
                                 value={category}

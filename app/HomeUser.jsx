@@ -2,8 +2,7 @@
 
 import { getFoodsService } from '@/services/foodServices';
 import { Alert } from '@/utils/popupWindows';
-import React, { useEffect, useRef, useState } from 'react';
-import { Pagination } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Loading from '@/components/Loading';
@@ -17,8 +16,6 @@ const HomeUser = () => {
     const [pagesCount, setPagesCount] = useState(1);
     const [searchChar, setSearchChar] = useState("");
     const [category, setCategory] = useState("");
-
-    const inputRef = useRef(null);
 
     let searchTimeout;
 
@@ -38,7 +35,6 @@ const HomeUser = () => {
                 }
                 setPagesCount(response.data.pagesCount);
                 setTimeout(() => {
-                    inputRef?.current?.focus();
                     if (page > 1 && document.querySelector(".main-content-section")) {
                         document.querySelector(".main-content-section").scrollTop = prevScrollTop;
                     }
@@ -89,7 +85,6 @@ const HomeUser = () => {
                     className="bg-slate-800 w-full max-w-sm px-3 py-1.5 outline-none
                     rounded-s-[20px] placeholder:text-sm disabled:opacity-60"
                     onChange={(ev) => setSearchCharHandler(ev)}
-                    ref={inputRef}
                 />
                 <select
                     value={category}
