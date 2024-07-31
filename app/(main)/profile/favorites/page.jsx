@@ -73,7 +73,7 @@ const Page = () => {
 
     return (
         <>
-            <h1 className="text-primary text-3xl mb-7 text-center font-bold">غذاهای مورد علاقه شما</h1>
+            <h1 className="text-primary text-2xl sm:text-3xl mb-7 text-center font-bold">غذاهای مورد علاقه شما</h1>
             <div
                 className={`flex justify-center mb-7`}
             >
