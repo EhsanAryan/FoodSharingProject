@@ -1,26 +1,35 @@
-// I don't use User model in this file, but it is necessary to recognize the userSchema, because it's the first API has been called in the project if user is not authenticated (GET /api/foods/[page])
+import db from "@/utils/db";
 import User from "@/models/user";
 import Comment from "@/models/comment";
 import Food from "@/models/food";
-import db from "@/utils/db";
 import { NextResponse } from "next/server";
+import { checkIsOwner } from "@/app/actions/actions";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request, context) {
     try {
-        const page = Number(context.params.page) || 1;
-        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 10;
-        const category = new URL(request.url).searchParams.get("category") || "";
+
+        const foodId = context.params.foodId;
+        const page = context.params.page;
+        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
 
         await db.connect();
 
-        const count = await Food.countDocuments({
-            title: {
-                $regex: search.trim(),
-                $options: "i"
-            }
-        });
+        const food = await Food.findById(foodId).lean();
+
+        if (!food) {
+            return NextResponse.json(
+                {
+                    message: "غذای مورد نظر یافت نشد."
+                },
+                {
+                    status: 404
+                }
+            );
+        }
+
+        const count = await Comment.countDocuments({ food: foodId });
         const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
 
         if (page > pagesCount) {
@@ -34,36 +43,25 @@ export async function GET(request, context) {
             );
         }
 
-        const foods = await Food.find((category.trim() && search.trim()) ? {
-            title: {
-                $regex: search.trim(),
-                $options: "i"
-            },
-            category: category.trim()
-        } : category.trim() ? {
-            category: category.trim()
-
-        } : search.trim() ? {
-            title: {
-                $regex: search.trim(),
-                $options: "i"
-            },
-        } : {})
+        const comments = await Comment.find({ food: foodId })
             .skip((page - 1) * pageSize)
             .limit(pageSize)
-            .populate("creator")
+            .populate("user")
+            .populate("food")
             .lean();
 
-        foods.forEach((food) => {
-            food.creator = db.convertToObject(food.creator);
-            delete food.creator.password;
-        });
 
+        for(let comment of comments) {
+            comment.user = db.convertToObject(comment.user);
+            delete comment.user.password;
+            comment.food = db.convertToObject(comment.food);
+            comment.is_owner = await checkIsOwner(comment.user._id.toString());
+        }
 
         return NextResponse.json(
             {
                 pagesCount,
-                data: foods.map(item => db.convertToObject(item))
+                data: comments.map(item => db.convertToObject(item))
             },
             {
                 status: 200,
@@ -81,4 +79,3 @@ export async function GET(request, context) {
         );
     }
 }
-
