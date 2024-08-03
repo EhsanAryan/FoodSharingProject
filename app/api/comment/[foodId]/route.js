@@ -4,7 +4,7 @@ import Food from "@/models/food";
 import db from "@/utils/db";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { checkTokenIsValid } from "@/app/actions/actions";
+import { checkIsOwner, checkTokenIsValid } from "@/app/actions/actions";
 import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
@@ -51,7 +51,7 @@ export async function POST(request, context) {
         }
 
         const foodId = context.params.foodId;
-        
+
         const data = await request.json();
 
         if (!data.text) {
@@ -86,12 +86,22 @@ export async function POST(request, context) {
             user: decodedToken.sub,
             food: foodId
         });
-        await newComment.save();
+        const addedComment = await newComment.save();
+
+        const newCommentData = await Comment.findById(addedComment._id.toString())
+            .populate("user")
+            .populate("food")
+            .lean();
+
+        newCommentData.user = db.convertToObject(newCommentData.user);
+        delete newCommentData.user.password;
+        newCommentData.food = db.convertToObject(newCommentData.food);
+        newCommentData.is_owner = await checkIsOwner(newCommentData.user._id.toString());
 
         revalidatePath("/", "layout");
 
         return NextResponse.json(
-            {}
+            newCommentData
             ,
             {
                 status: 200

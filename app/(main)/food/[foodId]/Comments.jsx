@@ -8,7 +8,7 @@ import { logoutAction } from '@/app/actions/actions';
 import { MainContext } from '@/context/MainContextContainer';
 
 const Comments = ({ food }) => {
-    const { setIsLogin, setIsAdmin } = useContext(MainContext);
+    const { isLogin, setIsLogin, setIsAdmin } = useContext(MainContext);
 
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -76,6 +76,9 @@ const Comments = ({ food }) => {
             const data = { text: text.trim() };
             const response = await addNewCommentService(food._id.toString(), data);
             if (response.status === 200) {
+                if (page === pagesCount) {
+                    setComments(prevValue => [...prevValue, response.data]);
+                }
                 setText("");
                 Alert(null, "نظر شما با موفقیت ثبت شد.", "success");
             }
@@ -185,73 +188,81 @@ const Comments = ({ food }) => {
                     )}
 
                     {comments.length > 0 && (
-                        <div
-                            className="mt-2 w-full flex justify-center items-center"
-                        >
+                        <>
                             {loading ? (
-                                <div className="py-3">
+                                <div className="mt-5 mb-3">
                                     <Loading
-                                        size={30}
+                                        size={35}
                                         color="#fff"
                                         noText
                                     />
                                 </div>
                             ) : (pagesCount > 1 && page < pagesCount) ? (
-                                <button
-                                    className="w-full max-w-[170px] blue-btn px-4 py-3 rounded-lg"
-                                    onClick={() => setPage(prevValue => prevValue + 1)}
+                                <div
+                                    className="mt-2 w-full flex justify-center items-center"
                                 >
-                                    مشاهده بیشتر
-                                </button>
+                                    <button
+                                        className="w-full max-w-[170px] blue-btn px-4 py-3 rounded-lg"
+                                        onClick={() => setPage(prevValue => prevValue + 1)}
+                                    >
+                                        مشاهده بیشتر
+                                    </button>
+                                </div>
                             ) : null}
-                        </div>
+                        </>
                     )}
                 </div>
             </div>
 
             {/* Add comment */}
-            <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 pt-6 pb-4 max-w-screen-xl 
+            {isLogin ? (
+                <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 pt-6 pb-4 max-w-screen-xl 
                  my-10 mx-auto bottom-appear">
-                <div className={`w-full flex flex-col gap-2.5 text-white`}>
-                    <label
-                        htmlFor="comment"
-                        className={`bg-transparent whitespace-nowrap px-3`}
-                    >
-                        نظر شما
-                    </label>
-                    <textarea
-                        id="comment"
-                        name="comment"
-                        placeholder="نظر خود را بنویسید"
-                        rows={4}
-                        className={`bg-slate-800 w-full
-                    border outline-none rounded-md resize-none
-                    placeholder:text-sm px-3 py-2`}
-                        value={text}
-                        onChange={(ev) => setText(ev.target.value)}
-                    ></textarea>
-                </div>
-                <div className="mt-6 flex justify-end">
-                    <button
-                        type="button"
-                        className={`px-4 py-2 rounded-lg yellow-btn
+                    <div className={`w-full flex flex-col gap-2.5 text-white`}>
+                        <label
+                            htmlFor="comment"
+                            className={`bg-transparent whitespace-nowrap px-3`}
+                        >
+                            نظر شما
+                        </label>
+                        <textarea
+                            id="comment"
+                            name="comment"
+                            placeholder="نظر خود را بنویسید"
+                            rows={4}
+                            className={`bg-slate-800 w-full
+                            border outline-none rounded-md resize-none
+                            placeholder:text-sm px-3 py-2`}
+                            value={text}
+                            onChange={(ev) => setText(ev.target.value)}
+                        ></textarea>
+                    </div>
+                    <div className="mt-6 flex justify-end">
+                        <button
+                            type="button"
+                            className={`px-4 py-2 rounded-lg yellow-btn
                         ${addLoading ? "pointer-events-none" : "pointer-events-auto"}`}
-                        onClick={addNewCommentHandler}
-                    >
-                        {addLoading ? (
-                            <Loading
-                                size={25}
-                                color="#fff"
-                                noText
-                            />
-                        ) : (
-                            "ثبت نظر"
-                        )}
-                    </button>
+                            onClick={addNewCommentHandler}
+                        >
+                            {addLoading ? (
+                                <Loading
+                                    size={25}
+                                    color="#fff"
+                                    noText
+                                />
+                            ) : (
+                                "ثبت نظر"
+                            )}
+                        </button>
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 py-8 max-w-screen-xl 
+                 my-10 mx-auto text-center text-xl bottom-appear">
+                    برای ثبت نظر، باید وارد حساب کاربری خود شوید
+                </div>
+            )}
         </>
-
     );
 }
 
