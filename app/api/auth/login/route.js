@@ -1,4 +1,5 @@
 import User from "@/models/user";
+import Comment from "@/models/comment";
 import Food from "@/models/food";
 import db from "@/utils/db";
 import { cookies } from "next/headers";

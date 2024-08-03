@@ -1,5 +1,6 @@
 // I don't use Food model in this file, but it is necessary to recognize the foodSchema, because it's the first API has been called in the project if user is authenticated (GET /api/user/info)
 import User from "@/models/user";
+import Comment from "@/models/comment";
 import Food from "@/models/food";
 import db from "@/utils/db";
 import { cookies } from "next/headers";

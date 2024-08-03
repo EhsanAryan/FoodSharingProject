@@ -1,52 +1,25 @@
-import db from "@/utils/db";
+// I don't use User model in this file, but it is necessary to recognize the userSchema, because it's the first API has been called in the project if user is not authenticated (GET /api/foods/[page])
 import User from "@/models/user";
 import Comment from "@/models/comment";
 import Food from "@/models/food";
+import db from "@/utils/db";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request, context) {
     try {
-        const userId = context.params.userId;
-        const page = context.params.page;
-        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 20;
-        const search = new URL(request.url).searchParams.get("search") || "";
+        const page = Number(context.params.page) || 1;
+        const pageSize = Number(new URL(request.url).searchParams.get("page_size")) || 10;
         const category = new URL(request.url).searchParams.get("category") || "";
 
         await db.connect();
 
-        const user = await User.findById(userId).lean();
-
-        if (!user) {
-            return NextResponse.json(
-                {
-                    message: "کاربر مورد نظر یافت نشد."
-                },
-                {
-                    status: 404
-                }
-            );
-        }
-
-        const count = await Food.countDocuments((category.trim() && search.trim()) ? {
-            creator: userId,
-            title: {
-                $regex: search.trim(),
-                $options: "i"
-            },
-            category: category.trim()
-        } : category.trim() ? {
-            creator: userId,
-            category: category.trim()
-        } : search.trim() ? {
-            creator: userId,
+        const count = await Food.countDocuments({
             title: {
                 $regex: search.trim(),
                 $options: "i"
             }
-        } : {
-            creator: userId,
         });
         const pagesCount = count === 0 ? 1 : Math.ceil(count / pageSize);
 
@@ -62,24 +35,20 @@ export async function GET(request, context) {
         }
 
         const foods = await Food.find((category.trim() && search.trim()) ? {
-            creator: userId,
             title: {
                 $regex: search.trim(),
                 $options: "i"
             },
             category: category.trim()
         } : category.trim() ? {
-            creator: userId,
             category: category.trim()
+
         } : search.trim() ? {
-            creator: userId,
             title: {
                 $regex: search.trim(),
                 $options: "i"
-            }
-        } : {
-            creator: userId
-        })
+            },
+        } : {})
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .populate("creator")
@@ -89,6 +58,7 @@ export async function GET(request, context) {
             food.creator = db.convertToObject(food.creator);
             delete food.creator.password;
         });
+
 
         return NextResponse.json(
             {
@@ -111,3 +81,4 @@ export async function GET(request, context) {
         );
     }
 }
+
