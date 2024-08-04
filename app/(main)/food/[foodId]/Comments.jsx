@@ -6,6 +6,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { logoutAction } from '@/app/actions/actions';
 import { MainContext } from '@/context/MainContextContainer';
+import { useRouter } from 'next/navigation';
 
 const Comments = ({ food }) => {
     const { isLogin, setIsLogin, setIsAdmin } = useContext(MainContext);
@@ -19,6 +20,8 @@ const Comments = ({ food }) => {
     const [addLoading, setAddLoading] = useState(false);
 
     const [deletingComment, setDeletingComment] = useState(null);
+
+    const router = useRouter();
 
     const getCommentsHandler = async () => {
         setLoading(true);
@@ -182,7 +185,7 @@ const Comments = ({ food }) => {
                             </div>
                         ))
                     ) : (
-                        <h3 className="text-2xl text-red-500 text-center py-4">
+                        <h3 className="text-2xl text-center py-4">
                             هنوز نظری ثبت نشده است!
                         </h3>
                     )}
@@ -215,53 +218,54 @@ const Comments = ({ food }) => {
             </div>
 
             {/* Add comment */}
-            {isLogin ? (
-                <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 pt-6 pb-4 max-w-screen-xl 
-                 my-10 mx-auto bottom-appear">
-                    <div className={`w-full flex flex-col gap-2.5 text-white`}>
-                        <label
-                            htmlFor="comment"
-                            className={`bg-transparent whitespace-nowrap px-3`}
-                        >
-                            نظر شما
-                        </label>
-                        <textarea
-                            id="comment"
-                            name="comment"
-                            placeholder="نظر خود را بنویسید"
-                            rows={4}
-                            className={`bg-slate-800 w-full
-                            border outline-none rounded-md resize-none
-                            placeholder:text-sm px-3 py-2`}
-                            value={text}
-                            onChange={(ev) => setText(ev.target.value)}
-                        ></textarea>
+            <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 pt-6 pb-4 max-w-screen-xl 
+            my-10 mx-auto bottom-appear">
+                {isLogin ? (
+                    <>
+                        <div className={`w-full flex flex-col gap-2.5 text-white`}>
+                            <label
+                                htmlFor="comment"
+                                className={`bg-transparent whitespace-nowrap px-3`}
+                            >
+                                نظر شما
+                            </label>
+                            <textarea
+                                id="comment"
+                                name="comment"
+                                placeholder="نظر خود را بنویسید"
+                                rows={4}
+                                className={`bg-slate-800 w-full
+                                border outline-none rounded-md resize-none
+                                placeholder:text-sm px-3 py-2`}
+                                value={text}
+                                onChange={(ev) => setText(ev.target.value)}
+                            ></textarea>
+                        </div>
+                        <div className="mt-6 flex justify-end">
+                            <button
+                                type="button"
+                                className={`px-4 py-2 rounded-lg yellow-btn
+                                ${addLoading ? "pointer-events-none" : "pointer-events-auto"}`}
+                                onClick={addNewCommentHandler}
+                            >
+                                {addLoading ? (
+                                    <Loading
+                                        size={25}
+                                        color="#fff"
+                                        noText
+                                    />
+                                ) : (
+                                    "ثبت نظر"
+                                )}
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <div className="text-center text-xl">
+                        برای ثبت نظر، باید وارد حساب کاربری خود شوید
                     </div>
-                    <div className="mt-6 flex justify-end">
-                        <button
-                            type="button"
-                            className={`px-4 py-2 rounded-lg yellow-btn
-                        ${addLoading ? "pointer-events-none" : "pointer-events-auto"}`}
-                            onClick={addNewCommentHandler}
-                        >
-                            {addLoading ? (
-                                <Loading
-                                    size={25}
-                                    color="#fff"
-                                    noText
-                                />
-                            ) : (
-                                "ثبت نظر"
-                            )}
-                        </button>
-                    </div>
-                </div>
-            ) : (
-                <div className="w-full bg-slate-900 rounded-md px-4 md:px-6 py-8 max-w-screen-xl 
-                 my-10 mx-auto text-center text-xl bottom-appear">
-                    برای ثبت نظر، باید وارد حساب کاربری خود شوید
-                </div>
-            )}
+                )}
+            </div>
         </>
     );
 }
