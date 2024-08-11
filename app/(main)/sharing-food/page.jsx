@@ -96,8 +96,8 @@ const Page = () => {
                                             <GetField
                                                 control="input"
                                                 name="summary"
-                                                placeholder="چکیده"
-                                                label="چکیده"
+                                                placeholder="توضیحات"
+                                                label="توضیحات"
                                                 formik={formik}
                                             />
                                         </div>

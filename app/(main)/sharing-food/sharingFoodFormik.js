@@ -45,7 +45,7 @@ export const onSubmit = async (values, actions, router, setIsLogin, setIsAdmin, 
 export const validationSchema = Yup.object({
     title: Yup.string().required("این فیلد الزامی می‌باشد"),
     summary: Yup.string().required("این فیلد الزامی می‌باشد")
-        .max(80, "چکیده باید شامل حداکثر 80 کاراکتر باشد"),
+        .max(80, "توضیحات باید شامل حداکثر 80 کاراکتر باشد"),
     instruction: Yup.string().required("این فیلد الزامی می‌باشد"),
     category: Yup.string().required("این فیلد الزامی می‌باشد")
         .oneOf(["B", "M", "A"], "فقط از مقادیر مجاز برای این فیلد استفاده کنید"),

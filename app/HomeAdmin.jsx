@@ -20,7 +20,7 @@ const HomeAdmin = () => {
             field: "title"
         },
         {
-            text: "چکیده",
+            text: "توضیحات",
             field: "summary"
         },
         {
