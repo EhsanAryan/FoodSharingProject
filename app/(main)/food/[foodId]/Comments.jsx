@@ -26,7 +26,7 @@ const Comments = ({ food }) => {
     const getCommentsHandler = async () => {
         setLoading(true);
         try {
-            const response = await getCommentsService(food._id.toString(), page, 5);
+            const response = await getCommentsService(food._id.toString(), page, 10);
             if (response.status === 200) {
                 if (page === 1) {
                     setComments(response.data.data);
